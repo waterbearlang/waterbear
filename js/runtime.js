@@ -453,8 +453,8 @@
             // Using the haversine formula.
             distanceBetween: function (p1Fn, p2Fn) {
                 var R = 6371000; // m
-                var p1 = p1Fn();
-                var p2 = p2Fn();
+                var p1 = p1Fn(this);
+                var p2 = p2Fn(this);
                 var lat1 = p1.coords.latitude;
                 var lon1 = p1.coords.longitude;
                 var lat2 = p2.coords.latitude;
@@ -475,58 +475,58 @@
             /* Returns latitude in degrees. */
             // TODO: should this return a "degrees" object?
             latitude: function (location) {
-                return location.coords.latitude;
+                return location(this).coords.latitude;
             },
             /* Returns longitude in degrees. */
             // TODO: should this return a "degrees" object?
             longitude: function (location) {
-                return location.coords.longitude;
+                return location(this).coords.longitude;
             },
             /* Returns altitude as a unit? */
             altitude: function (location) {
-                return location.coords.altitude;
+                return location(this).coords.altitude;
             },
             /* Returns degrees from north. */
             heading: function (location) {
                 // TODO: What do we do when this is NaN or NULL?
-                return location.coords.heading;
+                return location(this).coords.heading;
             },
             /* Returns estimated speed. */
             speed: function (location) {
                 // TODO: What do we do when this is NaN or NULL?
-                return location.coords.speed;
+                return location(this).coords.speed;
             },
         },
 
         image: {
             get: function(path){
-                return assets.images[path];
+                return assets.images[path(this)];
             },
             drawAtPoint: function(img, pt){
-                img.drawAtPoint(getContext(), pt);
+                img(this).drawAtPoint(getContext(), pt(this));
             },
             getWidth: function(img){
-                return img.getWidth();
+                return img(this).getWidth();
             },
             getHeight: function(img){
-                return img.getHeight();
+                return img(this).getHeight();
             },
             setWidth: function(img, w){
-                img.setWidth(w);
+                img(this).setWidth(w(this));
             },
             setHeight: function(img, h){
-                img.setHeight(h);
+                img(this).setHeight(h(this));
             },
             setSize: function(img, sz){
-                img.setSize(sz);
+                img(this).setSize(sz(this));
             },
             scale: function(img, scaleFactor){
-                img.scale(scaleFactor);
+                img(this).scale(scaleFactor(this));
             }
         },
         input: {
             keyPressed: function(key){
-                if(Event.keys[key])
+                if(Event.keys[key(this)])
                     return true;
                 else
                     return false;
@@ -543,7 +543,7 @@
             whenKeyPressed: function(key){
                 var self = this;
                 var contained = this.contains[0];
-                Event.onKeyDown(key(), function(){
+                Event.onKeyDown(key(this), function(){
                     contained.forEach(function(block){
                         block.run(self);
                     });
@@ -552,60 +552,80 @@
         },
 
         math: {
-            add: util.add,
-            subtract: util.subtract,
-            multiply: util.multiply,
-            divide: util.divide,
-            equal: util.equal,
-            notEqual: util.notEqual,
+            add: function(a,b){
+                return util.add(a(this), b(this));
+            },
+            subtract: function(a,b){
+                return util.subtract(a(this), b(this));
+            },
+            multiply: function(a,b){
+                return util.multiply(a(this), b(this));
+            },
+            divide: function(a,b){
+                return util.divide(a(this), b(this));
+            },
+            equal: function(a,b){
+                return util.equal(a(this), b(this));
+            },
+            notEqual: function(a,b){
+                return util.notEqual(a(this), b(this));
+            },
             lt: function(a,b){
-                return a < b;
+                return a(this) < b(this);
             },
             lte: function(a,b){
-                return a <= b;
+                return a(this) <= b(this);
             },
             gt: function(a,b){
-                return a > b;
+                return a(this) > b(this);
             },
             gte: function(a,b){
-                return a >= b;
+                return a(this) >= b(this);
             },
             mod: function(a,b){
-                return a % b;
+                return a(this) % b(this);
             },
-            round: Math.round,
-            abs: Math.abs,
-            floor: Math.floor,
-            ceil: Math.ceil,
+            round: function(a){
+                return Math.round(a(this));
+            },
+            abs: function(a){
+                return Math.abs(a(this));
+            },
+            floor: function(a){
+                return Math.floor(a(this));
+            },
+            ceil: function(a){
+                return Math.ceil(a(this));
+            },
             max: function(a){
-            	return Math.max.apply(Math,a);
+            	return Math.max.apply(Math,a(this));
             },
             min: function(a){
-            	return Math.min.apply(Math,a);
+            	return Math.min.apply(Math,a(this));
             },
             cos: function(a){
-                return Math.cos(util.deg2rad(a));
+                return Math.cos(util.deg2rad(a(this)));
             },
             sin: function(a){
-                return Math.sin(util.deg2rad(a));
+                return Math.sin(util.deg2rad(a(this)));
             },
             tan: function(a){
-                return Math.tan(util.deg2rad(a));
+                return Math.tan(util.deg2rad(a(this)));
             },
             asin: function(a){
-                return Math.asin(util.deg2rad(a));
+                return Math.asin(util.deg2rad(a(this)));
             },
             acos: function(a){
-                return Math.acos(util.deg2rad(a));
+                return Math.acos(util.deg2rad(a(this)));
             },
             atan: function(a){
-                return Math.atan(util.deg2rad(a));
+                return Math.atan(util.deg2rad(a(this)));
             },
             pow: function(a,b){
-                return Math.pow(a, b);
+                return Math.pow(a(this), b(this));
             },
             sqrt: function(a,b){
-                return Math.sqrt(a);
+                return Math.sqrt(a(this));
             },
             pi: function(){
                 return Math.PI;
@@ -616,19 +636,25 @@
             tau: function(){
                 return Math.PI * 2;
             },
-            deg2rad: util.deg2rad,
-            rad2deg: util.rad2deg,
-            stringToNumber: Number
+            deg2rad: function(a){
+                return util.deg2rad(a(this));
+            },
+            rad2deg: function(a){
+                return util.rad2deg(a(this));
+            },
+            stringToNumber: function(a){
+                return Number(a(this));
+            }
         },
 
         motion: {
             /* Asynchronous update event. Context. */
-            whenDeviceTurned: function(args, containers) {
+            /* FIXME: No block for this */
+            whenDeviceTurned: function whenDeviceTurnedCtx(direction) {
                 var currentScope = this,
-                steps = containers[0];
-
-                Event.on(window, 'runtime:motionchanged', null, function (event) {
-                    if (args[0] === util.motion.direction) {
+                steps = this._contains[0];
+                Event.on(window, 'runtime:motionchanged', null, function (event){
+                    if (direction === util.motion.direction) {
                         steps.forEach(function (block) {
                             block.run(currentScope);
                         });
@@ -657,120 +683,153 @@
                 return obj;
             },
             getValue: function (obj, key) {
-                return obj[key];
+                return obj()[key()];
             },
             getKeys: function (obj) {
-                return Object.keys(obj);
+                return Object.keys(obj());
             }
         },
 
         path:{
 
             lineTo: function(toPoint){
-                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y))
+                var pt = toPoint();
+                return new util.Path(getContext().lineTo, new Array(pt.x, pt.y))
             },
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
-                return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y));
+                return new util.Path(
+                    getContext().bezierCurveTo,
+                    new Array(
+                        controlPoint1().x, controlPoint1().y,
+                        controlPoint2().x, controlPoint2().y,
+                        toPoint().x, toPoint().y
+                    )
+                );
             },
             moveTo: function(toPoint){
-                return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));
+                return new util.Path(getContext().moveTo, new Array(toPoint().x, toPoint().y));
             },
             quadraticCurveTo: function(toPoint, controlPoint){
-                return new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                                                                       controlPoint.y,toPoint.x, toPoint.y));
+                return new util.Path(
+                    getContext().quadraticCurveTo,
+                    new Array(
+                        controlPoint().x, controlPoint().y,
+                        toPoint().x, toPoint().y
+                    )
+                );
             },
             arcTo: function(radius, controlPoint1, controlPoint2){
-                return new util.Path(getContext().arcTo, new Array(controlPoint1.x,
-                                                            controlPoint1.y,controlPoint2.x, controlPoint2.y,
-                                                            radius));
+                return new util.Path(
+                    getContext().arcTo,
+                    new Array(
+                        controlPoint1().x, controlPoint1().y,
+                        controlPoint2().x, controlPoint2().y,
+                        radius()
+                    )
+                );
             },
             closePath: function(){
                 return new util.Path(getContext().closePath);
             },
-            pathSet: function(args){
-                return new util.Shape(Array.prototype.slice.call(arguments));
+            pathSet: function(){
+                return new util.Shape(
+                    Array.prototype.slice.call(arguments).map(function(arg){
+                        return arg();
+                    })
+                );
             },
 
             lineStyle: function(width, color, capStyle, joinStyle){
-                getContext().lineWidth = width;
-                getContext().strokeStyle = color;
-                getContext().lineCap = capStyle;
-                getContext().lineJoin = joinStyle;
+                getContext().lineWidth = width();
+                getContext().strokeStyle = color();
+                getContext().lineCap = capStyle();
+                getContext().lineJoin = joinStyle();
             }
 
         },
 
         random: {
-            randFloat: Math.random,
-            randInt: util.randInt,
-            noise: util.noise,
-            choice: util.choice
+            randFloat: function randFloatExpr(){
+                return Math.random();
+            },
+            randInt: function randIntExpr(start, stop){
+                return util.randInt(start(), stop());
+            },
+            noise: function noiseExpr(x, y, z){
+                return util.noise(x(), y(), z());
+            },
+            choice: function choiceExpr(list){
+                return util.choice(list());
+            }
         },
 
         rect: {
             fromCoordinates: function (x, y, width, height) {
-                return new util.Rect(x, y, width, height);
+                return new util.Rect(x(), y(), width(), height());
             },
             fromVectors: function (point, size) {
-                return util.Rect.fromVectors(point, size);
+                return util.Rect.fromVectors(point(), size());
             },
-            fromArray: function (a) {
+            fromArray: function (arr) {
+                var a = arr();
                 if (a.length < 4) {
                     throw new Error('Array must have at least four elements.');
                 }
                 return new util.Rect(a[0], a[1], a[2], a[3]);
             },
             getPosition: function (rect) {
-                return rect.getPosition();
+                return rect().getPosition();
             },
             getSize: function (rect) {
-                return rect.getSize();
+                return rect().getSize();
             },
-            asArray: function (rect) {
+            asArray: function (r) {
+                var rect = r();
                 return [rect.x, rect.y, rect.size.width, rect.size.height];
             },
             getX: function (rect) {
-                return rect.x;
+                return rect().x;
             },
             getY: function (rect) {
-                return rect.y;
+                return rect().y;
             },
             getWidth: function (rect) {
-                return rect.size.width;
+                return rect().size.width;
             },
             getHeight: function (rect) {
-                return rect.size.height;
+                return rect().size.height;
             }
         },
 
         shape: {
             draw: function(shapeArg){
-                shapeArg.draw(getContext());
+                shapeArg().draw(getContext());
             },
             fill: function(shapeArg){
-                shapeArg.draw(getContext());
+                shapeArg().draw(getContext());
                 getContext().fill();
             },
             stroke: function(shapeArg){
-                shapeArg.draw(getContext());
+                shapeArg().draw(getContext());
                 getContext().stroke();
             },
             setLineWidth: function(width){
-                getContext().lineWidth = width;
+                getContext().lineWidth = width();
             },
             circle: function(pt, rad){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                    ctx.arc(pt().x, pt().y, rad(), 0, Math.PI * 2, true);
                 });
             },
-            rectangle: function(pt, width, height, orientation){
+            rectangle: function(p, w, h, orientation){
+                var pt = p();
+                var width = w();
+                var height = h();
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
-                    if(orientation == "center"){
+                    if(orientation() == "center"){
                         ctx.moveTo(pt.x - width/2, pt.y - height/2);
                         ctx.lineTo(pt.x + width/2, pt.y - height/2);
                         ctx.lineTo(pt.x + width/2, pt.y + height/2);
@@ -789,74 +848,75 @@
             ellipse: function(pt, rad1, rad2, rot){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
-                    ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+                    ctx.ellipse(pt().x, pt().y, rad1(), rad2(), rot(), 0, Math.PI * 2);
                 });
             },
         },
         size: {
             fromCoordinates: function (width, widthUnits, height, heightUnits) {
-                return new util.Size(width, widthUnits, height, heightUnits);
+                return new util.Size(width(), widthUnits(), height(), heightUnits());
             },
             fromArray: function (a, widthUnits, heightUnits) {
-                if (a.length < 2) {
+                var arr = a();
+                if (arr.length < 2) {
                     throw new Error('Array must have at least two elements.');
                 }
-                return new util.Size(a[0], widthUnits, a[1], heightUnits);
+                return new util.Size(arr[0], widthUnits(), arr[1], heightUnits());
             },
             toArray: function (size) {
-                return [size.width, size.height];
+                return [size().width, size().height];
             },
             getWidth: function (size) {
-                return size.width;
+                return size().width;
             },
             getHeight: function (size) {
-                return size.height;
+                return size().height;
             }
         },
 
         sound: {
 
             get: function(url){
-                return assets.sounds[url]; // already cached by sounds library
+                return assets.sounds[url()]; // already cached by sounds library
             },
             play: function(sound){
-                sound.play();
+                sound().play();
             },
             setLoop: function(sound, flag){
-                sound.loop = flag;
+                sound().loop = flag();
             },
             setVolume: function(sound, volume){
-                sound.volume = volume;
+                sound().volume = volume();
             },
             pause: function(sound){
-                sound.pause();
+                sound().pause();
             },
             playFrom: function(sound, time){
-                sound.playFrom(time);
+                sound().playFrom(time());
             },
             pan: function(sound, balance){
-                sound.pan = balance;
+                sound().pan = balance();
             },
             echo_DelayFeedbackFilter: function(sound, delay, feedback, filter){
-                sound.setEcho(delay, feedback, filter);
+                sound().setEcho(delay(), feedback(), filter());
             },
             stopEcho: function(sound){
-                sound.echo = false;
+                sound().echo = false;
             },
             reverb_DurationDecayReverse: function(sound, duration, decay, reverse){
-                sound.setReverb(duration, decay, reverse);
+                sound().setReverb(duration(), decay(), reverse());
             },
             stopReverb: function(sound){
-                sound.reverb = false;
+                sound().reverb = false;
             },
             effect: function(frequency, attack, decay, wait, echoDelay, echoFeedback, echoFilter, waveform, volume, balance, pitchBend, reverseBend, random, dissonance){
                 return {
                     play: function(){
                         soundEffect(
-                            frequency, attack, decay, waveform,
-                            volume, balance, wait,
-                            pitchBend, reverseBend, random, dissonance,
-                            [echoDelay, echoFeedback, echoFilter]
+                            frequency(), attack(), decay(), waveform(),
+                            volume(), balance(), wait(),
+                            pitchBend(), reverseBend(), random(), dissonance(),
+                            [echoDelay(), echoFeedback(), echoFilter()]
                         );
                     }
                 };
@@ -865,58 +925,58 @@
 
         sprite: {
             create: function(imgShapeOrSprite){
-                return new util.Sprite(imgShapeOrSprite);
+                return new util.Sprite(imgShapeOrSprite());
             },
             accelerate: function(spt, speed){
-                spt.accelerate(speed);
+                spt().accelerate(speed());
             },
             setVelocity: function(spt, vec){
-                spt.setVelocity(vec);
+                spt().setVelocity(vec());
             },
             getVelocity: function spriteGetVelocityExpr(spt){
-                return spt.velocity;
+                return spt().velocity;
             },
             getSpeed: function spriteGetSpeedExpr(spt){
-                return spt.velocity.magnitude();
+                return spt().velocity.magnitude();
             },
             getXvel: function(spt){
-                return spt.getXvel();
+                return spt().getXvel();
             },
             getYvel: function(spt){
-                return spt.getYvel();
+                return spt().getYvel();
             },
             getXpos: function(spt){
-                return spt.getXpos();
+                return spt().getXpos();
             },
             getYpos: function(spt){
-                return spt.getYpos();
+                return spt().getYpos();
             },
             rotate: function(spt, angle){
-                spt.rotate(angle);
+                spt().rotate(angle());
             },
             rotateTo: function(spt, angle){
-                spt.rotateTo(angle);
+                spt().rotateTo(angle());
             },
             move: function(spt){
-                spt.move();
+                spt().move();
             },
             moveTo: function(spt, pt){
-                spt.moveTo(pt);
+                spt().moveTo(pt());
             },
             draw: function(spt){
-                spt.draw(getContext());
+                spt().draw(getContext());
             },
             applyForce: function(spt, vec){
-                spt.applyForce(vec);
+                spt().applyForce(vec());
             },
             bounceAtEdge: function(spt){
-                spt.bounceWithinRect(canvasRect());
+                spt().bounceWithinRect(canvasRect());
             },
             wrapAtEdge: function(spt){
-                spt.wrapAroundRect(canvasRect());
+                spt().wrapAroundRect(canvasRect());
             },
             stopAtEdge: function(spt){
-                spt.stayWithinRect(canvasRect());
+                spt().stayWithinRect(canvasRect());
             }
         },
         stage: {
@@ -925,20 +985,20 @@
                     var r = canvasRect();
                     var c = getContext();
                     c.save();
-                    c.fillStyle = clr;
+                    c.fillStyle = clr();
                     c.fillRect(r.x, r.y, r.width, r.height);
                     c.restore();
                 })
                 .when(['wbimage'], function(img){
                     var c = getContext();
                     c.save();
-                    img.drawInRect(c, canvasRect());
+                    img().drawInRect(c, canvasRect());
                     c.restore();
                 })
                 .when(['shape'], function(shape){
                     var c = getContext();
                     c.save();
-                    shape.draw(c);
+                    shape().draw(c);
                     c.restore();
                 })
             .fn(),
@@ -967,48 +1027,48 @@
         string: {
 
             toString: function(x){
-                return x.toString();
+                return x().toString();
             },
             split: function(x,y){
-                return x.split(y);
+                return x().split(y);
             },
             concatenate: function(x,y){
-                return x.concat(y);
+                return x().concat(y);
             },
             repeat: function(x,n){
                 var str = "";
-                for(var i=0; i<n; i++){
-                    str = str.concat(x);
+                for(var i=0; i<n(); i++){
+                    str = str.concat(x());
                 }
                 return str;
             },
             getChar: function(n,x){
-                if(n<0)
-                    n = x.length + n;
+                if(n()<0)
+                    n = x().length + n();
 
-                return x.charAt(n);
+                return x().charAt(n);
             },
             getCharFromEnd: function(n,x){
-                if(n<=0)
-                    n = n*(-1)-1;
+                if(n()<=0)
+                    n = n()*(-1)-1;
                 else
-                    n = x.length-n;
-                return x.charAt(n);
+                    n = x().length-n;
+                return x().charAt(n);
             },
             substring: function(x,a,b){
-                if(a<0)
+                if(a()<0)
                     return "";
                 else
-                    return x.substring(a,a+b);
+                    return x().substring(a(),a()+b());
             },
             substring2: function(x,a,b){
-                if(a<0 || a>x.length)
+                if(a()<0 || a()>x().length)
                     return "";
                 else
-                    return x.substring(a,b);
+                    return x().substring(a(),b());
             },
             isSubstring: function(x,y){
-                if(y.indexOf(x)===-1){
+                if(y().indexOf(x())===-1){
                     return false;
                 }
                 else{
@@ -1016,72 +1076,72 @@
                 }
             },
             substringPosition: function(x,y){
-                return y.indexOf(x);
+                return y().indexOf(x());
             },
             replaceSubstring: function(x,y,z){
-                return x.replace(new RegExp(y, 'g'), z);
+                return x().replace(new RegExp(y(), 'g'), z());
             },
             trimWhitespace: function(x){
-                return x.trim();
+                return x().trim();
             },
             uppercase: function(x){
-                return x.toUpperCase();
+                return x().toUpperCase();
             },
             lowercase: function(x){
-                return x.toLowerCase();
+                return x().toLowerCase();
             },
             matches: function(x,y){
-                return x===y;
+                return x()===y();
             },
             doesntMatch: function(x,y){
-                return !(x===y);
+                return !(x()===y());
             },
             startsWith: function(x,y){
-                return (x.lastIndexOf(y, 0) === 0);
+                return (x().lastIndexOf(y(), 0) === 0);
             },
             endsWith: function(x,y){
-                return x.indexOf(y, x.length - y.length) !== -1;
+                return x().indexOf(y(), x().length - y().length) !== -1;
             },
             setFont: function (size, fontStyle){
-                var sizeString = size[0] + size[1];
-                getContext().font = sizeString + " " + fontStyle;
+                var sizeString = size()[0] + size()[1];
+                getContext().font = sizeString + " " + fontStyle();
 
             },
             textAlign: function (alignment){
-                getContext().textAlign = alignment;
+                getContext().textAlign = alignment();
             },
             textBaseline: function (baseline){
-                getContext().textBaseline = baseline;
+                getContext().textBaseline = baseline();
             },
             fillText: function (text, x, y){
-                getContext().fillText(text, x, y);
+                getContext().fillText(text(), x(), y());
             },
             fillTextWidth: function (text, x, y, width){
-                getContext().fillText(text, x, y, width);
+                getContext().fillText(text(), x(), y(), width());
             },
             strokeText: function (text, x, y){
-                getContext().strokeText(text, x, y);
+                getContext().strokeText(text(), x(), y());
             },
             strokeTextWidth: function (text, x, y, width){
-                getContext().strokeText(text, x, y, width);
+                getContext().strokeText(text(), x(), y(), width());
             },
             width: function (text){
-                var textMetric = getContext().measureText(text);
+                var textMetric = getContext().measureText(text());
                 return textMetric.width;
             }
         },
         vector: {
             create: function create(x,y){
-                return new util.Vector(x,y);
+                return new util.Vector(x(),y());
             },
             createPolar: function createPolar(deg, mag){
-                return util.Vector.fromPolar(deg, mag);
+                return util.Vector.fromPolar(deg(), mag());
             },
             fromArray: function fromArray(arr){
-                return new util.Vector(arr[0], arr[1]);
+                return new util.Vector(arr()[0], arr()[1]);
             },
             toArray: function toArray(vec){
-                return [vec.x, vec.y];
+                return [vec().x, vec().y];
             },
             randomPoint: function randomPoint(){
                 return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
@@ -1093,25 +1153,25 @@
                 return new util.Vector(0,0);
             },
             rotateTo: function rotateTo(vec, deg){
-                return vec.rotateTo(deg);
+                return vec().rotateTo(deg());
             },
             rotate: function rotate(vec, deg){
-                return vec.rotate(deg);
+                return vec().rotate(deg());
             },
             magnitude: function magnitude(vec){
-                return vec.magnitude();
+                return vec().magnitude();
             },
             degrees: function degrees(vec){
-                return vec.degrees();
+                return vec().degrees();
             },
             normalize: function normalize(vec){
-                return vec.normalize();
+                return vec().normalize();
             },
             x: function x(vec){
-                return vec.x;
+                return vec().x;
             },
             y: function y(vec){
-                return vec.y;
+                return vec().y;
             },
             randomUnitVector: function randomUnitVector(){
                 var vec = util.Vector.fromPolar(Math.random() * 360, 1);
@@ -1120,7 +1180,7 @@
         },
         date: {
             create: function (year, month, day) {
-                return new Date(year, month-1, day);
+                return new Date(year(), month()-1, day());
             },
             now: function () {
                 var today = new Date();
@@ -1131,40 +1191,40 @@
             },
             addDays: function (prevDate, days) {
                 // we don't want to mutate an argument in place
-                var date = new Date(prevDate.valueOf()); // clone argument
-                date.setDate(prevDate.getDate() + days);
+                var date = new Date(prevDate().valueOf()); // clone argument
+                date.setDate(prevDate.getDate() + days());
                 return date;
             },
             addMonths: function (prevDate, months) {
-                var date = new Date(prevDate.valueOf());
-                date.setMonth(date.getMonth() + months);
+                var date = new Date(prevDate().valueOf());
+                date.setMonth(date.getMonth() + months());
                 return date;
             },
             addYears: function (prevDate, years) {
-                var date = new Date(prevDate.valueOf());
-                date.setFullYear(date.getFullYear() + years);
+                var date = new Date(prevDate().valueOf());
+                date.setFullYear(date.getFullYear() + years());
                 return date;
             },
             dayOfWeek: function(date) {
                 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                return days[date.getDay()];
+                return days[date().getDay()];
             },
             getDay: function(date) {
-                return date.getDate();
+                return date().getDate();
             },
             getMonth: function(date) {
-                return date.getMonth()+1;
+                return date().getMonth()+1;
             },
             getMonthName: function(date) {
                 var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                               'August', 'September', 'October', 'November', 'December'];
-                return months[date.getMonth()];
+                return months[date().getMonth()];
             },
             getYear: function(date) {
-                return date.getFullYear();
+                return date().getFullYear();
             },
             formattedDate: function(date) {
-                return date.toLocaleDateString();
+                return date().toLocaleDateString();
             }
         }
     };

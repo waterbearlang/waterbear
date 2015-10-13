@@ -266,7 +266,6 @@
 
     //Shape
     function Shape(pathArrayOrFunction){
-        //debugger;
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
         }else if (type(pathArrayOrFunction) === 'array'){
@@ -281,7 +280,6 @@
         }
     }
     Shape.prototype.draw = function(ctx){
-        //debugger;
         if (this.pathArray){
             ctx.beginPath();
             var i;
@@ -897,7 +895,6 @@
     function Sprite(drawable){
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
-        //debugger;
         this.drawable = drawable || defaultDrawable;
         this.position = new Vector(0,0);
         this.facing = new Vector(1,0);

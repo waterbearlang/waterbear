@@ -911,9 +911,6 @@
             stopAtEdge: function stopAtEdge(spt){
                 spt.stayWithinRect(canvasRect());
             },
-            bounceAtEdgeOfSpirite: function bounceAtEdgeOfSpirite(spt1, spt2){
-                spt1.bounceWithinRect(spt2);
-            },
             checkForCollision: function checkForCollision(spt1, spt2){
                 return spt1.checkForCollision(spt2);
             }

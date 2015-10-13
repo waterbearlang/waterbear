@@ -811,18 +811,16 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 //toggle an input's selection
 ValueProto.toggleSelect = function(){
-    // debugger;
-    if (this.getAttribute('selected') === 'true'){
-       this.deselect();
-    }
-    else{
+    if (this != selectedItem) {
+        if(selectedItem) {
+            selectedItem.deselect();
+        }
         this.select();
     }
 }
 
 //select an input field
 ValueProto.select = function(){
-    // debugger;
     this.setAttribute('selected', 'true');
 
     // Highlight input field with one click
@@ -837,23 +835,22 @@ ValueProto.select = function(){
 
 // deselect an input field
 ValueProto.deselect = function(){
-    // debugger;
     this.removeAttribute('selected');
     selectedItem = null;
 }
 
 //deselect an input field and unfilter the sidebar
 function toggleFilter(evt){
-    // debugger;
     var value = dom.closest(evt.target, 'wb-value');
 
     if (BLOCK_MENU.getAttribute('filtered') === 'true'){
-        if (value && value != selectedItem){
-            value.deselect();
+        // if click outside of wb-contains then deselect the selectedItem
+        if(!value && selectedItem) {
+            selectedItem.deselect();
         }
         app.clearFilter();
 
-
+        // filter on value which is the next value for selectedItem
         if (value && value.matches('wb-value')){
             app.setFilter(value);
         }
@@ -1297,7 +1294,6 @@ function updateLocalInstancesType(variableStep, type){
 // Manage block selections
 
 function manageSelections(evt){
-    // debugger;
     var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
     if (!block) {
         // clicking away should deselect
@@ -1317,7 +1313,6 @@ function selectByValue(valueBlock){
     // Todo:
     // * make sure this is a valid block to select
     // * move selection to next block as needed
-    // debugger;
     var oldValue = dom.find(workspace, '.selected-value');
     if (oldValue){
         // clicking an item for a second time is not deselecting
@@ -1338,7 +1333,6 @@ function selectByBlock(block){
     // Todo:
     // * make sure this is a valid block to select
     // * move selection to next block as needed
-    // debugger;
     var oldBlock = dom.find(workspace, '.selected-block');
     if (oldBlock){
         if (oldBlock === block){

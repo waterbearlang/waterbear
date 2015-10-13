@@ -991,7 +991,7 @@
     }
 
     function checkForCollisionRectangleAndCircle(rectangle, circle){
-        // Solution came from http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+        // Solution came from `http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection`
 
         var center_x;
         var center_y;

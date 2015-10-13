@@ -811,6 +811,7 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 //toggle an input's selection
 ValueProto.toggleSelect = function(){
+    // debugger;
     if (this.getAttribute('selected') === 'true'){
        this.deselect();
     }
@@ -821,6 +822,7 @@ ValueProto.toggleSelect = function(){
 
 //select an input field
 ValueProto.select = function(){
+    // debugger;
     this.setAttribute('selected', 'true');
 
     // Highlight input field with one click
@@ -835,12 +837,14 @@ ValueProto.select = function(){
 
 // deselect an input field
 ValueProto.deselect = function(){
+    // debugger;
     this.removeAttribute('selected');
     selectedItem = null;
 }
 
 //deselect an input field and unfilter the sidebar
 function toggleFilter(evt){
+    // debugger;
     var value = dom.closest(evt.target, 'wb-value');
 
     if (BLOCK_MENU.getAttribute('filtered') === 'true'){
@@ -1293,9 +1297,15 @@ function updateLocalInstancesType(variableStep, type){
 // Manage block selections
 
 function manageSelections(evt){
+    // debugger;
     var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
-    if (!block) return;
-    if (block.localName == 'wb-value'){
+    if (!block) {
+        // clicking away should deselect
+        selectByValue(null);
+        selectByBlock(null);
+        return;
+    }
+    if (block.localName == 'wb-value' || block.localName == "wb-contains"){
         selectByValue(block);
         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
     }else{
@@ -1307,22 +1317,28 @@ function selectByValue(valueBlock){
     // Todo:
     // * make sure this is a valid block to select
     // * move selection to next block as needed
+    // debugger;
     var oldValue = dom.find(workspace, '.selected-value');
     if (oldValue){
+        // clicking an item for a second time is not deselecting
         if (oldValue === valueBlock){
             /* nothing to do */
             return;
         }else{
             oldValue.classList.remove('selected-value');
+            if (!valueBlock) return;
         }
     }
-    valueBlock.classList.add('selected-value');
+    if(valueBlock) {
+        valueBlock.classList.add('selected-value');
+    }
 }
 
 function selectByBlock(block){
     // Todo:
     // * make sure this is a valid block to select
     // * move selection to next block as needed
+    // debugger;
     var oldBlock = dom.find(workspace, '.selected-block');
     if (oldBlock){
         if (oldBlock === block){
@@ -1330,9 +1346,13 @@ function selectByBlock(block){
             return;
         }else{
             oldBlock.classList.remove('selected-block');
+            if (!block) return;
+
         }
     }
-    block.classList.add('selected-block');
+    if (block) {
+        block.classList.add('selected-block');
+    }
 }
 
 function handleInputOnBalance(evt) {

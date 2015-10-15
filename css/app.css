@@ -282,6 +282,31 @@ wb-accordion.text > header:after{ background-color: hsl(150, 50%, 50%); }
 wb-accordion.vector > header:after{ background-color: hsl(75, 50%, 50%); }
 wb-accordion.date > header:after{ background-color: hsl(55, 76%, 70%); }
 
+
+/* Accordion colors when open*/
+wb-accordion.control[open=true] > header{ background-color: hsl(0, 53%, 56%); }
+wb-accordion.sprite[open=true] > header{ background-color: hsl(105, 50%, 50%); }
+wb-accordion.music[open=true] > header{ background-color: hsl(210, 50%, 50%); }
+wb-accordion.sound[open=true] > header{ background-color: hsl(315, 50%, 50%); }
+wb-accordion.array[open=true] > header{ background-color: hsl(60, 50%, 50%); }
+wb-accordion.boolean[open=true] > header{ background-color: hsl(165, 50%, 75%); }
+wb-accordion.stage[open=true] > header{ background-color: hsl(270, 50%, 50%); }
+wb-accordion.color[open=true] > header{ background-color: hsl(15, 50%, 50%); }
+wb-accordion.image[open=true] > header{ background-color: hsl(120, 50%, 50%); }
+wb-accordion.math[open=true] > header{ background-color: hsl(225, 50%, 50%); }
+wb-accordion.random[open=true] > header{ background-color: hsl(330, 50%, 50%); }
+wb-accordion.object[open=true] > header{ background-color: hsl(180, 50%, 50%); }
+wb-accordion.string[open=true] > header{ background-color: hsl(285, 50%, 50%); }
+wb-accordion.path[open=true] > header{ background-color: hsl(30, 50%, 50%); }
+wb-accordion.rect[open=true] > header{ background-color: hsl(240, 50%, 50%); }
+wb-accordion.sense[open=true] > header{ background-color: hsl(345, 50%, 50%); }
+wb-accordion.motion[open=true] > header{ background-color: hsl(90, 50%, 50%); }
+wb-accordion.shape[open=true] > header{ background-color: hsl(195, 50%, 50%); }
+wb-accordion.geolocation[open=true] > header{ background-color: hsl(300, 50%, 75%); }
+wb-accordion.size[open=true] > header{ background-color: hsl(45, 50%, 50%); }
+wb-accordion.text[open=true] > header{ background-color: hsl(150, 50%, 50%); }
+wb-accordion.vector[open=true] > header{ background-color: hsl(75, 50%, 50%); }
+wb-accordion.date[open=true] > header{ background-color: hsl(55, 76%, 70%); }
 /* Prevent selecting text while dragging */
 .dragging *{
     -webkit-touch-callout: none;

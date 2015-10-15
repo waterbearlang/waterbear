@@ -603,9 +603,6 @@
             pow: function(a,b){
                 return Math.pow(a, b);
             },
-            sqrt: function(a,b){
-                return Math.sqrt(a);
-            },
             pi: function(){
                 return Math.PI;
             },

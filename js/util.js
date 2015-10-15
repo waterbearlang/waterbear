@@ -143,6 +143,13 @@
         return atan2(sin(diff), cos(diff));
     }
 
+    function dist(x1, y1, x2, y2){
+        // absolute distance between two points
+        var dx = x1 - x2;
+        var dy = y1 - y2;
+        sqrt(dx * dx + dy * dy);
+    }
+
     // Create a vector from an angle in degrees and a magnitude (length)
     function Vector(x,y){
         this.x = x;
@@ -1025,6 +1032,7 @@
         deleteItem: deleteItem,
         setDefault: setDefault,
         type: type,
+        dist: dist,
         Method: Method,
         Vector: Vector,
         Rect: Rect,

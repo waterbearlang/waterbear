@@ -48,6 +48,9 @@ AccordionProto.toggle = function(){
 window.WBAccordion = document.registerElement('wb-accordion', {prototype: AccordionProto});
 
 function accordionClick(evt){
+    if (Event.distancePointerMoved > 5){
+        return;
+    }
     evt.preventDefault();
     evt.stopPropagation();
     dom.closest(evt.target, 'wb-accordion').toggle();
@@ -55,7 +58,7 @@ function accordionClick(evt){
 }
 
 Event.on(document.body, 'editor:click', 'wb-accordion > header', accordionClick);
-Event.on(document.body, 'editor:tap', 'wb-accordion > header', accordionClick);
+Event.on(document.body, 'editor:touchend', 'wb-accordion > header', accordionClick);
 
 /* For HBox, VBox, and Splitter:
 

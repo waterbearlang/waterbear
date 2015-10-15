@@ -276,13 +276,10 @@
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
         }else if (type(pathArrayOrFunction) === 'array'){
-            var len = pathArrayOrFunction.length;
-            var i = 0;
-            while (i<len){
+            for(var i =0; i < pathArrayOrFunction.length; i++){
                 if(!(pathArrayOrFunction[i] instanceof Path)){
                     throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
                 }
-                i = i+1;
             }
             this.pathArray = pathArrayOrFunction;
         }else{
@@ -963,7 +960,7 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
-    Sprite.prototype.bounceWithinRect = function(r){
+    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }else if (this.position.x < r.x && this.velocity.x < 0){
@@ -974,6 +971,116 @@
         }else if (this.position.y < r.y && this.velocity.y < 0){
             this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
         }
+    }
+
+    Sprite.prototype.checkForCollision = function checkForCollision(other){
+
+        var collision = false;
+
+        if(this.drawable.width && other.drawable.width){
+            collision = checkForCollisionTwoRectangles(this, other);
+        }
+        else if(this.drawable.radius && other.drawable.radius){
+            collision = checkForCollisionTwoCircles(this, other);
+        }
+        else if(this.drawable.radius && other.drawable.width){
+            collision = checkForCollisionRectangleAndCircle(other, this);
+        }
+        else if(this.drawable.width && other.drawable.radius){
+            collision = checkForCollisionRectangleAndCircle(this, other);
+        }
+
+        return collision;
+
+    }
+
+    function checkForCollisionRectangleAndCircle(rectangle, circle){
+        // Solution came from `http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection`
+
+        var center_x;
+        var center_y;
+
+        if(rectangle.drawable.centered){
+            center_x = rectangle.position.x;
+            center_y = rectangle.position.y;
+        }
+        else{
+            center_x = rectangle.position.x + rectangle.drawable.width/2;
+            center_y = rectangle.position.y + rectangle.drawable.height/2;
+        }
+
+        var distance_x = Math.abs(circle.position.x - center_x);
+        var distance_y = Math.abs(circle.position.y - center_y);
+
+        var collision = false;
+
+
+        if(distance_x > rectangle.drawable.width/2 + circle.drawable.radius){
+            collision = false;
+        }
+        else if(distance_y > rectangle.drawable.height/2 + circle.drawable.radius){
+            collision = false;
+        }
+        else if(distance_x <= rectangle.drawable.width/2){
+            collision = true;
+        }
+        else if(distance_y <= rectangle.drawable.height/2){
+            collision = true;
+        }
+        else{
+            var corner_distance = Math.pow(distance_x - rectangle.width/2, 2) +
+                                Math.pow(distance_y - rectangle.height/2, 2);
+
+            collision = corner_distance <= Math.pow(circle.drawable.radius, 2);
+
+        }
+
+        return collision;
+
+    }
+
+
+    function checkForCollisionTwoCircles(this_, other){
+
+        var diff_x = this_.position.x - other.position.x;
+        var diff_y = this_.position.y - other.position.y;
+
+        var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+
+        return distance < this_.drawable.radius + other.drawable.radius;
+
+    }
+
+    function checkForCollisionTwoRectangles(this_, other){
+
+        var this_x;
+        var this_y;
+        var other_x;
+        var other_y;
+
+        if(this_.drawable.centered){
+            this_x = this_.position.x - this_.drawable.width/2;
+            this_y = this_.position.y - this_.drawable.height/2;
+        }
+        else{
+            this_x = this_.position.x;
+            this_y = this_.position.y;
+        }
+
+
+        if(other.drawable.centered){
+            other_x = other.position.x - other.drawable.width/2;
+            other_y = other.position.y - other.drawable.height/2;
+        }
+        else{
+            other_x = other.position.x;
+            other_y = other.position.y;
+        }
+
+        return this_x < other_x + other.drawable.width &&
+                this_x + this_.drawable.width > other_x &&
+                this_y < other_y + other.drawable.height &&
+                this_.drawable.height + this_y > other_y;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

@@ -1121,11 +1121,18 @@
                 </wb-accordion>
             </sidebar>
             <wb-workspace>
-                <header class="title">Workspace</header>
+                <div class="sideMenu">
+                    <button class="do-run">Run</button>
+                    <button class="do-stop">Stop</button>
+                    <button class="open-files">File</button>
+                    <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
+                    <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
+                    <button class="open-example">Examples</button>
+                </div>
                 <wb-contains></wb-contains>
             </wb-workspace>
         </wb-workbox>
-    </wb-vbox>
+        </wb-vbox>
     <wb-vbox>
       <div class="menu">
 	<button class="do-run">Run</button>

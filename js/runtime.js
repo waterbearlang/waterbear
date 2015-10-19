@@ -796,6 +796,16 @@
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
                 });
             },
+            triangle: function(p1, p2, p3){
+                return new util.Shape(function(ctx){
+                    ctx.beginPath();
+
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.lineTo(p3.x, p3.y);
+                    ctx.lineTo(p1.x, p1.y);
+                });
+            }
         },
         size: {
             fromCoordinates: function (width, widthUnits, height, heightUnits) {

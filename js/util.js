@@ -1,3 +1,5 @@
+
+
 // Utility functions
 
 (function(){
@@ -1077,10 +1079,20 @@
             other_y = other.position.y;
         }
 
-        return this_x < other_x + other.drawable.width &&
-                this_x + this_.drawable.width > other_x &&
-                this_y < other_y + other.drawable.height &&
-                this_.drawable.height + this_y > other_y;
+
+
+        var this_rect = new SAT.Box(new SAT.Vector(this_x, this_y), this_.drawable.width, this_.drawable.height);
+        var other_rect = new SAT.Box(new SAT.Vector(other_x, other_y), other.drawable.width, other.drawable.height);
+
+        var response = new SAT.Response();
+
+        SAT.testPolygonPolygon(this_rect.toPolygon(), other_rect.toPolygon(), response)
+
+        return response.a || response.b;
+        //return this_x < other_x + other.drawable.width &&
+        //        this_x + this_.drawable.width > other_x &&
+        //        this_y < other_y + other.drawable.height &&
+        //        this_.drawable.height + this_y > other_y;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

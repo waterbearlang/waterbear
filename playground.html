@@ -1123,7 +1123,6 @@
             <wb-workspace>
                 <div class="sideMenu">
                     <button class="do-run">Run</button>
-                    <button class="do-stop">Stop</button>
                     <button class="open-files">File</button>
                     <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
                     <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
@@ -1133,14 +1132,13 @@
             </wb-workspace>
         </wb-workbox>
         </wb-vbox>
-    <wb-vbox>
-      <div class="menu">
-	<button class="do-run">Run</button>
-	<button class="do-stop">Stop</button>
-      </div>
-      <wb-playground>
-        <canvas></canvas>
-      </wb-playground>
+    <wb-vbox id="playgroundBox">
+        <wb-playground> 
+            <div class="sideMenu">
+                <button class="do-stop">Stop</button>
+            </div>
+            <canvas></canvas>
+        </wb-playground>
     </wb-vbox>
     </wb-hbox>
     <output class="feedback"></output>

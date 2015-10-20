@@ -245,6 +245,21 @@ wb-playground {
     border: 4px #111111 outset;
 }
 
+#playgroundBox {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 0;
+    
+    -webkit-transition: width 0.2s ease-out;
+    -moz-transition: width 0.2s ease-out;
+    transition: width 0.2s ease-out;
+    
+    overflow: hidden;
+    z-index: 999;
+}
+
 wb-contains:empty::before{
     content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */
     width: 70%;

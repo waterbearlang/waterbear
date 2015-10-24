@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start my.conf.js"
+    "test": "./node_modules/karma/bin/karma start karma.conf.js"
   },
   "repository": {
     "type": "git",
@@ -27,10 +27,11 @@
     "karma-coverage": "^0.5.2",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-qunit": "^0.1.5",
-    "node-qunit-phantomjs": "^1.2.0",
+    "karma-requirejs": "^0.2.2",
     "parse5": "^1.5.0",
     "phantomjs": "^1.9.18",
-    "qunitjs": "^1.19.0"
+    "qunitjs": "^1.19.0",
+    "requirejs": "^2.1.20"
   },
   "dependencies": {}
 }

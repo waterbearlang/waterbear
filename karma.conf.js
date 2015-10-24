@@ -15,8 +15,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      { pattern: 'js/util.js', watched: false },
+      { pattern: 'js/event.js', watched: false },
+      'js/dom.js',
+      //'js/block.js',
+      'js/file.js',
+      'js/queryparams.js',
+      'js/undo.js',
+      //'js/app*.js',
+      //'js/widget.js',
       'js/runtime.js',
-      'test/runtime.html'
+      'test/test-helpers.js',
+      'test/sinon-1.12.2.js',
+      'test/runtime.js',
+      //'test/all-blocks-have-functions.js'
     ],
 
 
@@ -28,7 +40,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'js/runtime.js': ['coverage']
+        'js/*.js': ['coverage']
     },
 
 
@@ -52,7 +64,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
     // start these browsers

@@ -1366,11 +1366,11 @@ function handleEnter(evt) {
     if(code === 13){
         var wb = dom.closest(evt.target, 'wb-value');
             wb.deselect();
+            selectByValue(null);
+            selectByBlock(null);
             app.clearFilter();
             var input = wb.getElementsByTagName('input');
             input[0].blur();
-            var oldBlock = dom.find(workspace, '.selected-block');
-            oldBlock.classList.remove('selected-block');
     }
     return false;
 }

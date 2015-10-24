@@ -1,3 +1,5 @@
+
+
 // Utility functions
 
 (function(){
@@ -995,45 +997,25 @@
     }
 
     function checkForCollisionRectangleAndCircle(rectangle, circle){
-        // Solution came from `http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection`
 
-        var center_x;
-        var center_y;
+        var rectangle_x;
+        var rectangle_y;
 
         if(rectangle.drawable.centered){
-            center_x = rectangle.position.x;
-            center_y = rectangle.position.y;
+            rectangle_x = rectangle.position.x - rectangle.drawable.width/2;
+            rectangle_y = rectangle.position.y - rectangle.drawable.height/2;
         }
         else{
-            center_x = rectangle.position.x + rectangle.drawable.width/2;
-            center_y = rectangle.position.y + rectangle.drawable.height/2;
+            rectangle_x = rectangle.position.x;
+            rectangle_y = rectangle.position.y;
         }
 
-        var distance_x = Math.abs(circle.position.x - center_x);
-        var distance_y = Math.abs(circle.position.y - center_y);
+        var rect = new SAT.Box(new SAT.Vector(rectangle_x, rectangle_y), rectangle.drawable.width, rectangle.drawable.height);
+        var circ = new SAT.Circle(new SAT.Vector(circle.position.x, circle.position.y), circle.drawable.radius);
 
-        var collision = false;
+        var response = new SAT.Response();
 
-
-        if(distance_x > rectangle.drawable.width/2 + circle.drawable.radius){
-            collision = false;
-        }
-        else if(distance_y > rectangle.drawable.height/2 + circle.drawable.radius){
-            collision = false;
-        }
-        else if(distance_x <= rectangle.drawable.width/2){
-            collision = true;
-        }
-        else if(distance_y <= rectangle.drawable.height/2){
-            collision = true;
-        }
-        else{
-            var corner_distance = Math.pow(distance_x - rectangle.width/2, 2) +
-                                Math.pow(distance_y - rectangle.height/2, 2);
-
-            collision = corner_distance <= Math.pow(circle.drawable.radius, 2);
-
-        }
+        var collision = SAT.testPolygonCircle(rect.toPolygon(), circ, response)
 
         return collision;
 
@@ -1042,12 +1024,14 @@
 
     function checkForCollisionTwoCircles(this_, other){
 
-        var diff_x = this_.position.x - other.position.x;
-        var diff_y = this_.position.y - other.position.y;
+        var this_circle = new SAT.Circle(new SAT.Vector(this_.position.x, this_.position.y), this_.drawable.radius);
+        var other_circle = new SAT.Circle(new SAT.Vector(other.position.x, other.position.y), other.drawable.radius);
 
-        var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+        var response = new SAT.Response();
 
-        return distance < this_.drawable.radius + other.drawable.radius;
+        var collision = SAT.testCircleCircle(this_circle, other_circle, response)
+
+        return collision;
 
     }
 
@@ -1077,10 +1061,14 @@
             other_y = other.position.y;
         }
 
-        return this_x < other_x + other.drawable.width &&
-                this_x + this_.drawable.width > other_x &&
-                this_y < other_y + other.drawable.height &&
-                this_.drawable.height + this_y > other_y;
+        var this_rect = new SAT.Box(new SAT.Vector(this_x, this_y), this_.drawable.width, this_.drawable.height);
+        var other_rect = new SAT.Box(new SAT.Vector(other_x, other_y), other.drawable.width, other.drawable.height);
+
+        var response = new SAT.Response();
+
+        var collision = SAT.testPolygonPolygon(this_rect.toPolygon(), other_rect.toPolygon(), response)
+
+        return collision;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

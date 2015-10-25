@@ -994,6 +994,31 @@
                     <wb-value type="number" min="0">height</wb-value>
                     <wb-value type="list" allow="literal" options="center,corner" value="corner">anchored at</wb-value>
                 </wb-expression>
+                <wb-expression type="shape" ns="shape" fn="polygon">
+                    <wb-value>polygon with points</wb-value>
+                    <wb-row>
+                        <wb-value type="vector"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+                <wb-expression ns="shape" type="shape" fn="arc">
+                    <wb-value type="number">arc with radius</wb-value>
+                    <wb-value type="vector">starting from point</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
+                </wb-expression>
+                <wb-expression ns="shape" type="shape" fn="bezierCurve">
+                    <wb-value type="vector">bezier curve from</wb-value>
+                    <wb-value type="vector">to</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
+                </wb-expression>
+                <wb-expression ns="shape" type="shape" fn="quadraticCurve">
+                    <wb-value type="vector">quadratic curve from</wb-value>
+                    <wb-value type="vector">to</wb-value>
+                    <wb-value type="vector">control point</wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">
                 <header>

@@ -257,45 +257,82 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints){
+    function Path(funcToCall, inputPoints, startPoint){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
+        this.startPoint = startPoint;
     }
 
     Path.prototype.draw = function(ctx){
+        // debugger;
+        ctx.beginPath();
+        ctx.moveTo(this.startPoint.x, this.startPoint.y);
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
             this.funcToCall.apply(ctx, new Array());
         }
-
+        ctx.fill();
+        ctx.stroke();
     }
 
 
     //Shape
-    function Shape(pathArrayOrFunction){
+    function Shape(pathArrayOrFunction, pointsArray){
+        // debugger;
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
-        }else if (type(pathArrayOrFunction) === 'array'){
-            for(var i =0; i < pathArrayOrFunction.length; i++){
-                if(!(pathArrayOrFunction[i] instanceof Path)){
-                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
-                }
-            }
-            this.pathArray = pathArrayOrFunction;
-        }else{
+            if (pointsArray != undefined)
+                this.pointsArray = pointsArray;
+        }
+        // else if (type(pathArrayOrFunction) === 'array'){
+        //     for(var i =0; i < pathArrayOrFunction.length; i++){
+        //         // if(!(pathArrayOrFunction[i] instanceof Path)){
+        //         //     throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
+        //         // }
+        //     }
+        //     this.pathArray = pathArrayOrFunction;
+        // }
+        else if (pathArrayOrFunction instanceof Path) {
+            this.path = pathArrayOrFunction;
+        }
+        else{
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
     Shape.prototype.draw = function(ctx){
-        if (this.pathArray){
+        // debugger;
+        // if (this.pathArray){
+        //     console.log("drawing path array");
+        //     ctx.beginPath();
+
+        //     // ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        //     var i;
+        //     for(i=0; i<this.pathArray.length; i++){
+        //         this.pathArray[i].draw(ctx);
+        //     }
+
+        //     // ctx.beginPath();
+        //     // for(var i=0; i < this.pathArray.length; i++) {
+        //     //     if (i === 0) {
+        //     //         ctx.moveTo(this.pathArray[i].x, this.pathArray[i].y);
+        //     //     }
+        //     //     else {
+        //     //         ctx.lineTo(this.pathArray[i].x, this.pathArray[i].y);
+        //     //     }
+        //     //     if(i === this.pathArray.length-1) ctx.lineTo(this.pathArray[0].x, this.pathArray[0].y);
+        //     // }
+        // }else
+        if (this.path){
+            console.log("drawing stand alone path");
             ctx.beginPath();
-            var i;
-            for(i=0; i<this.pathArray.length; i++){
-                this.pathArray[i].draw(ctx);
-            }
-        }else if (this._draw){
+            ctx.moveTo(this.path.startPoint.x, this.path.startPoint.y);
+            this.path.draw(ctx);
+
+
+        }else if(this._draw){
+            console.log("drawing other shape");
             this._draw(ctx);
         }
         ctx.fill();

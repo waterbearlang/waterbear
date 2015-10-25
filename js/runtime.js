@@ -798,6 +798,45 @@
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
                 });
             },
+            polygon: function(args){
+                var points = [].slice.call(arguments);
+                return new util.Shape(function(ctx){
+                    // debugger;
+                    ctx.beginPath();
+                    var points = this.pointsArray;
+                    for(var i=0; i < points.length; i++) {
+                        if (i === 0) {
+                            ctx.moveTo(points[i].x, points[i].y);
+                        }
+                        else {
+                            ctx.lineTo(points[i].x, points[i].y);
+                        }
+                        if(i === points.length-1) ctx.lineTo(points[0].x, points[0].y);
+                    }
+                }, points);
+            },
+            arc: function(radius, startPoint, controlPoint1, controlPoint2){
+                // debugger;
+                var path = new util.Path(getContext().arcTo, new Array(controlPoint1.x,
+                                                            controlPoint1.y,controlPoint2.x, controlPoint2.y,
+                                                            radius), startPoint);
+                return new util.Shape(path);
+            },
+            bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
+                // debugger;
+                var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
+                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
+                                                                    toPoint.y), startPoint);
+                return new util.Shape(path);
+            },
+            quadraticCurve: function(startPoint, toPoint, controlPoint){
+                // debugger;
+                var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
+                                                                       controlPoint.y,toPoint.x, toPoint.y),
+                                                                       startPoint);
+                // return new util.Shape(path);
+                return path;
+            },
         },
         size: {
             fromCoordinates: function (width, widthUnits, height, heightUnits) {

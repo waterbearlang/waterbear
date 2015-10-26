@@ -14,13 +14,12 @@ body{
 }
 
 sidebar{
-    flex: 0 0 200px;
+    flex: 0 0 20%;
     overflow-y: auto;
     overflow-x: auto;
     position: relative;
     border-radius: 5px;
     border: 4px #111111 outset;
-    width: 195px;
     float: left;
     margin-top: 10px;
     margin-left: 10px;
@@ -70,12 +69,13 @@ body > output{
     position: absolute;
     z-index: 1;
     right: 0;
+    margin-right: inherit;
     padding-right: 4px;
 }
 
 .open-files, .undo, .redo, .open-example, .do-run, .do-stop {
     color: #FFFFFF; 
-    height: 40px;
+    height: 45px;
     width: 100%;
     font-size: 2vw;
     border: none;
@@ -240,19 +240,20 @@ wb-workspace > wb-contains{
 }
 
 wb-workspace {
-    margin-top: 10px;
+    margin: 10px 10px 0 10px;
     border-radius: 5px;
     border: 4px #111111 outset;
 }
 
 wb-playground {
-    width: 97%;
-    margin: 10px 2% 0 1%;
+    width: 100%;
     border-radius: 5px;
     border: 4px #111111 outset;
+    background-color: white;
 }
 
-/*#playgroundBox {
+#playgroundBox {
+    margin-top: 7%;
     position: absolute;
     top: 0px;
     right: 0px;
@@ -265,7 +266,7 @@ wb-playground {
     
     overflow: hidden;
     z-index: 999;
-}*/
+}
 
 wb-contains:empty::before{
     content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */

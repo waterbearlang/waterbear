@@ -147,7 +147,7 @@ Event.on(document.body, 'ui:drag-end', null, function(evt){
     }));
 });
 
-Event.on(window, 'ui:load', null, function(evt){
+/*Event.on(window, 'ui:load', null, function(evt){
     if (localStorage.__splitterPositions){
         var splitters = dom.findAll('wb-splitter');
         var positions = JSON.parse(localStorage.__splitterPositions);
@@ -155,7 +155,7 @@ Event.on(window, 'ui:load', null, function(evt){
             splitters[i].previousElementSibling.style.flex = positions[i];
         }
     }
-});
+});*/
 
 Event.on(window, 'ui:dblclick', 'wb-splitter', function(evt){
     var panel = evt.target.previousElementSibling;

@@ -32,7 +32,6 @@ Event.on('.do-run', 'ui:click', null, startScript);
 Event.on('.do-stop', 'ui:click', null, stopScript);
 
 function startScript(evt){
-    document.getElementById("playgroundBox").style.width = "800px";
     _gaq.push(['_trackEvent', 'Actions', 'run']);
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
@@ -41,6 +40,7 @@ function startScript(evt){
         evt.target.blur();
     }
     runtime.getStage().focus();
+    document.getElementById('playgroundBox').style.width = '100%';
     preload().whenLoaded(runScript);
 }
 

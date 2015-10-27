@@ -1,3 +1,5 @@
+
+
 // Utility functions
 
 (function(){
@@ -143,6 +145,13 @@
         return atan2(sin(diff), cos(diff));
     }
 
+    function dist(x1, y1, x2, y2){
+        // absolute distance between two points
+        var dx = x1 - x2;
+        var dy = y1 - y2;
+        sqrt(dx * dx + dy * dy);
+    }
+
     // Create a vector from an angle in degrees and a magnitude (length)
     function Vector(x,y){
         this.x = x;
@@ -269,13 +278,10 @@
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
         }else if (type(pathArrayOrFunction) === 'array'){
-            var len = pathArrayOrFunction.length;
-            var i = 0;
-            while (i<len){
+            for(var i =0; i < pathArrayOrFunction.length; i++){
                 if(!(pathArrayOrFunction[i] instanceof Path)){
                     throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
                 }
-                i = i+1;
             }
             this.pathArray = pathArrayOrFunction;
         }else{
@@ -325,7 +331,7 @@
         .when(['array', 'vector'], function(a,b){ return a.map(function(x){ return multiply(x,b); }); })
         .when(['vector', 'number'], function(a,b){ return new Vector(a.x * b, a.y * b); })
         .when(['number', 'vector'], function(a,b){ return new Vector(b.x * a, b.y * a); })
-        // dot product, cross product only makes sense in 3 (or more?) dimensions
+        // dot product, cross product only makes sense in 3 dimensions
         .when(['vector', 'vector'], function(a,b){ return a.x * b.x + a.y * b.y; })
         .when(['number', 'number'], function(a,b){ return a * b; })
         .fn(); // no inverse!
@@ -956,7 +962,7 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
-    Sprite.prototype.bounceWithinRect = function(r){
+    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }else if (this.position.x < r.x && this.velocity.x < 0){
@@ -967,6 +973,102 @@
         }else if (this.position.y < r.y && this.velocity.y < 0){
             this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
         }
+    }
+
+    Sprite.prototype.checkForCollision = function checkForCollision(other){
+
+        var collision = false;
+
+        if(this.drawable.width && other.drawable.width){
+            collision = checkForCollisionTwoRectangles(this, other);
+        }
+        else if(this.drawable.radius && other.drawable.radius){
+            collision = checkForCollisionTwoCircles(this, other);
+        }
+        else if(this.drawable.radius && other.drawable.width){
+            collision = checkForCollisionRectangleAndCircle(other, this);
+        }
+        else if(this.drawable.width && other.drawable.radius){
+            collision = checkForCollisionRectangleAndCircle(this, other);
+        }
+
+        return collision;
+
+    }
+
+    function checkForCollisionRectangleAndCircle(rectangle, circle){
+
+        var rectangle_x;
+        var rectangle_y;
+
+        if(rectangle.drawable.centered){
+            rectangle_x = rectangle.position.x - rectangle.drawable.width/2;
+            rectangle_y = rectangle.position.y - rectangle.drawable.height/2;
+        }
+        else{
+            rectangle_x = rectangle.position.x;
+            rectangle_y = rectangle.position.y;
+        }
+
+        var rect = new SAT.Box(new SAT.Vector(rectangle_x, rectangle_y), rectangle.drawable.width, rectangle.drawable.height);
+        var circ = new SAT.Circle(new SAT.Vector(circle.position.x, circle.position.y), circle.drawable.radius);
+
+        var response = new SAT.Response();
+
+        var collision = SAT.testPolygonCircle(rect.toPolygon(), circ, response)
+
+        return collision;
+
+    }
+
+
+    function checkForCollisionTwoCircles(this_, other){
+
+        var this_circle = new SAT.Circle(new SAT.Vector(this_.position.x, this_.position.y), this_.drawable.radius);
+        var other_circle = new SAT.Circle(new SAT.Vector(other.position.x, other.position.y), other.drawable.radius);
+
+        var response = new SAT.Response();
+
+        var collision = SAT.testCircleCircle(this_circle, other_circle, response)
+
+        return collision;
+
+    }
+
+    function checkForCollisionTwoRectangles(this_, other){
+
+        var this_x;
+        var this_y;
+        var other_x;
+        var other_y;
+
+        if(this_.drawable.centered){
+            this_x = this_.position.x - this_.drawable.width/2;
+            this_y = this_.position.y - this_.drawable.height/2;
+        }
+        else{
+            this_x = this_.position.x;
+            this_y = this_.position.y;
+        }
+
+
+        if(other.drawable.centered){
+            other_x = other.position.x - other.drawable.width/2;
+            other_y = other.position.y - other.drawable.height/2;
+        }
+        else{
+            other_x = other.position.x;
+            other_y = other.position.y;
+        }
+
+        var this_rect = new SAT.Box(new SAT.Vector(this_x, this_y), this_.drawable.width, this_.drawable.height);
+        var other_rect = new SAT.Box(new SAT.Vector(other_x, other_y), other.drawable.width, other.drawable.height);
+
+        var response = new SAT.Response();
+
+        var collision = SAT.testPolygonPolygon(this_rect.toPolygon(), other_rect.toPolygon(), response)
+
+        return collision;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){
@@ -1025,6 +1127,7 @@
         deleteItem: deleteItem,
         setDefault: setDefault,
         type: type,
+        dist: dist,
         Method: Method,
         Vector: Vector,
         Rect: Rect,

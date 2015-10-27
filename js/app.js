@@ -200,7 +200,8 @@ function handleExampleButton(evt){
                 handleExample('Noise 3D', 'noise3d'),
                 handleExample('Dance', 'dance'),
                 handleExample('Simple Bounce', 'bounce'),
-                handleExample('Simple Move', 'simple_move')
+                handleExample('Simple Move', 'simple_move'),
+                handleExample('Simple Pong', 'simple_pong')
             ]
         }
     );

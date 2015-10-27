@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="lib/notiFire.css">
     <script src="lib/prefixfree.min.js"></script>
     <script src="lib/ga.js"></script>
+    <script src="lib/SAT.js"></script>
 </head>
 <body>
     <header>
@@ -215,6 +216,10 @@
                 <wb-step ns="sprite" fn="stopAtEdge">
                     <wb-value type="sprite">stop at edge</wb-value>
                 </wb-step>
+                <wb-expression type="boolean" ns="sprite" fn="checkForCollision">
+                    <wb-value type="sprite">is collision</wb-value>
+                    <wb-value type="sprite"></wb-value>
+                </wb-expression>
             </wb-accordion>
             <wb-accordion class="sound">
                 <header>
@@ -611,6 +616,9 @@
                 <wb-expression type="number" ns="math" fn="abs">
                     <wb-value type="number" value="0">absolute value</wb-value>
                 </wb-expression>
+                <wb-expression type="number" ns="math" fn="sgn">
+                	<wb-value type="number" value="0">sign of</wb-value>
+                </wb-expression>
                 <wb-expression type="number" ns="math" fn="floor">
                     <wb-value type="number" value="0">floor</wb-value>
                 </wb-expression>
@@ -621,6 +629,24 @@
                     <wb-value type="number" value="0"></wb-value>
                     <wb-value type="number" value="0">to the power of
                 </wb-value></wb-expression>
+                <wb-expression ns="math" type="number" fn="sqrt">
+                	<wb-value type="number" value="1">square root of</wb-value>
+                </wb-expression>
+                <wb-expression ns="math" type="number" fn="cbrt">
+                	<wb-value type="number" value="1">cube root of</wb-value>
+                </wb-expression>
+                <wb-expression ns="math" type="number" fn="root">
+                	<wb-value type="number" value="1">root of</wb-value>
+                	<wb-value type="number" value="4">to degree</wb-value>
+                </wb-expression>
+                <wb-expression ns="math" type="number" fn="log">
+                	<wb-value type="number" value="1">logarithm of</wb-value>
+                	<wb-value type="number">to base
+                		<wb-expression type="number" ns="math" fn="e">
+							<wb-value>e</wb-value>
+						</wb-expression>
+                	</wb-value>
+                </wb-expression>
                 <wb-expression type="number" ns="math" fn="max">
                     <wb-value type="array" value="0">max</wb-value>
                 </wb-expression>
@@ -920,7 +946,7 @@
                     <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="quadraticCurveTo">
-                    <wb-value type="vector">draw a quadric curve to</wb-value>
+                    <wb-value type="vector">draw a quadratic curve to</wb-value>
                     <wb-value type="vector">control point</wb-value>
                 </wb-expression>
                 <wb-expression ns="path" type="path" fn="arcTo">
@@ -966,7 +992,7 @@
                     <wb-value type="vector">rectangle at</wb-value>
                     <wb-value type="number" min="0">width</wb-value>
                     <wb-value type="number" min="0">height</wb-value>
-                    <wb-value type="list" allow="literal" options="center,corner" value="corner">orientation</wb-value>
+                    <wb-value type="list" allow="literal" options="center,corner" value="corner">anchored at</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">

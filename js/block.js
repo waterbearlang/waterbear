@@ -807,10 +807,10 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 //toggle an input's selection
 ValueProto.toggleSelect = function(){
-    if (this.getAttribute('selected') === 'true'){
-       this.deselect();
-    }
-    else{
+    if (this != selectedItem) {
+        if(selectedItem) {
+            selectedItem.deselect();
+        }
         this.select();
     }
 }
@@ -840,12 +840,13 @@ function toggleFilter(evt){
     var value = dom.closest(evt.target, 'wb-value');
 
     if (BLOCK_MENU.getAttribute('filtered') === 'true'){
-        if (value && value != selectedItem){
-            value.deselect();
+        // if click outside of wb-contains then deselect the selectedItem
+        if(!value && selectedItem) {
+            selectedItem.deselect();
         }
         app.clearFilter();
 
-
+        // filter on value which is the next value for selectedItem
         if (value && value.matches('wb-value')){
             app.setFilter(value);
         }
@@ -1290,8 +1291,13 @@ function updateLocalInstancesType(variableStep, type){
 
 function manageSelections(evt){
     var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
-    if (!block) return;
-    if (block.localName == 'wb-value'){
+    if (!block) {
+        // clicking away should deselect
+        selectByValue(null);
+        selectByBlock(null);
+        return;
+    }
+    if (block.localName == 'wb-value' || block.localName == "wb-contains"){
         selectByValue(block);
         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
     }else{
@@ -1305,14 +1311,18 @@ function selectByValue(valueBlock){
     // * move selection to next block as needed
     var oldValue = dom.find(workspace, '.selected-value');
     if (oldValue){
+        // clicking an item for a second time is not deselecting
         if (oldValue === valueBlock){
             /* nothing to do */
             return;
         }else{
             oldValue.classList.remove('selected-value');
+            if (!valueBlock) return;
         }
     }
-    valueBlock.classList.add('selected-value');
+    if(valueBlock) {
+        valueBlock.classList.add('selected-value');
+    }
 }
 
 function selectByBlock(block){
@@ -1326,29 +1336,33 @@ function selectByBlock(block){
             return;
         }else{
             oldBlock.classList.remove('selected-block');
+            if (!block) return;
+
         }
     }
-    block.classList.add('selected-block');
+    if (block) {
+        block.classList.add('selected-block');
+    }
 }
 
 function handleInputOnBalance(evt) {
     var input = dom.closest(evt.target, 'input');
-    if(input.min || input.max ) {
-        if(input.value < input.min) input.value = input.min;
-        if(input.value > input.max) input.value = input.max;
+    if(input.min){ && input.value < input.min){
+        input.value = input.min;
+    }else if(input.max && input.value > input.max){
+        input.value = input.max;
     }
-}
 
 function handleEnter(evt) {
     var code = (evt.keyCode ? evt.keyCode : evt.which);
     if(code === 13){
         var wb = dom.closest(evt.target, 'wb-value');
             wb.deselect();
+            selectByValue(null);
+            selectByBlock(null);
             app.clearFilter();
             var input = wb.getElementsByTagName('input');
             input[0].blur();
-            var oldBlock = dom.find(workspace, '.selected-block');
-            oldBlock.classList.remove('selected-block');
     }
     return false;
 }

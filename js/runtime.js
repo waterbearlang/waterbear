@@ -558,8 +558,22 @@
             },
             round: Math.round,
             abs: Math.abs,
+            sgn: Math.sign || function(a) {
+            	if(a == 0) return 0;
+            	return a / Math.abs(a);
+            },
             floor: Math.floor,
             ceil: Math.ceil,
+            sqrt: Math.sqrt,
+            cbrt: Math.cbrt || function(a) {
+            	return Math.pow(a,1/3);
+            },
+            root: function(a,b) {
+            	return Math.pow(a, 1/b);
+            },
+            log: function(val,base) {
+            	return Math.log(val) / Math.log(base);
+            },
             max: function(a){
             	return Math.max.apply(Math,a);
             },
@@ -586,9 +600,6 @@
             },
             pow: function(a,b){
                 return Math.pow(a, b);
-            },
-            sqrt: function(a,b){
-                return Math.sqrt(a);
             },
             pi: function(){
                 return Math.PI;
@@ -744,29 +755,37 @@
             setLineWidth: function(width){
                 getContext().lineWidth = width;
             },
-            circle: function(pt, rad){
+            circle: function circle(pt, rad){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
+                    this.radius = rad;
                 });
             },
-            rectangle: function(pt, width, height, orientation){
+            rectangle: function rectangle(pt, width, height, orientation){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
+                    var x = 0;
+                    var y = 0;
                     if(orientation == "center"){
-                        ctx.moveTo(pt.x - width/2, pt.y - height/2);
-                        ctx.lineTo(pt.x + width/2, pt.y - height/2);
-                        ctx.lineTo(pt.x + width/2, pt.y + height/2);
-                        ctx.lineTo(pt.x - width/2, pt.y + height/2);
-                        ctx.lineTo(pt.x - width/2, pt.y - height/2);
+                        x = pt.x - width/2;
+                        y = pt.y - height/2;
+                        this.centered = true;
                     }
                     else{
-                        ctx.moveTo(pt.x, pt.y);
-                        ctx.lineTo(pt.x + width, pt.y);
-                        ctx.lineTo(pt.x + width, pt.y + height);
-                        ctx.lineTo(pt.x, pt.y + height);
-                        ctx.lineTo(pt.x, pt.y);
+                        x = pt.x;
+                        y = pt.y;
+                        this.centered = false;
                     }
+
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + width, y);
+                    ctx.lineTo(x + width, y + height);
+                    ctx.lineTo(x, y + height);
+                    ctx.lineTo(x, y);
+
+                    this.width = width;
+                    this.height = height;
                 });
             },
             ellipse: function(pt, rad1, rad2, rot){
@@ -847,13 +866,13 @@
         },
 
         sprite: {
-            create: function(imgShapeOrSprite){
+            create: function create(imgShapeOrSprite){
                 return new util.Sprite(imgShapeOrSprite);
             },
-            accelerate: function(spt, speed){
+            accelerate: function accelerate(spt, speed){
                 spt.accelerate(speed);
             },
-            setVelocity: function(spt, vec){
+            setVelocity: function setVelocity(spt, vec){
                 spt.setVelocity(vec);
             },
             getVelocity: function spriteGetVelocityExpr(spt){
@@ -862,44 +881,47 @@
             getSpeed: function spriteGetSpeedExpr(spt){
                 return spt.velocity.magnitude();
             },
-            getXvel: function(spt){
+            getXvel: function getXvel(spt){
                 return spt.getXvel();
             },
-            getYvel: function(spt){
+            getYvel: function getYvel(spt){
                 return spt.getYvel();
             },
-            getXpos: function(spt){
+            getXpos: function getXpos(spt){
                 return spt.getXpos();
             },
-            getYpos: function(spt){
+            getYpos: function getYpos(spt){
                 return spt.getYpos();
             },
-            rotate: function(spt, angle){
+            rotate: function rotate(spt, angle){
                 spt.rotate(angle);
             },
-            rotateTo: function(spt, angle){
+            rotateTo: function rotateTo(spt, angle){
                 spt.rotateTo(angle);
             },
-            move: function(spt){
+            move: function move(spt){
                 spt.move();
             },
-            moveTo: function(spt, pt){
+            moveTo: function moveTo(spt, pt){
                 spt.moveTo(pt);
             },
-            draw: function(spt){
+            draw: function draw(spt){
                 spt.draw(getContext());
             },
-            applyForce: function(spt, vec){
+            applyForce: function applyForce(spt, vec){
                 spt.applyForce(vec);
             },
-            bounceAtEdge: function(spt){
+            bounceAtEdge: function bounceAtEdge(spt){
                 spt.bounceWithinRect(canvasRect());
             },
-            wrapAtEdge: function(spt){
+            wrapAtEdge: function wrapAtEdge(spt){
                 spt.wrapAroundRect(canvasRect());
             },
-            stopAtEdge: function(spt){
+            stopAtEdge: function stopAtEdge(spt){
                 spt.stayWithinRect(canvasRect());
+            },
+            checkForCollision: function checkForCollision(spt1, spt2){
+                return spt1.checkForCollision(spt2);
             }
         },
         stage: {

@@ -5,3 +5,4 @@ waterbear.bbprojectd
 .DS_Store
 node_modules
 out/
+coverage/

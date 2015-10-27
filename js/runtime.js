@@ -205,6 +205,12 @@
         },
 
         'boolean': {
+            'true': function booleanTrue(){
+                return true;
+            },
+            'false': function booleanFalse(){
+                return false;
+            },
             and: function booleanAndExpr(a,b){
                 return a && b;
             },
@@ -292,7 +298,7 @@
                     scope = Object.getPrototypeOf(scope);
                 }
                 if (scope === null){
-                    alert('something went horribly wrong, no variable to set');
+                    alert('something went horribly wrong, no variable to set. Old value: ' + oldValue + ', newValue: ' + newValue);
                 }
             },
             // FIXME: This doesn't seem to have a block
@@ -303,6 +309,8 @@
                 // FIXME: this has to work over arrays, strings, objects, and numbers
                 var self = this;
                 var list = args[0];
+                var indexName = args[1][0];
+                var valueName = args[1][1];
                 var type = util.type(list);
                 var i =0,len,keys;
                 switch(type){
@@ -318,7 +326,14 @@
                         len = list;
                         break;
                     case 'boolean':
+                        var listName = this._block.gatherValues(this)[0];
                         len = list ? Infinity : 0
+                        break;
+                    default:
+                        type: 'boolean';
+                        list: false;
+                        len: 0;
+                        break;
                 }
 
                 /* For every element in the container place
@@ -328,20 +343,21 @@
                         // FIXME: Get names of index & value from block
                         case 'array': // fall through
                         case 'string':
-                            this.index = i;
-                            this.value = list[i];
+                            this[indexName] = i;
+                            this[valueName] = list[i];
                             break;
                         case 'object':
-                            this.key = keys[i];
-                            this.value = list[this.key];
+                            this[indexName] = keys[i];
+                            this[valueName] = list[this.key];
                             break;
                         case 'number':
-                            this.value = i;
-                            this.index = i;
+                            this[indexName] = i;
+                            this[valueName] = i;
                             break;
                         case 'boolean':
-                            this.value = list;
-                            this.index = i;
+                            this[indexName] = i;
+                            this[valueName] = i;
+                            list = this[listName];
                             if (!list){
                                 // hopefully this will handle the case where the value changes after starting the loop
                                 return;
@@ -668,8 +684,8 @@
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
                 return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y));
+                    controlPoint2.x, controlPoint2.y, toPoint.x,
+                    toPoint.y));
             },
             moveTo: function(toPoint){
                 return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));

@@ -75,6 +75,7 @@ function startScript(evt, options) {
     evt.target.blur();
     runtime.getStage().focus();
     document.getElementById('playgroundBox').style.width = '100%';
+    
     /* Add emitter. */
     if (options === undefined) {
         options = {};
@@ -89,6 +90,7 @@ function startScript(evt, options) {
     };
 
     preload().whenLoaded(runScript.bind(null, options));
+    runtime.handleResize();
 }
 
 function stopScript(evt) {

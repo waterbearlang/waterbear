@@ -18,10 +18,9 @@ wb-hbox{
     height: 100%;
 }
 wb-vbox{
-    width: 100%;
     position: relative;
     flex-direction: column;
-    max-height: 100%
+    max-height: 100%;
 }
 wb-leftbox, wb-rightbox{
     flex-direction: column;
@@ -115,12 +114,13 @@ wb-workspace > wb-contains{
 }
 
 /* Playground */
-
-/*wb-playground{
-    display: flex;
+wb-playground{
+    /*display: flex;
     flex-direction: column;
-    flex: 1 1;
-}*/
+    flex: 3 1;*/
+    width: 100%;
+    height: 100%;
+}
 
 /*wb-playground > header{
     flex: 0 0 34px;
@@ -157,8 +157,47 @@ wb-accordion[open=true] > :not(header){
     margin-bottom: 6px;
 }
 
-/* Sidebar Filtering */
 
+wb-blockbox {
+    width: 30%;
+    margin: 10px 0 0 10px;
+    border-radius: 5px;
+    border: 4px #111111 outset;
+}
+
+wb-block {
+    display: block;
+}
+
+wb-blocks {
+    display:hidden;
+}
+
+wb-block > header {
+    display: block;
+    position: relative;
+    margin-left: -6px;
+    padding-left: 45px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    font-size: 18px;
+    color: #000;
+    clear: left;
+    font-family: monospace;
+    border: none;
+}
+
+wb-block > header:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    background-color: #CCC; /* over-ride colours in app.css */
+    pointer-events: none;
+}
+/* Sidebar Filtering */
 sidebar[filtered=true] wb-accordion > :not(header){
     display: inline-block; /*display everything*/
 }

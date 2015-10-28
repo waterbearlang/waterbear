@@ -162,7 +162,6 @@
         getStage: canvas,
         resetStage: resetCanvas,
         handleResize: handleResize,
-
         local: {
             //temporary fix for locals
             value: function(){

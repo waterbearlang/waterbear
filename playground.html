@@ -20,122 +20,12 @@
         <wb-workbox>
         <sidebar>
             <wb-search></wb-search>
-            <wb-accordion class="control">
+            <wb-block class="control">
                 <header>
                     <img class="cat-icon" src="images/icon/control.svg">
                     Controls
                 </header>
-                <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
-                <wb-context ns="control" toplevel="true" fn="eachFrame">
-                    <wb-row>
-                        <wb-value>each frame</wb-value>
-                    </wb-row>
-                    <wb-row>
-                        <wb-local>
-                            <wb-expression type="number" ns="control" fn="frame">
-                                <wb-value value="frame">frame</wb-value>
-                            </wb-expression>
-                        </wb-local>
-                        <wb-local>
-                            <wb-expression type="number" ns="control" fn="elapsed">
-                                <wb-value value="elapsed">elapsed</wb-value>
-                            </wb-expression>
-                        </wb-local>
-                    </wb-row>
-                </wb-context>
-                <wb-step ns="control" fn="setVariable">
-                    <wb-row>
-                        <wb-value>set</wb-value>
-						<wb-local renameable="true">
-							<wb-expression type="any" ns="control" fn="getVariable">
-								<wb-value type="text" allow="literal" value="variable"></wb-value>
-							</wb-expression>
-						</wb-local>
-                        <wb-value type="any">to</wb-value>
-                    </wb-row>
-                </wb-step>
-				<wb-step ns="control" fn="updateVariable">
-					<wb-row>
-						<wb-value type="any" allow="variable">update</wb-value>
-						<wb-value type="any">to</wb-value>
-					</wb-row>
-				</wb-step>
-                <wb-context ns="control" fn="loopOver">
-                    <wb-row>
-                        <wb-value type="any">loop over</wb-value>
-                    </wb-row>
-                    <wb-row>
-                        <wb-local renameable="true">
-                            <wb-expression type="any" ns="control" fn="getVariable">
-                                <wb-value type="text" allow="literal" value="indexOrKey"></wb-value>
-                            </wb-expression>
-                        </wb-local>
-                        <wb-local renameable="true">
-                            <wb-expression type="any" ns="control" fn="getVariable">
-                                <wb-value type="text" allow="literal" value="value"></wb-value>
-                            </wb-expression>
-                        </wb-local>
-                    </wb-row>
-                </wb-context>
-                <wb-step ns="control" fn="broadcast">
-                    <wb-value type="text">broadcast</wb-value>
-                    <wb-value type="any" optional="true">message with data</wb-value>
-                </wb-step>
-                <wb-context ns="control" fn="receive">
-                    <wb-row>
-                        <wb-value type="text">when I receive message</wb-value>
-                    </wb-row>
-                    <wb-row>
-						<wb-value>with data</wb-value>
-                        <wb-local renameable="true">
-                            <wb-expression type="any" ns="control" fn="getVariable">
-                                <wb-value type="text" allow="literal" value="data"></wb-value>
-                            </wb-expression>
-                        </wb-local>
-                    </wb-row>
-                </wb-context>
-                <wb-context ns="control" fn="if">
-                    <wb-value type="boolean" value="true">if</wb-value>
-                </wb-context>
-                <wb-context ns="control" fn="ifElse">
-                    <header>
-                        <wb-value type="boolean" value="true">if</wb-value>
-                    </header>
-                    <wb-contains></wb-contains>
-                    <header>
-                        <wb-value>else</wb-value>
-                    </header>
-                    <wb-contains></wb-contains>
-                </wb-context>
-                <wb-expression type="any" ns="control" fn="ternary">
-                    <wb-value type="boolean" value="true">if</wb-value>
-                    <wb-value type="any">then</wb-value>
-                    <wb-value type="any">else</wb-value>
-                </wb-expression>
-                <wb-step ns="control" fn="log">
-                    <wb-value type="any">log</wb-value>
-                </wb-step>
-                <wb-step ns="control" fn="ask">
-                    <wb-row>
-                        <wb-value type="text,string">Ask</wb-value>
-                        <wb-value>and store answer as</wb-value>
-                        <wb-local renameable="true">
-                            <wb-expression type="any" ns="control" fn="getVariable">
-                                <wb-value type="text" allow="literal" value="answer"></wb-value>
-                            </wb-expression>
-                        </wb-local>
-                    </wb-row>
-                </wb-step>
-                <wb-context ns="control" fn="commentContext">
-                    <wb-value>ignore blocks</wb-value>
-                </wb-context>
-                <wb-step ns="control" fn="comment">
-                    <wb-value type="text">comment</wb-value>
-                </wb-step>
-                <wb-step ns="control" fn="alert">
-                    <wb-value type="text,string">alert</wb-value>
-                </wb-step>
-            </wb-accordion>
+            </wb-block>
             <wb-accordion class="sprite">
                 <header>
                     <img class="cat-icon" src="images/icon/sprite.svg">
@@ -1118,6 +1008,120 @@
                     </wb-expression>
                 </wb-accordion>
             </sidebar>
+            <wb-blockbox>
+                <wb-blocks class="controls">
+                <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
+                <wb-context ns="control" toplevel="true" fn="eachFrame">
+                    <wb-row>
+                        <wb-value>each frame</wb-value>
+                    </wb-row>
+                    <wb-row>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="frame">
+                                <wb-value value="frame">frame</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="elapsed">
+                                <wb-value value="elapsed">elapsed</wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-context>
+                <wb-step ns="control" fn="setVariable">
+                    <wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="any" ns="control" fn="getVariable">
+								<wb-value type="text" allow="literal" value="variable"></wb-value>
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any">to</wb-value>
+                    </wb-row>
+                </wb-step>
+				<wb-step ns="control" fn="updateVariable">
+					<wb-row>
+						<wb-value type="any" allow="variable">update</wb-value>
+						<wb-value type="any">to</wb-value>
+					</wb-row>
+				</wb-step>
+                <wb-context ns="control" fn="loopOver">
+                    <wb-row>
+                        <wb-value type="any">loop over</wb-value>
+                    </wb-row>
+                    <wb-row>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable">
+                                <wb-value type="text" allow="literal" value="indexOrKey"></wb-value>
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable">
+                                <wb-value type="text" allow="literal" value="value"></wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-context>
+                <wb-step ns="control" fn="broadcast">
+                    <wb-value type="text">broadcast</wb-value>
+                    <wb-value type="any" optional="true">message with data</wb-value>
+                </wb-step>
+                <wb-context ns="control" fn="receive">
+                    <wb-row>
+                        <wb-value type="text">when I receive message</wb-value>
+                    </wb-row>
+                    <wb-row>
+						<wb-value>with data</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable">
+                                <wb-value type="text" allow="literal" value="data"></wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-context>
+                <wb-context ns="control" fn="if">
+                    <wb-value type="boolean" value="true">if</wb-value>
+                </wb-context>
+                <wb-context ns="control" fn="ifElse">
+                    <header>
+                        <wb-value type="boolean" value="true">if</wb-value>
+                    </header>
+                    <wb-contains></wb-contains>
+                    <header>
+                        <wb-value>else</wb-value>
+                    </header>
+                    <wb-contains></wb-contains>
+                </wb-context>
+                <wb-expression type="any" ns="control" fn="ternary">
+                    <wb-value type="boolean" value="true">if</wb-value>
+                    <wb-value type="any">then</wb-value>
+                    <wb-value type="any">else</wb-value>
+                </wb-expression>
+                <wb-step ns="control" fn="log">
+                    <wb-value type="any">log</wb-value>
+                </wb-step>
+                <wb-step ns="control" fn="ask">
+                    <wb-row>
+                        <wb-value type="text,string">Ask</wb-value>
+                        <wb-value>and store answer as</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable">
+                                <wb-value type="text" allow="literal" value="answer"></wb-value>
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row>
+                </wb-step>
+                <wb-context ns="control" fn="commentContext">
+                    <wb-value>ignore blocks</wb-value>
+                </wb-context>
+                <wb-step ns="control" fn="comment">
+                    <wb-value type="text">comment</wb-value>
+                </wb-step>
+                <wb-step ns="control" fn="alert">
+                    <wb-value type="text,string">alert</wb-value>
+                </wb-step>
+                </wb-blocks>
+            </wb-blockbox>
             <wb-workspace>
                 <div class="sideMenu">
                     <button class="do-run"></button>

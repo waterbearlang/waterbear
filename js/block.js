@@ -250,8 +250,9 @@ BlockProto.gatherValues = function blockGatherValues(scope){
 };
 
 BlockProto.applyValues = function blockApplyValues(scope){
+    var self = this;
     return this.gatherValues(scope).map(function(val){
-        if (val && val._isValueFunction){
+        if (val && val._isValueFunction && !self.hasAttribute('specialform')){
             return val(scope);
         }
         return val;
@@ -886,14 +887,14 @@ ValueProto.createdCallback = function valueCreated(){
         resize(input);
     }
 };
-ValueProto.getValue = function(){
+ValueProto.getValue = function(scope){
     // All versions of getValue eventually call this
     // Return an array of one function
     var block = dom.child(this, 'wb-expression');
     var self = this;
     if (block){
-        var blockGetter = function blockValueGetter(scope){
-            scope._block = block;
+        var blockGetter = function blockValueGetter(){
+            self._block = block;
             return block.run(scope);
         };
         // mark this function in case we want to return normal functions

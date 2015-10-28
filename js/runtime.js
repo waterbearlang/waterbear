@@ -269,20 +269,18 @@
             elapsed: function controlElapsedExpr(){
                 return runtime.control._elapsed;
             },
-            setVariable: function controlSetVariableStep(nameValuePair){
+            setVariable: function controlSetVariableStep(name, valueFn){
                 //FIXME: Make sure this is named properly
-                var name = nameValuePair[0];
-                var value = nameValuePair[1];
-                this[name] = value;
+                this[name] = valueFn;
             },
             getVariable: function controlGetVariableExpr(name){
-                return this[name];
+                // I could actually ignore name altogether and get the
+                // value from the structure?
+                return this[name]();
             },
-            updateVariable: function controlUpdateVariableStep(values){
+            updateVariable: function controlUpdateVariableStep(oldValue, newValue){
                 // this is one of the rare times we need access to the element
                 var scope = this; // get ready to walk up the scope tree
-                var oldValue = values[0];
-                var newValue = values[1];
                 var variableName = dom.find(scope._block, 'wb-value').getValue();
                 while( scope !== null){
                     if (scope.hasOwnProperty(variableName)){

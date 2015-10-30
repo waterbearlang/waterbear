@@ -272,19 +272,21 @@
 
     }
 
-
     //Shape
-    function Shape(pathArrayOrFunction){
-        if (type(pathArrayOrFunction) === 'function'){
-            this._draw = pathArrayOrFunction;
-        }else if (type(pathArrayOrFunction) === 'array'){
-            for(var i =0; i < pathArrayOrFunction.length; i++){
-                if(!(pathArrayOrFunction[i] instanceof Path)){
-                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
+    function Shape(pathArrayOrFunctionOrSAT){
+        if (type(pathArrayOrFunctionOrSAT) === 'function'){
+            this._draw = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'array'){
+            for(var i =0; i < pathArrayOrFunctionOrSAT.length; i++){
+                if(!(pathArrayOrFunctionOrSAT[i] instanceof Path)){
+                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunctionOrSAT[i] + " is not.");
                 }
             }
-            this.pathArray = pathArrayOrFunction;
+            this.pathArray = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'polygon'){
+            this.satObject = pathArrayOrFunctionOrSAT;
         }else{
+            debugger;
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
@@ -297,6 +299,17 @@
             }
         }else if (this._draw){
             this._draw(ctx);
+        }
+        else if (this.satObject){
+            ctx.beginPath();
+
+            ctx.moveTo(this.satObject.points[0].x, this.satObject.points[0].y);
+
+            for (var i = 1; i < this.satObject.points.length; i++) {
+                ctx.lineTo(this.satObject.points[i].x, this.satObject.points[i].y);
+            };
+
+            ctx.lineTo(this.satObject.points[0].x, this.satObject.points[0].y);
         }
         ctx.fill();
         ctx.stroke();

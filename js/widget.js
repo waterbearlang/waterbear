@@ -14,12 +14,13 @@
 var SearchProto = Object.create(HTMLElement.prototype);
 window.WBSearch = document.registerElement('wb-search', {prototype: SearchProto});
 
+//depreciated
 /*************************
  *
  *  ACCORDION
  *
  *************************/
-
+/*
 var AccordionProto = Object.create(HTMLElement.prototype);
 
 AccordionProto.open = function(){
@@ -60,6 +61,53 @@ function accordionClick(evt){
 Event.on(document.body, 'editor:click', 'wb-accordion > header', accordionClick);
 Event.on(document.body, 'editor:touchend', 'wb-accordion > header', accordionClick);
 
+ */   
+/*************************
+ *
+ *  Menu Selections
+ *
+ *************************/
+    
+var MenuProto = Object.create(HTMLElement.prototype);
+    
+MenuProto.select = function() {
+    //hide the currently opened selection
+    var existing = dom.find('wb-menu[open=true]');
+    if(existing) {
+        existing.deselect();
+    }
+    
+    //highlight the new menu selection
+    this.setAttribute('open','true');
+    
+    //reveal the block selection
+    var type = this.getAttribute('class');
+    var blocks = document.getElementById(type);
+    blocks.setAttribute('open','true');
+}
+
+MenuProto.deselect = function() {
+    this.removeAttribute('open');
+    var type = this.getAttribute('class');
+    var blocks = document.getElementById(type);
+    blocks.removeAttribute('open');
+}
+
+MenuProto.toggle = function() {
+    if (this.getAttribute('open') === 'true'){
+        this.deselect();
+    }else{
+        this.select();
+    }
+}
+window.WBMenu = document.registerElement('wb-menu', {prototype: MenuProto});
+    
+function sideMenuClick(evt) {
+    dom.closest(evt.target,'wb-menu').toggle();
+}
+    
+Event.on(document.body, 'editor:click', 'wb-menu > header', sideMenuClick);
+    
 /* For HBox, VBox, and Splitter:
 
   * Use % widths (or heights)
@@ -80,13 +128,14 @@ window.WBHBox = document.registerElement('wb-hbox', {prototype: HBoxProto});
 var VBoxProto = Object.create(HTMLElement.prototype);
 window.WBVBox = document.registerElement('wb-vbox', {prototype: VBoxProto});
 
+/*splitters removed so code is depreciated
 /******************************
 *
 * SPLITTER
 *
 *******************************/
 
-var SplitterProto = Object.create(HTMLElement.prototype);
+/*var SplitterProto = Object.create(HTMLElement.prototype);
 SplitterProto.attachedCallback = function splitterAttached(){
     // console.log('splitting up');
 };
@@ -105,7 +154,7 @@ var minPosition = 0;
 var maxPosition = 0;
 var slop = 0;
 /* FIXME: next value should be determined dynamically */
-var splitterThickness = 8;
+/*var splitterThickness = 8;
 
 Event.on(document.body, 'ui:drag-start', 'wb-splitter', function(evt){
     dragSplitter = evt.target;
@@ -117,7 +166,7 @@ Event.on(document.body, 'ui:drag-start', 'wb-splitter', function(evt){
     minPosition = direction === 'vertical' ? prevBox.top : prevBox.left;
     maxPosition = direction === 'vertical' ? nextBox.bottom : nextBox.right;
     slop = direction === 'vertical' ? evt.clientY - prevBox.bottom : evt.clientX - prevBox.right;
-    // maxPosition = maxPosition - /* evt.target.thickness */;
+    // maxPosition = maxPosition - /* evt.target.thickness ;
 });
 
 Event.on(document.body, 'ui:dragging', null, function(evt){
@@ -145,7 +194,7 @@ Event.on(document.body, 'ui:drag-end', null, function(evt){
     localStorage.__splitterPositions = JSON.stringify(splitters.map(function(splitter){
         return getComputedStyle(splitter.previousElementSibling)['flex'];
     }));
-});
+});*/
 
 /*Event.on(window, 'ui:load', null, function(evt){
     if (localStorage.__splitterPositions){

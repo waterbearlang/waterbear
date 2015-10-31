@@ -996,7 +996,7 @@ function dragBlock(evt){
     var potentialDropTarget = document.elementFromPoint(evt.pageX, evt.pageY);
 
     // Check if the user dragged over the sidebar.
-    if (dom.matches(potentialDropTarget, 'sidebar, sidebar *')){
+    if (dom.matches(potentialDropTarget, 'sidebar, sidebar *,wb-blockbox, wb-blockbox *')){
         dropTarget = BLOCK_MENU;
         dropTarget.classList.add('no-drop');
         app.warn('drop here to delete block(s)');

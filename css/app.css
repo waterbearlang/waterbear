@@ -190,13 +190,13 @@ sidebar button.availableBlocks{
     color: #666666;
 }
 
-/* Show trash for sidebar while dragging */
+/* Show trash for wb-blockbox while dragging */
 
-sidebar.trashcan > wb-search, sidebar.trashcan wb-accordion{
+wb-blockbox.trashcan > wb-search, wb-blockbox.trashcan wb-menu{
     display: none;
 }
 
-sidebar.trashcan:after{
+wb-blockbox.trashcan:after{
     content: '';
     width: 100%;
     height: 100%;
@@ -288,55 +288,56 @@ wb-contains:empty::before{
 
 
 /* Accordion Colors and Icons */
-wb-block.control > header:after{ background-color: hsl(0, 53%, 56%); }
-wb-accordion.sprite > header:after{ background-color: hsl(105, 50%, 50%); }
-wb-accordion.music > header:after{ background-color: hsl(210, 50%, 50%); }
-wb-accordion.sound > header:after{ background-color: hsl(315, 50%, 50%); }
-wb-accordion.array > header:after{ background-color: hsl(60, 50%, 50%); }
-wb-accordion.boolean > header:after{ background-color: hsl(165, 50%, 75%); }
-wb-accordion.stage > header:after{ background-color: hsl(270, 50%, 50%); }
-wb-accordion.color > header:after{ background-color: hsl(15, 50%, 50%); }
-wb-accordion.image > header:after{ background-color: hsl(120, 50%, 50%); }
-wb-accordion.math > header:after{ background-color: hsl(225, 50%, 50%); }
-wb-accordion.random > header:after{ background-color: hsl(330, 50%, 50%); }
-wb-accordion.object > header:after{ background-color: hsl(180, 50%, 50%); }
-wb-accordion.string > header:after{ background-color: hsl(285, 50%, 50%); }
-wb-accordion.path > header:after{ background-color: hsl(30, 50%, 50%); }
-wb-accordion.rect > header:after{ background-color: hsl(240, 50%, 50%); }
-wb-accordion.sense > header:after{ background-color: hsl(345, 50%, 50%); }
-wb-accordion.motion > header:after{ background-color: hsl(90, 50%, 50%); }
-wb-accordion.shape > header:after{ background-color: hsl(195, 50%, 50%); }
-wb-accordion.geolocation > header:after{ background-color: hsl(300, 50%, 75%); }
-wb-accordion.size > header:after{ background-color: hsl(45, 50%, 50%); }
-wb-accordion.text > header:after{ background-color: hsl(150, 50%, 50%); }
-wb-accordion.vector > header:after{ background-color: hsl(75, 50%, 50%); }
-wb-accordion.date > header:after{ background-color: hsl(55, 76%, 70%); }
+wb-menu.control > header:after{ background-color: hsl(0, 53%, 56%); }
+wb-menu.sprite > header:after{ background-color: hsl(105, 50%, 50%); }
+wb-menu.music > header:after{ background-color: hsl(210, 50%, 50%); }
+wb-menu.sound > header:after{ background-color: hsl(315, 50%, 50%); }
+wb-menu.array > header:after{ background-color: hsl(60, 50%, 50%); }
+wb-menu.boolean > header:after{ background-color: hsl(165, 50%, 75%); }
+wb-menu.stage > header:after{ background-color: hsl(270, 50%, 50%); }
+wb-menu.color > header:after{ background-color: hsl(15, 50%, 50%); }
+wb-menu.image > header:after{ background-color: hsl(120, 50%, 50%); }
+wb-menu.math > header:after{ background-color: hsl(225, 50%, 50%); }
+wb-menu.random > header:after{ background-color: hsl(330, 50%, 50%); }
+wb-menu.object > header:after{ background-color: hsl(180, 50%, 50%); }
+wb-menu.string > header:after{ background-color: hsl(285, 50%, 50%); }
+wb-menu.path > header:after{ background-color: hsl(30, 50%, 50%); }
+wb-menu.rect > header:after{ background-color: hsl(240, 50%, 50%); }
+wb-menu.sense > header:after{ background-color: hsl(345, 50%, 50%); }
+wb-menu.motion > header:after{ background-color: hsl(90, 50%, 50%); }
+wb-menu.shape > header:after{ background-color: hsl(195, 50%, 50%); }
+wb-menu.geolocation > header:after{ background-color: hsl(300, 50%, 75%); }
+wb-menu.size > header:after{ background-color: hsl(45, 50%, 50%); }
+wb-menu.text > header:after{ background-color: hsl(150, 50%, 50%); }
+wb-menu.vector > header:after{ background-color: hsl(75, 50%, 50%); }
+wb-menu.date > header:after{ background-color: hsl(55, 76%, 70%); }
 
 
 /* Accordion colors when open*/
-wb-block.control[open=true] > header{ background-color: hsl(0, 53%, 56%); }
-wb-accordion.sprite[open=true] > header{ background-color: hsl(105, 50%, 50%); }
-wb-accordion.music[open=true] > header{ background-color: hsl(210, 50%, 50%); }
-wb-accordion.sound[open=true] > header{ background-color: hsl(315, 50%, 50%); }
-wb-accordion.array[open=true] > header{ background-color: hsl(60, 50%, 50%); }
-wb-accordion.boolean[open=true] > header{ background-color: hsl(165, 50%, 75%); }
-wb-accordion.stage[open=true] > header{ background-color: hsl(270, 50%, 50%); }
-wb-accordion.color[open=true] > header{ background-color: hsl(15, 50%, 50%); }
-wb-accordion.image[open=true] > header{ background-color: hsl(120, 50%, 50%); }
-wb-accordion.math[open=true] > header{ background-color: hsl(225, 50%, 50%); }
-wb-accordion.random[open=true] > header{ background-color: hsl(330, 50%, 50%); }
-wb-accordion.object[open=true] > header{ background-color: hsl(180, 50%, 50%); }
-wb-accordion.string[open=true] > header{ background-color: hsl(285, 50%, 50%); }
-wb-accordion.path[open=true] > header{ background-color: hsl(30, 50%, 50%); }
-wb-accordion.rect[open=true] > header{ background-color: hsl(240, 50%, 50%); }
-wb-accordion.sense[open=true] > header{ background-color: hsl(345, 50%, 50%); }
-wb-accordion.motion[open=true] > header{ background-color: hsl(90, 50%, 50%); }
-wb-accordion.shape[open=true] > header{ background-color: hsl(195, 50%, 50%); }
-wb-accordion.geolocation[open=true] > header{ background-color: hsl(300, 50%, 75%); }
-wb-accordion.size[open=true] > header{ background-color: hsl(45, 50%, 50%); }
-wb-accordion.text[open=true] > header{ background-color: hsl(150, 50%, 50%); }
-wb-accordion.vector[open=true] > header{ background-color: hsl(75, 50%, 50%); }
-wb-accordion.date[open=true] > header{ background-color: hsl(55, 76%, 70%); }
+wb-menu.control[open=true] > header{ background-color: hsl(0, 53%, 56%); }
+wb-menu.sprite[open=true] > header{ background-color: hsl(105, 50%, 50%); }
+wb-menu.music[open=true] > header{ background-color: hsl(210, 50%, 50%); }
+wb-menu.sound[open=true] > header{ background-color: hsl(315, 50%, 50%); }
+wb-menu.array[open=true] > header{ background-color: hsl(60, 50%, 50%); }
+wb-menu.boolean[open=true] > header{ background-color: hsl(165, 50%, 75%); }
+wb-menu.stage[open=true] > header{ background-color: hsl(270, 50%, 50%); }
+wb-menu.color[open=true] > header{ background-color: hsl(15, 50%, 50%); }
+wb-menu.image[open=true] > header{ background-color: hsl(120, 50%, 50%); }
+wb-menu.math[open=true] > header{ background-color: hsl(225, 50%, 50%); }
+wb-menu.random[open=true] > header{ background-color: hsl(330, 50%, 50%); }
+wb-menu.object[open=true] > header{ background-color: hsl(180, 50%, 50%); }
+wb-menu.string[open=true] > header{ background-color: hsl(285, 50%, 50%); }
+wb-menu.path[open=true] > header{ background-color: hsl(30, 50%, 50%); }
+wb-menu.rect[open=true] > header{ background-color: hsl(240, 50%, 50%); }
+wb-menu.sense[open=true] > header{ background-color: hsl(345, 50%, 50%); }
+wb-menu.motion[open=true] > header{ background-color: hsl(90, 50%, 50%); }
+wb-menu.shape[open=true] > header{ background-color: hsl(195, 50%, 50%); }
+wb-menu.geolocation[open=true] > header{ background-color: hsl(300, 50%, 75%); }
+wb-menu.size[open=true] > header{ background-color: hsl(45, 50%, 50%); }
+wb-menu.text[open=true] > header{ background-color: hsl(150, 50%, 50%); }
+wb-menu.vector[open=true] > header{ background-color: hsl(75, 50%, 50%); }
+wb-menu.date[open=true] > header{ background-color: hsl(55, 76%, 70%); }
+
 /* Prevent selecting text while dragging */
 .dragging *{
     -webkit-touch-callout: none;

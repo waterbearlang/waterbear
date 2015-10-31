@@ -158,6 +158,7 @@ wb-accordion[open=true] > :not(header){
 }
 
 
+/* Blockbox and sidemenu */
 wb-blockbox {
     width: 30%;
     margin: 10px 0 0 10px;
@@ -165,15 +166,19 @@ wb-blockbox {
     border: 4px #111111 outset;
 }
 
-wb-block {
+wb-menu {
     display: block;
 }
 
 wb-blocks {
-    display:hidden;
+    display:none;
 }
 
-wb-block > header {
+wb-blocks[open=true] {
+    display:block;
+}
+
+wb-menu > header {
     display: block;
     position: relative;
     margin-left: -6px;
@@ -187,7 +192,7 @@ wb-block > header {
     border: none;
 }
 
-wb-block > header:after {
+wb-menu > header:after {
     content: '';
     position: absolute;
     top: 0;
@@ -197,6 +202,7 @@ wb-block > header:after {
     background-color: #CCC; /* over-ride colours in app.css */
     pointer-events: none;
 }
+
 /* Sidebar Filtering */
 sidebar[filtered=true] wb-accordion > :not(header){
     display: inline-block; /*display everything*/
@@ -233,6 +239,7 @@ sidebar[filtered=true] button.availableBlocks:after{
     background-color: #000000; /* over-ride colours in app.css */
 }
 
+/* depreciated
 wb-accordion > header {
     display: block;
     position: relative;
@@ -256,7 +263,7 @@ wb-accordion[open=true] > header{
 wb-accordion > header *{
     pointer-events: none;
 }
-
+*/
 .cat-icon{
     width: 30px;
     height: 30px;

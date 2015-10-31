@@ -234,29 +234,50 @@ BlockProto.attachedCallback = function blockAttached(){
     }
 };
 
-BlockProto.gatherValues = function blockGatherValues(scope){
+BlockProto.header = function blockHeader(){
+    return dom.child(this, 'header');
+};
+
+BlockProto.gatherArguments = function blockGatherArguments(){
+    return dom.children(this.header(), 'wb-value[type], wb-value[value], wb-row');
+};
+
+BlockProto.firstExpression = function blockFirstExpression(){
+    return dom.child(this.header(), 'wb-expression');
+};
+
+BlockProto.localOrSelf = function blockLocalOrSelf(){
+    if (this.isLocal()){
+        return this.getLocalForInstance();
+    }
+    return this;
+};
+
+BlockProto.gatherValues = function blockGatherValues(){
+    if (local._currentValue !== undefined){
+        return [local._currentValue];
+    }
     var value = this.getAttribute('value');
     if (value){
-        // FIXME: Does this need to be an array of function?
         return [ value ];
     }
-    var values = dom.children(dom.child(this, 'header'), 'wb-value[type], wb-value[value], wb-row');
+    var values = this.gatherArguments();
     return Array.prototype.concat.apply(
         [],
         values.map(function(value){
-            return value.getValue(scope);
+            return value.getValue();
         })
     );
 };
 
-BlockProto.applyValues = function blockApplyValues(scope){
-    var self = this;
-    return this.gatherValues(scope).map(function(val){
-        if (val && val._isValueFunction && !self.hasAttribute('specialform')){
-            return val(scope);
-        }
-        return val;
-    });
+BlockProto.run = function stepRun(){
+    if (!this.fn){
+        var nsName = this.getAttribute('ns');
+        var fnName = this.getAttribute('fn');
+        this.fn = runtime[nsName][fnName];
+    }
+    var values = this.gatherValues();
+    return this.fn.apply(this, values);
 };
 
 BlockProto.hasLocal = function blockHasLocal(){
@@ -328,6 +349,17 @@ BlockProto.getAncestorContexts = function blockGetAncestorContexts(){
     return contexts.reverse();
 };
 
+BlockProto.isInstance = function blockIsInstance(){
+    return this.hasAttribute('instanceof');
+};
+
+BlockProto.getLocalForInstance = function blockGetLocalForInstance(){
+    var localId = this.getAttribute('instanceof');
+    if (localId){
+        return document.getElementById(localId);
+    }
+};
+
 /* Applicable for both <wb-step> and <wb-context>.
  * The next element is simply the nextElementSibling. */
 BlockProto.next = function next() {
@@ -354,16 +386,6 @@ BlockProto.isContext =  false;
 ******************/
 
 var StepProto = Object.create(BlockProto);
-StepProto.run = function stepRun(scope){
-    if (!this.fn){
-        var nsName = this.getAttribute('ns');
-        var fnName = this.getAttribute('fn');
-        this.fn = runtime[nsName][fnName];
-    }
-    var values = this.applyValues(scope);
-    scope._block = this;
-    return this.fn.apply(scope, values);
-};
 
 StepProto.getLocals = function stepGetLocals(){
     // For Steps this should work, but for contexts we need to gather the steps and contexts
@@ -402,9 +424,17 @@ ContextProto.childContainers = function childContainers(){
 
 ContextProto.gatherContains = function contextGatherContains(){
     // returns an array of arrays of blocks (steps and contexts)
+    // This is used by context blocks that have multiple contains areas
+    // such as if/else
+    // Other contexts can use gatherSteps which returns a single array of blocks
     return dom.children(this, 'wb-contains').map(function(container){
         return Array.prototype.slice.call(container.children);
     });
+};
+
+ContextProto.gatherSteps = function contextGatherSteps(){
+    // return an array of contained blocks, both steps and contexts
+    return Array.prototype.slice.call(dom.child(this, 'wb-contains').children);
 };
 
 ContextProto.getLocals = function contextGetLocals(){
@@ -450,17 +480,14 @@ ContextProto.getAllContextLocals = function contextGetAllContextLocals(){
     return locals;
 };
 
-ContextProto.run = function contextRun(parentScope){
+ContextProto.run = function contextRun(){
     if (!this.fn){
         var nsName = this.getAttribute('ns');
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
     }
-    var scope = Object.create(parentScope); // use parentScope as prototype
-    var values = this.applyValues(scope);
-    scope._block = this;
-    scope._contains = this.gatherContains(scope);
-    return this.fn.apply(scope, values);
+    var values = this.gatherValues();
+    return this.fn.apply(this, values);
 };
 
 /**
@@ -548,8 +575,8 @@ ExpressionProto.removeInstances = function(){
 
 ExpressionProto.run = StepProto.run;
 ExpressionProto.gatherValues = BlockProto.gatherValues; // should ExpressionProto straight-up inherit from BlockProto yet? Probably.
-ExpressionProto.applyValues = BlockProto.applyValues;
-
+ExpressionProto.isInstance = BlockProto.isInstance;
+ExpressionProto.getLocalForInstance = BlockProto.getLocalForInstance;
 
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
@@ -887,19 +914,13 @@ ValueProto.createdCallback = function valueCreated(){
         resize(input);
     }
 };
-ValueProto.getValue = function(scope){
+ValueProto.getValue = function(){
     // All versions of getValue eventually call this
     // Return an array of one function
     var block = dom.child(this, 'wb-expression');
     var self = this;
     if (block){
-        var blockGetter = function blockValueGetter(){
-            self._block = block;
-            return block.run(scope);
-        };
-        // mark this function in case we want to return normal functions
-        blockGetter._isValueFunction = true;
-        return [blockGetter];
+        return block.run();
     }
     var input = dom.child(self, 'input, select');
     if (!self.type){
@@ -918,6 +939,7 @@ ValueProto.getValue = function(scope){
         return value;
     }
 };
+
 ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 

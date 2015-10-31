@@ -126,7 +126,7 @@
     }
 
 
-    // for all of these functions, `this` is the scope object
+    // for all of these functions, `this` is the block object
     //
     // Contents of runtime (please add new handlers alphabetically)
     //
@@ -256,10 +256,10 @@
         control: {
             eachFrame: function controlEachFrameCtx(){
                 var self = this;
-                var steps = self._contains[0];
+                var steps = self.gatherSteps();
                 perFrameHandlers.push(function runFrame(){
                     steps.forEach(function runBoundBlock(block){
-                        block.run(self);
+                        block.run();
                     });
                 });
             },
@@ -269,30 +269,25 @@
             elapsed: function controlElapsedExpr(){
                 return runtime.control._elapsed;
             },
-            setVariable: function controlSetVariableStep(name, valueFn){
-                //FIXME: Make sure this is named properly
-                this[name] = valueFn;
+            setVariable: function controlSetVariableStep(name, value){
+                // This works differently than updateVariable, not sure if
+                // what I have here will work
+                // in fact, do I need to do anything at all?
+                // var instance = this.gatherArguments()[0];
+                // var local = instance.localOrSelf();
+                // local._currentValue = value;
             },
             getVariable: function controlGetVariableExpr(name){
-                // I could actually ignore name altogether and get the
-                // value from the structure?
-                return this[name]();
+                // Do I need to find the setVariable block get the value from that?
+                var instance = this.firstExpression();
+                var local = instance.localOrSelf();
+                return local.getValue();
             },
-            updateVariable: function controlUpdateVariableStep(oldValue, newValue){
-                // this is one of the rare times we need access to the element
-                var scope = this; // get ready to walk up the scope tree
-                var variableName = dom.find(scope._block, 'wb-value').getValue();
-                while( scope !== null){
-                    if (scope.hasOwnProperty(variableName)){
-                        console.assert(scope[variableName] === oldValue);
-                        scope[variableName] = newValue;
-                        break;
-                    }
-                    scope = Object.getPrototypeOf(scope);
-                }
-                if (scope === null){
-                    alert('something went horribly wrong, no variable to set');
-                }
+            updateVariable: function controlUpdateVariableStep(name, value){
+                // Do I need to find the setVariable block and set the value there?
+                var instance = this.gatherArguments()[0];
+                var local = instance.localOrSelf();
+                local._currentValue = value;
             },
             // FIXME: This doesn't seem to have a block
             incrementVariable: function controlIncrementVariableExpr(variable, value){
@@ -346,9 +341,10 @@
                             }
                             break;
                     }
-                    self._contains[0].forEach(runBlock);
+                    self.gatherSteps().forEach(runBlock);
                 }
 
+                // FIXME: Move this outside function for reuse
                 function runBlock(block){
                     block.run(self);
                 }
@@ -365,7 +361,7 @@
                     // FIXME: how do I get the local from here?
                     // As an arg would be easiest
                     self[messageName] = evt.detail;
-                    self._contains[0].forEach(function(block){
+                    self.gatherSteps().forEach(function(block){
                         block.run(self);
                     });
                 });
@@ -373,7 +369,7 @@
             'if': function controlIfCtx(predicate){
                 if (predicate){
                     var self = this;
-                    self._contains[0].forEach(function(block){
+                    self.gatherSteps.forEach(function(block){
                         block.run(self);
                     });
                 }
@@ -381,16 +377,17 @@
             ifElse: function controlIfElseCtx(predicate){
                 var self = this;
                 if (predicate){
-                    self._contains[0].forEach(function(block){
+                    self.gatherSteps().forEach(function(block){
                         block.run(self);
                     });
                 }else{
-                    self._contains[1].forEach(function(block){
+                    self.gatherContains()[1].forEach(function(block){
                         block.run(self);
                     });
                 }
             },
             ternary: function controlTernaryCtx(cond, iftrue, otherwise){
+                // FIXME: Implement short-circuit processing
                 return cond ? iftrue : otherwise;
             },
             ask: function controlAskStep(message, name){
@@ -416,18 +413,17 @@
          */
         geolocation: {
             /* Synchronous "get current location" */
-            currentLocation: function () {
+            currentLocation: function geoLocationCurrentLocationExpr() {
                 return util.geolocation.currentLocation;
             },
             /* Asynchronous update event. Context. */
-            whenLocationUpdated: function() {
+            whenLocationUpdated: function geoLocationWhenLocationUpdatedContext() {
                 var self = this;
-                var steps = self._contains[0];
-
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
                     // TODO: probably factor out augmenting scope and running
                     // the block stuff to somewhere else.
-                    steps.forEach(function (block) {
+                    // FIXME: save event values for access
+                    this.gatherSteps().forEach(function (block) {
                         block.run(self);
                     });
                 });
@@ -525,7 +521,7 @@
             whenKeyPressed: function(key){
                 var self = this;
                 Event.onKeyDown(key, function(){
-                    self._contains[0].forEach(function(block){
+                    self.gatherSteps().forEach(function(block){
                         block.run(self);
                     });
                 });
@@ -615,14 +611,12 @@
 
         motion: {
             /* Asynchronous update event. Context. */
-            whenDeviceTurned: function(args, containers) {
-                var currentScope = this,
-                steps = containers[0];
-
+            whenDeviceTurned: function(direction) {
+                var self = this;
                 Event.on(window, 'runtime:motionchanged', null, function (event) {
-                    if (args[0] === util.motion.direction) {
-                        steps.forEach(function (block) {
-                            block.run(currentScope);
+                    if (direction === util.motion.direction) {
+                        self.gatherSteps().forEach(function (block) {
+                            block.run();
                         });
                     }
                 });
@@ -664,20 +658,20 @@
 
             bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
                 return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y));
+                    controlPoint2.x, controlPoint2.y, toPoint.x,
+                    toPoint.y));
             },
             moveTo: function(toPoint){
                 return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));
             },
             quadraticCurveTo: function(toPoint, controlPoint){
                 return new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                                                                       controlPoint.y,toPoint.x, toPoint.y));
+                    controlPoint.y,toPoint.x, toPoint.y));
             },
             arcTo: function(radius, controlPoint1, controlPoint2){
                 return new util.Path(getContext().arcTo, new Array(controlPoint1.x,
-                                                            controlPoint1.y,controlPoint2.x, controlPoint2.y,
-                                                            radius));
+                    controlPoint1.y,controlPoint2.x, controlPoint2.y,
+                    radius));
             },
             closePath: function(){
                 return new util.Path(getContext().closePath);

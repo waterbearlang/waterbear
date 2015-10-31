@@ -1,7 +1,7 @@
 (function(global){
     'use strict';
 
-    // Dependencies: ctx, canvas, Event, runtime, sound, soundEffect,
+    // Dependencies: ctx, canvas, Event, runtime
     // canvas/stage stuff
     var _canvas, _ctx;
     function canvas(){
@@ -821,49 +821,32 @@
         sound: {
 
             get: function(url){
-                return assets.sounds[url]; // already cached by sounds library
+                return console.log(url);
             },
-            play: function(sound){
-                sound.play();
+
+            play: function(text){
+                T(text).bang().play();
             },
-            setLoop: function(sound, flag){
-                sound.loop = flag;
-            },
-            setVolume: function(sound, volume){
-                sound.volume = volume;
-            },
-            pause: function(sound){
-                sound.pause();
-            },
-            playFrom: function(sound, time){
-                sound.playFrom(time);
-            },
-            pan: function(sound, balance){
-                sound.pan = balance;
-            },
-            echo_DelayFeedbackFilter: function(sound, delay, feedback, filter){
-                sound.setEcho(delay, feedback, filter);
-            },
-            stopEcho: function(sound){
-                sound.echo = false;
-            },
-            reverb_DurationDecayReverse: function(sound, duration, decay, reverse){
-                sound.setReverb(duration, decay, reverse);
-            },
-            stopReverb: function(sound){
-                sound.reverb = false;
-            },
-            effect: function(frequency, attack, decay, wait, echoDelay, echoFeedback, echoFilter, waveform, volume, balance, pitchBend, reverseBend, random, dissonance){
-                return {
-                    play: function(){
-                        soundEffect(
-                            frequency, attack, decay, waveform,
-                            volume, balance, wait,
-                            pitchBend, reverseBend, random, dissonance,
-                            [echoDelay, echoFeedback, echoFilter]
-                        );
-                    }
-                };
+
+            keys: function(wave, vol){
+                var synth = T("OscGen", {wave:wave, mul:vol}).play();
+
+                var keydict = T("ndict.key");
+                var midicps = T("midicps");
+                T("keyboard").on("keydown", function(e) {
+                  var midi = keydict.at(e.keyCode);
+                  if (midi) {
+                    var freq = midicps.at(midi);
+                    synth.noteOnWithFreq(freq, 100);
+                  }
+                }).on("keyup", function(e) {
+                  var midi = keydict.at(e.keyCode);
+                  if (midi) {
+                    synth.noteOff(midi, 100);
+                  }
+                }).start();
+
+                alert("Play notes on the keyboard");
             }
         },
 

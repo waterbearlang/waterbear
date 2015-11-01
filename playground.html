@@ -922,50 +922,6 @@
                         <wb-value type="text,string">width of text</wb-value>
                     </wb-expression>
             </wb-accordion>
-            <wb-accordion class="path">
-                <header>
-                    <img class="cat-icon" src="images/icon/path.svg">
-                    Paths
-                </header>
-                <p>Paths are drawing instructions for producing an image from a series of points.</p>
-                <wb-step ns="path" type="path" fn="lineStyle">
-                    <wb-value type="number">line width</wb-value>
-                    <wb-value type="color" value="#0000FF">line color</wb-value>
-                    <wb-value type="list" allow="literal" options="butt,round,square" value="butt">cap style</wb-value>
-                    <wb-value type="list" allow="literal" options="round,bevel,miter" value="round">join style</wb-value>
-                </wb-step>
-                <wb-expression ns="path" type="path" fn="moveTo">
-                    <wb-value type="vector">move to point</wb-value>
-                </wb-expression>
-                <wb-expression ns="path" type="path" fn="lineTo">
-                    <wb-value type="vector">draw a line to</wb-value>
-                </wb-expression>
-                <wb-expression ns="path" type="path" fn="bezierCurveTo">
-                    <wb-value type="vector">draw a bezier curve to</wb-value>
-                    <wb-value type="vector">first control point</wb-value>
-                    <wb-value type="vector">second control point</wb-value>
-                </wb-expression>
-                <wb-expression ns="path" type="path" fn="quadraticCurveTo">
-                    <wb-value type="vector">draw a quadratic curve to</wb-value>
-                    <wb-value type="vector">control point</wb-value>
-                </wb-expression>
-                <wb-expression ns="path" type="path" fn="arcTo">
-                    <wb-value type="number">draw an arc with radius</wb-value>
-                    <wb-value type="vector">first control point</wb-value>
-                    <wb-value type="vector">second control point</wb-value>
-                </wb-expression>
-                <wb-expression ns="path" type="path" fn="closePath">
-                    close path
-                </wb-expression>
-                <wb-expression ns="path" type="shape" fn="pathSet">
-                    <wb-value>create set of paths</wb-value>
-                    <wb-row>
-                        <wb-value type="path"></wb-value>
-                        <button class="remove-item">-</button>
-                        <button class="add-item">+</button>
-                    </wb-row>
-                </wb-expression>
-            </wb-accordion>
             <wb-accordion class="shape">
                 <header>
                     <img class="cat-icon" src="images/icon/shape.svg">
@@ -973,7 +929,13 @@
                 </header>
                 <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
                  <wb-step ns="shape" fn="draw">
-                    <wb-value type="shape">draw the shape</wb-value>
+                    <wb-value type="shape,path">draw the shape</wb-value>
+                </wb-step>
+                <wb-step ns="shape" type="shape" fn="lineStyle">
+                    <wb-value type="number">line width</wb-value>
+                    <wb-value type="color" value="#0000FF">line color</wb-value>
+                    <wb-value type="list" allow="literal" options="butt,round,square" value="butt">cap style</wb-value>
+                    <wb-value type="list" allow="literal" options="round,bevel,miter" value="round">join style</wb-value>
                 </wb-step>
                 <wb-step ns="shape" fn="setLineWidth">
                     <wb-value type="number" value="1">line width</wb-value>
@@ -1002,22 +964,41 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-                <wb-expression ns="shape" type="shape" fn="arc">
+                <wb-expression ns="shape" type="path" fn="lineTo">
+                    <wb-value type="vector">line from</wb-value>
+                    <wb-value type="vector">to</wb-value>
+
+                </wb-expression>
+                <wb-expression ns="shape" type="path" fn="arc">
                     <wb-value type="number">arc with radius</wb-value>
                     <wb-value type="vector">starting from point</wb-value>
                     <wb-value type="vector">first control point</wb-value>
                     <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
-                <wb-expression ns="shape" type="shape" fn="bezierCurve">
+                <wb-expression ns="shape" type="path" fn="bezierCurve">
                     <wb-value type="vector">bezier curve from</wb-value>
                     <wb-value type="vector">to</wb-value>
                     <wb-value type="vector">first control point</wb-value>
                     <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
-                <wb-expression ns="shape" type="shape" fn="quadraticCurve">
+                <wb-expression ns="shape" type="path" fn="quadraticCurve">
                     <wb-value type="vector">quadratic curve from</wb-value>
                     <wb-value type="vector">to</wb-value>
                     <wb-value type="vector">control point</wb-value>
+                </wb-expression>
+                <wb-expression type="shape" ns="shape" fn="path">
+                    <wb-value>set of paths</wb-value>
+                    <wb-row>
+                        <wb-value type="path"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-expression>
+                <wb-expression ns="shape" type="path" fn="closePath">
+                    close path
+                </wb-expression>
+                <wb-expression ns="shape" type="vector" fn="lastPoint">
+                    last point
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">

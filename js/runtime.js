@@ -662,45 +662,6 @@
             }
         },
 
-        path:{
-
-            lineTo: function(toPoint){
-                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y))
-            },
-
-            bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
-                return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y));
-            },
-            moveTo: function(toPoint){
-                return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));
-            },
-            quadraticCurveTo: function(toPoint, controlPoint){
-                return new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                                                                       controlPoint.y,toPoint.x, toPoint.y));
-            },
-            arcTo: function(radius, controlPoint1, controlPoint2){
-                return new util.Path(getContext().arcTo, new Array(controlPoint1.x,
-                                                            controlPoint1.y,controlPoint2.x, controlPoint2.y,
-                                                            radius));
-            },
-            closePath: function(){
-                return new util.Path(getContext().closePath);
-            },
-            pathSet: function(args){
-                return new util.Shape(Array.prototype.slice.call(arguments));
-            },
-
-            lineStyle: function(width, color, capStyle, joinStyle){
-                getContext().lineWidth = width;
-                getContext().strokeStyle = color;
-                getContext().lineCap = capStyle;
-                getContext().lineJoin = joinStyle;
-            }
-
-        },
-
         random: {
             randFloat: Math.random,
             randInt: util.randInt,
@@ -801,7 +762,6 @@
             polygon: function(args){
                 var points = [].slice.call(arguments);
                 return new util.Shape(function(ctx){
-                    // debugger;
                     ctx.beginPath();
                     var points = this.pointsArray;
                     for(var i=0; i < points.length; i++) {
@@ -815,28 +775,43 @@
                     }
                 }, points);
             },
+            lineTo: function(startPoint, toPoint){
+                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint);
+            },
             arc: function(radius, startPoint, controlPoint1, controlPoint2){
-                // debugger;
                 var path = new util.Path(getContext().arcTo, new Array(controlPoint1.x,
                                                             controlPoint1.y,controlPoint2.x, controlPoint2.y,
                                                             radius), startPoint);
-                return new util.Shape(path);
+                return path;
             },
             bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
-                // debugger;
                 var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
                                                                     controlPoint2.x, controlPoint2.y, toPoint.x,
                                                                     toPoint.y), startPoint);
-                return new util.Shape(path);
+                return path;
             },
             quadraticCurve: function(startPoint, toPoint, controlPoint){
-                // debugger;
                 var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
                                                                        controlPoint.y,toPoint.x, toPoint.y),
                                                                        startPoint);
-                // return new util.Shape(path);
                 return path;
             },
+            path: function(args){
+                var paths = [].slice.call(arguments);
+                return new util.Shape(paths);
+            },
+            closePath: function(){
+                return new util.Path(getContext().closePath);
+            },
+            lastPoint: function(){
+                return false;
+            },
+            lineStyle: function(width, color, capStyle, joinStyle){
+                getContext().lineWidth = width;
+                getContext().strokeStyle = color;
+                getContext().lineCap = capStyle;
+                getContext().lineJoin = joinStyle;
+            }
         },
         size: {
             fromCoordinates: function (width, widthUnits, height, heightUnits) {

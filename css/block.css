@@ -264,6 +264,10 @@ wb-value[type*=image][type*=shape][type*=color] > input{
     background-position: 3px 3px, 20px 3px, 47px 3px;
     padding-left: 65px;
 }
+wb-value[type*=shape][type*=path] > input{
+    background-image: url(../images/icon/shape.svg), url(../images/icon/path.svg);
+    background-position: 3px 3px, 20px 3px;
+}
 wb-workspace wb-value[selected=true] > input{border-color: blue}
 wb-expression:before{
     content: '';

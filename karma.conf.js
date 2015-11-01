@@ -15,15 +15,16 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'js/util.js', watched: false },
-      { pattern: 'js/event.js', watched: false },
+      { pattern: 'lib/*.js', watched: false },
+      'js/util.js',
+      'js/event.js',
       'js/dom.js',
       //'js/block.js',
       'js/file.js',
       'js/queryparams.js',
       'js/undo.js',
       //'js/app*.js',
-      //'js/widget.js',
+      'js/widget.js',
       'js/runtime.js',
       'test/test-helpers.js',
       'test/sinon-1.12.2.js',
@@ -34,6 +35,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+      'lib/ga.js'
     ],
 
 

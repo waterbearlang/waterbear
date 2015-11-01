@@ -254,9 +254,6 @@ BlockProto.localOrSelf = function blockLocalOrSelf(){
 };
 
 BlockProto.gatherValues = function blockGatherValues(){
-    if (local._currentValue !== undefined){
-        return [local._currentValue];
-    }
     var value = this.getAttribute('value');
     if (value){
         return [ value ];
@@ -270,11 +267,21 @@ BlockProto.gatherValues = function blockGatherValues(){
     );
 };
 
-BlockProto.run = function stepRun(){
+BlockProto.run = function blockRun(){
+    if (typeof(this._currentValue) !== 'undefined'){
+        return this._currentValue;
+    }
     if (!this.fn){
         var nsName = this.getAttribute('ns');
         var fnName = this.getAttribute('fn');
         this.fn = runtime[nsName][fnName];
+        // We could match arbitrary functions without duplicating them
+        // into runtime by using ns="global" or no namespace at all.
+        // With a bit more work we could have specialized "well-known"
+        // namespaces that recognize libraries external to Waterbear.
+        // or we could look in runtime and fall back to globals if
+        // nothing is found, for things like Math namespace. That way
+        // runtime can over-ride built-in behaviour as needed.
     }
     var values = this.gatherValues();
     return this.fn.apply(this, values);
@@ -480,16 +487,6 @@ ContextProto.getAllContextLocals = function contextGetAllContextLocals(){
     return locals;
 };
 
-ContextProto.run = function contextRun(){
-    if (!this.fn){
-        var nsName = this.getAttribute('ns');
-        var fnName = this.getAttribute('fn');
-        this.fn = runtime[nsName][fnName];
-    }
-    var values = this.gatherValues();
-    return this.fn.apply(this, values);
-};
-
 /**
  * Prepares the setup() callback.
  */
@@ -573,7 +570,11 @@ ExpressionProto.removeInstances = function(){
     /* do nothing */
 };
 
-ExpressionProto.run = StepProto.run;
+ExpressionProto.setValue = function(val){
+    this._currentValue = val;
+};
+
+ExpressionProto.run = BlockProto.run;
 ExpressionProto.gatherValues = BlockProto.gatherValues; // should ExpressionProto straight-up inherit from BlockProto yet? Probably.
 ExpressionProto.isInstance = BlockProto.isInstance;
 ExpressionProto.getLocalForInstance = BlockProto.getLocalForInstance;
@@ -779,7 +780,7 @@ function toggleClosed(evt){
 ******************/
 
 var LocalProto = Object.create(HTMLElement.prototype);
-LocalProto.run = StepProto.run;
+LocalProto.run = BlockProto.run;
 LocalProto.attachedCallback = insertIntoHeader;
 LocalProto.getValue = function(){
     // wb-value already returns an array
@@ -916,23 +917,22 @@ ValueProto.createdCallback = function valueCreated(){
 };
 ValueProto.getValue = function(){
     // All versions of getValue eventually call this
-    // Return an array of one function
     var block = dom.child(this, 'wb-expression');
-    var self = this;
     if (block){
         return block.run();
     }
-    var input = dom.child(self, 'input, select');
-    if (!self.type){
-        self.type = self.getAttribute('type') || 'text';
+    var input = dom.child(this, 'input, select');
+    if (!this.type){
+        this.type = self.getAttribute('type') || 'text';
     }
     var value;
     if (input){
         value = input.value;
     }else{
-        value = self.getAttribute('value');
+        value = this.getAttribute('value');
     }
-    var primaryType = self.type.split(',')[0];
+    // FIXME: We need to be able to adapt return types based on arguments
+    var primaryType = this.type.split(',')[0];
     if (convert[primaryType]){
         return convert[primaryType](value);
     }else{

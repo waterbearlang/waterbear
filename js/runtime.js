@@ -81,6 +81,11 @@
         Event.off(null, 'runtime:*');
     }
 
+    // utility for iterating over child blocks
+    function runBlock(block){
+        block.run(self);
+    }
+
     var perFrameHandlers;
     var lastTime;
     var animationFrameHandler;
@@ -163,8 +168,19 @@
         resetStage: resetCanvas,
         handleResize: handleResize,
 
+        // All Contexts, for reference:
+        // * control.eachFrame
+        // * control.loopOver
+        // * control.receive
+        // * control.if
+        // * control.ifElse
+        // * control.comment
+        // * input.whenKeyPressed
+        // * geolocation.whenLocationUpdated
+
         local: {
-            //temporary fix for locals
+            // temporary fix for locals
+            // is this still used anywhere?
             value: function(){
                 return this.value;
             }
@@ -258,9 +274,9 @@
         control: {
             eachFrame: function controlEachFrameCtx(){
                 var self = this;
-                var steps = self.gatherSteps();
                 perFrameHandlers.push(function runFrame(){
-                    steps.forEach(function runBoundBlock(block){
+                    var steps = self.gatherSteps();
+                    steps.forEach(runBlock);
                         block.run();
                     });
                 });
@@ -297,7 +313,9 @@
             },
             loopOver: function controlLoopOverCtx(list) {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
-                var self = this;
+                var locals = this.getLocals();
+                var index = locals[0];
+                var value = locals[1];
                 var type = util.type(list);
                 var i =0,len,keys;
                 switch(type){
@@ -323,32 +341,27 @@
                         // FIXME: Get names of index & value from block
                         case 'array': // fall through
                         case 'string':
-                            this.index = i;
-                            this.value = list[i];
+                            index.setValue(i);
+                            value.setValue(list[i]);
                             break;
                         case 'object':
-                            this.key = keys[i];
-                            this.value = list[this.key];
+                            index.setValue(keys[i]);
+                            value.setValue(list[this.key]);
                             break;
                         case 'number':
-                            this.value = i;
-                            this.index = i;
+                            index.setValue(i);
+                            value.setValue(i);
                             break;
                         case 'boolean':
-                            this.value = list;
-                            this.index = i;
+                            index.setValue(i);
+                            value.setValue(list);
                             if (!list){
                                 // hopefully this will handle the case where the value changes after starting the loop
                                 return;
                             }
                             break;
                     }
-                    self.gatherSteps().forEach(runBlock);
-                }
-
-                // FIXME: Move this outside function for reuse
-                function runBlock(block){
-                    block.run(self);
+                    this.gatherSteps().forEach(runBlock);
                 }
             },
             broadcast: function controlBroadcastStep(messageName, data){
@@ -362,42 +375,32 @@
                 Event.on(document.body, 'runtime:' + args[0], null, function(evt){
                     // FIXME: how do I get the local from here?
                     // As an arg would be easiest
-                    self[messageName] = evt.detail;
-                    self.gatherSteps().forEach(function(block){
-                        block.run(self);
-                    });
+                    var local = self.locals()[0];
+                    local.setValue(evt.detail);
+                    self.gatherSteps().forEach(runBlock);
                 });
             },
             'if': function controlIfCtx(predicate){
                 if (predicate){
-                    var self = this;
-                    self.gatherSteps.forEach(function(block){
-                        block.run(self);
-                    });
+                    this.gatherSteps.forEach(runBlock);
                 }
             },
             ifElse: function controlIfElseCtx(predicate){
-                var self = this;
                 if (predicate){
-                    self.gatherSteps().forEach(function(block){
-                        block.run(self);
-                    });
+                    this.gatherSteps().forEach(runBlock);
                 }else{
-                    self.gatherContains()[1].forEach(function(block){
-                        block.run(self);
-                    });
+                    this.gatherContains()[1].forEach(runBlock);
                 }
             },
-            ternary: function controlTernaryCtx(cond, iftrue, otherwise){
+            ternary: function controlTernaryExpr(cond, iftrue, otherwise){
                 // FIXME: Implement short-circuit processing
                 return cond ? iftrue : otherwise;
             },
             ask: function controlAskStep(message, name){
-                // Shouldn't this be a context? Or have an on-message handler?
                 var answer = prompt(message);
                 runtime.control.setVariable(name, answer);
             },
-            comment: function controlCommentStep(){
+            comment: function controlCommentCtx(){
                 // do nothing, it's a comment
             },
             log: function controlLogStep(item){
@@ -419,21 +422,20 @@
                 return util.geolocation.currentLocation;
             },
             /* Asynchronous update event. Context. */
-            whenLocationUpdated: function geoLocationWhenLocationUpdatedContext() {
+            whenLocationUpdated: function geoWhenLocationUpdatedCtx() {
                 var self = this;
                 Event.on(window, 'runtime:locationchanged', null, function (event) {
                     // TODO: probably factor out augmenting scope and running
                     // the block stuff to somewhere else.
                     // FIXME: save event values for access
-                    this.gatherSteps().forEach(function (block) {
-                        block.run(self);
-                    });
+                    // FIXME: update the location object?
+                    self.gatherSteps().forEach(runBlock);
                 });
             },
             // Returns the distance between two points in meters.
             // taken from http://www.movable-type.co.uk/scripts/latlong.html
             // Using the haversine formula.
-            distanceBetween: function (p1, p2) {
+            distanceBetween: function geoDistanceBetweenExpr(p1, p2) {
                 var R = 6371000; // m
                 var lat1 = p1.coords.latitude;
                 var lon1 = p1.coords.longitude;
@@ -454,78 +456,76 @@
             },
             /* Returns latitude in degrees. */
             // TODO: should this return a "degrees" object?
-            latitude: function (location) {
+            latitude: function geoLatitudeExpr(location) {
                 return location.coords.latitude;
             },
             /* Returns longitude in degrees. */
             // TODO: should this return a "degrees" object?
-            longitude: function (location) {
+            longitude: function geoLongitudeExpr(location) {
                 return location.coords.longitude;
             },
             /* Returns altitude as a unit? */
-            altitude: function (location) {
+            altitude: function geoAltitudeExpr(location) {
                 return location.coords.altitude;
             },
             /* Returns degrees from north. */
-            heading: function (location) {
+            heading: function geoHeadingExpr(location) {
                 // TODO: What do we do when this is NaN or NULL?
-                return location.coords.heading;
+                return location.coords.heading || 0;
             },
             /* Returns estimated speed. */
-            speed: function (location) {
+            speed: function geoSpeedExpr(location) {
                 // TODO: What do we do when this is NaN or NULL?
-                return location.coords.speed;
+                return location.coords.speed || 0;
             },
         },
 
         image: {
-            get: function(path){
+            get: function imageGetExpr(path){
                 return assets.images[path];
             },
-            drawAtPoint: function(img, pt){
+            drawAtPoint: function imageDrawAtPointStep(img, pt){
                 img.drawAtPoint(getContext(), pt);
             },
-            getWidth: function(img){
+            getWidth: function imageGetWidthExpr(img){
                 return img.getWidth();
             },
-            getHeight: function(img){
+            getHeight: function imageGetHeightExpr(img){
                 return img.getHeight();
             },
-            setWidth: function(img, w){
+            setWidth: function imageSetWidthStep(img, w){
                 img.setWidth(w);
             },
-            setHeight: function(img, h){
+            setHeight: function imageSetHeightStep(img, h){
                 img.setHeight(h);
             },
-            setSize: function(img, sz){
+            setSize: function imageSetSizeStep(img, sz){
                 img.setSize(sz);
             },
-            scale: function(img, scaleFactor){
+            scale: function imageScaleStep(img, scaleFactor){
                 img.scale(scaleFactor);
             }
         },
         input: {
-            keyPressed: function(key){
+            keyPressed: function inputKeyPressedExpr(key){
                 if(Event.keys[key])
                     return true;
                 else
                     return false;
             },
-            mouseX: function(){
+            mouseX: function inputPointerXExpr(){
                 return (Event.pointerX-Event.stage.left);
             },
-            mouseY: function(){
+            mouseY: function inputPointerYExpr(){
                 return (Event.pointerY-Event.stage.top);
             },
-            mouseDown: function(){
+            mouseDown: function inputPointerDownExpr(){
                 return Event.pointerDown;
             },
-            whenKeyPressed: function(key){
+            whenKeyPressed: function inputWhenKeyPressedCtx(key){
                 var self = this;
                 Event.onKeyDown(key, function(){
-                    self.gatherSteps().forEach(function(block){
-                        block.run(self);
-                    });
+                    self.gatherSteps().forEach(runBlock);
                 });
             },
         },
@@ -537,19 +537,19 @@
             divide: util.divide,
             equal: util.equal,
             notEqual: util.notEqual,
-            lt: function(a,b){
+            lt: function mathLessThanExpr(a,b){
                 return a < b;
             },
-            lte: function(a,b){
+            lte: function mathLessThanEqualToExpr(a,b){
                 return a <= b;
             },
-            gt: function(a,b){
+            gt: function mathGreaterThanExpr(a,b){
                 return a > b;
             },
-            gte: function(a,b){
+            gte: function mathGreaterThanEqualToExpr(a,b){
                 return a >= b;
             },
-            mod: function(a,b){
+            mod: function mathModulusExpr(a,b){
                 return a % b;
             },
             round: Math.round,
@@ -564,46 +564,46 @@
             cbrt: Math.cbrt || function(a) {
             	return Math.pow(a,1/3);
             },
-            root: function(a,b) {
+            root: function mathRootExpr(a,b) {
             	return Math.pow(a, 1/b);
             },
-            log: function(val,base) {
+            log: function mathLogExpr(val,base) {
             	return Math.log(val) / Math.log(base);
             },
-            max: function(a){
+            max: function mathMaxExpr(a){
             	return Math.max.apply(Math,a);
             },
-            min: function(a){
+            min: function mathMinExpr(a){
             	return Math.min.apply(Math,a);
             },
-            cos: function(a){
+            cos: function mathCosExpr(a){
                 return Math.cos(util.deg2rad(a));
             },
-            sin: function(a){
+            sin: function mathSinExpr(a){
                 return Math.sin(util.deg2rad(a));
             },
-            tan: function(a){
+            tan: function mathTanExpr(a){
                 return Math.tan(util.deg2rad(a));
             },
-            asin: function(a){
+            asin: function mathAsinExpr(a){
                 return Math.asin(util.deg2rad(a));
             },
-            acos: function(a){
+            acos: function mathAcosExpr(a){
                 return Math.acos(util.deg2rad(a));
             },
-            atan: function(a){
+            atan: function mathAtanExpr(a){
                 return Math.atan(util.deg2rad(a));
             },
-            pow: function(a,b){
+            pow: function mathPowerExpr(a,b){
                 return Math.pow(a, b);
             },
-            pi: function(){
+            pi: function mathPiExpr(){
                 return Math.PI;
             },
-            e: function(){
+            e: function mathEExpr(){
                 return Math.E;
             },
-            tau: function(){
+            tau: function mathTauExpr(){
                 return Math.PI * 2;
             },
             deg2rad: util.deg2rad,
@@ -613,27 +613,26 @@
 
         motion: {
             /* Asynchronous update event. Context. */
-            whenDeviceTurned: function(direction) {
+            // FIXME: We don't seem to have a block for this
+            whenDeviceTurned: function whenDeviceTurnedCtx(direction) {
                 var self = this;
                 Event.on(window, 'runtime:motionchanged', null, function (event) {
                     if (direction === util.motion.direction) {
-                        self.gatherSteps().forEach(function (block) {
-                            block.run();
-                        });
+                        self.gatherSteps().forEach(runBlock);
                     }
                 });
             },
             /* Synchronous "get current location" */
-            tiltDirection: function(){
+            tiltDirection: function tiltDirectionExpr(){
                 return util.motion.direction;
             }
         },
 
         object: {
-            empty: function () {
+            empty: function objectEmpty() {
                 return {};
             },
-            create: function () {
+            create: function objectCreate() {
                 var i, key, val, obj;
                 obj = {};
                 // Get key/value pairs from arguments.
@@ -644,17 +643,17 @@
                 }
                 return obj;
             },
-            getValue: function (obj, key) {
+            getValue: function objectGetValue(obj, key) {
                 return obj[key];
             },
-            getKeys: function (obj) {
+            getKeys: function objectGetKeys(obj) {
                 return Object.keys(obj);
             }
         },
 
         path:{
 
-            lineTo: function(toPoint){
+            lineTo: function (toPoint){
                 return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y))
             },
 

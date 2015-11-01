@@ -51,7 +51,9 @@
 
     function handleResize(){
         if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground
-            var rect = canvas().getBoundingClientRect();
+            var can = canvas();
+            can.removeAttribute('height');
+            var rect = can.parentElement.getBoundingClientRect();
             Event.stage = {
                 // FIXME: Move these to runtime.stage
                 top: Math.round(rect.top),
@@ -61,8 +63,8 @@
                 width: Math.round(rect.right) - Math.round(rect.left),
                 height: Math.round(rect.bottom) - Math.round(rect.top)
             };
-            canvas().setAttribute('width', Event.stage.width);
-            canvas().setAttribute('height', Event.stage.height);
+            can.setAttribute('width', Event.stage.width);
+            can.setAttribute('height', Event.stage.height);
         }
     }
 

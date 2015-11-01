@@ -918,59 +918,61 @@
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
-        this.position = new Vector(0,0);
-        this.facing = new Vector(1,0);
-        this.velocity = new Vector(0,0);
+        this.position = this.drawable.satObject.pos;
+        this.facing = new SAT.Vector(1,0);
+        this.velocity = new SAT.Vector();
     }
 
     Sprite.prototype.accelerate = function(speed){
-        this.velocity = add(this.velocity, multiply(this.facing, speed));
-        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+        var temp = new SAT.Vector(this.facing.x * speed, this.facing.y * speed);
+        this.velocity.add(temp);
     }
 
     Sprite.prototype.setVelocity = function(vec){
-        this.velocity = vec;
+        this.velocity = new SAT.Vector(vec.x, vec.y);
     }
 
     Sprite.prototype.getXvel = function(){
-        return this.velocity.getX();
+        return this.velocity.x;
     }
 
     Sprite.prototype.getYvel = function(){
-        return this.velocity.getY();
+        return this.velocity.y;
     }
 
     Sprite.prototype.getXpos = function(){
-        return this.position.getX();
+        return this.position.x;
     }
 
     Sprite.prototype.getYpos = function(){
-        return this.position.getY();
+        return this.position.x;
     }
 
     Sprite.prototype.applyForce = function(vec){
-        this.velocity = add(this.velocity, vec);
+        this.velocity.add(vec);
     }
 
     Sprite.prototype.rotate = function(r){
-        this.facing = this.facing.rotate(r);
+        this.facing.rotate(r);
     }
 
     Sprite.prototype.rotateTo = function(r){
-        this.facing = this.facing.rotateTo(r);
+        debugger;
+        this.facing.angle = r;
     }
 
     Sprite.prototype.move = function(){
-        this.position = add(this.position, this.velocity);
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
     }
 
     Sprite.prototype.moveTo = function(pt){
-        this.position = new Vector(pt.x, pt.y);
+        this.position = new SAT.Vector(pt.x, pt.y);
     }
 
     Sprite.prototype.draw = function(ctx){
         ctx.translate(this.position.x, this.position.y);
-        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
+        ctx.rotate(this.facing.angle); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }

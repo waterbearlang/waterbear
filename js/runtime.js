@@ -764,19 +764,23 @@
                     this.radius = rad;
                 });
             },
-            rectangle: function rectangle(pt, width, height, orientation){
+            rectangle: function rectangle(orientation, pt, width, height){
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     var x = 0;
                     var y = 0;
                     if(orientation == "center"){
-                        x = pt.x - width/2;
-                        y = pt.y - height/2;
+                        x = 0 - width/2;
+                        y = 0 - height/2;
                         this.centered = true;
                     }
-                    else{
+                    else if(orientation == "use vector"){
                         x = pt.x;
                         y = pt.y;
+                    }
+                    else{
+                        x = 0;
+                        y = 0;
                         this.centered = false;
                     }
 

@@ -989,10 +989,10 @@
                     <wb-value type="number" min="0">rotation</wb-value>
                 </wb-expression>
                 <wb-expression type="shape" ns="shape" fn="rectangle">
-                    <wb-value type="vector">rectangle at</wb-value>
+                    <wb-value type="list" allow="literal" options="center,bottom left corner,use vector" value="corner">rectangle origin</wb-value>
+                    <wb-value type="vector">vector origin</wb-value>
                     <wb-value type="number" min="0">width</wb-value>
                     <wb-value type="number" min="0">height</wb-value>
-                    <wb-value type="list" allow="literal" options="center,corner" value="corner">anchored at</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">

@@ -849,6 +849,19 @@
                 }).start();
 
                 alert("Play notes on the keyboard");
+            },
+
+            effect: function(){
+                // Change from 1760Hz to 220Hz in 200ms.
+                var table = [1760, [110, "200ms"]];
+
+                var freq = T("env", {table:table}).on("bang", function() {
+                    VCO.mul = 0.2;
+                }).on("ended", function() {
+                    VCO.mul = 0;
+                });
+                var VCO = T("saw", {freq:freq, mul:0}).play();
+                freq.bang();
             }
         },
 

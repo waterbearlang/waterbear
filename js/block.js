@@ -1414,7 +1414,7 @@ Event.on(workspace, 'editor:click', '*', manageSelections);
 // Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
 
 Event.on(workspace, 'editor:click', '*', toggleFilter);
-
+    
 // Hit enter to deselect
 Event.on(workspace,'editor:keydown', 'wb-value input', handleEnter);
 })();

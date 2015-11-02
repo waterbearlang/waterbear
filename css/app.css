@@ -254,8 +254,13 @@ wb-playground {
 }
 
 wb-blockbox {
+    display:block;
     overflow-y: auto;
     overflow-x: auto;
+}
+
+wb-blocks {
+    padding-left: 10px;
 }
 
 #playgroundBox {

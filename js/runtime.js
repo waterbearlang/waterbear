@@ -277,8 +277,6 @@
                 perFrameHandlers.push(function runFrame(){
                     var steps = self.gatherSteps();
                     steps.forEach(runBlock);
-                        block.run();
-                    });
                 });
             },
             frame: function controlFrameExpr(){
@@ -288,18 +286,28 @@
                 return runtime.control._elapsed;
             },
             setVariable: function controlSetVariableStep(name, value){
-                // This works differently than updateVariable, not sure if
-                // what I have here will work
-                // in fact, do I need to do anything at all?
-                // var instance = this.gatherArguments()[0];
-                // var local = instance.localOrSelf();
-                // local._currentValue = value;
+                // var valueBlock = this.gatherArguments()[0].children[2];
+                // var block = dom.child(valueBlock, 'wb-expression');
+                // if (block){
+                //     if (this._currentBlock && this._currentBlock === block){
+                //         // do nothing
+                //     }else{
+                //         this._currentBlock = block;
+                //         this._currentValue = block.run();
+                //     }
+                //     return [this._currentValue];
+                // }else{
+                //     this._currentBlock = null;
+                //     this._currentValue = null;
+                // }
+                this.getLocals()[0]._currentValue = this.gatherValues()[0];
             },
             getVariable: function controlGetVariableExpr(name){
-                // Do I need to find the setVariable block get the value from that?
-                var instance = this.firstExpression();
-                var local = instance.localOrSelf();
-                return local.getValue();
+                var local = this.localOrSelf();
+                if (typeof(local._currentValue) !== undefined){
+                    return local._currentValue;
+                }
+                return local.run();
             },
             updateVariable: function controlUpdateVariableStep(name, value){
                 // Do I need to find the setVariable block and set the value there?
@@ -382,7 +390,7 @@
             },
             'if': function controlIfCtx(predicate){
                 if (predicate){
-                    this.gatherSteps.forEach(runBlock);
+                    this.gatherSteps().forEach(runBlock);
                 }
             },
             ifElse: function controlIfElseCtx(predicate){
@@ -866,6 +874,7 @@
                 spt.accelerate(speed);
             },
             setVelocity: function setVelocity(spt, vec){
+                // console.log('set velocity of ' + spt + ' to ' + vec);
                 spt.setVelocity(vec);
             },
             getVelocity: function spriteGetVelocityExpr(spt){
@@ -896,6 +905,7 @@
                 spt.move();
             },
             moveTo: function moveTo(spt, pt){
+                // console.log('move ' + spt + ' to ' + pt);
                 spt.moveTo(pt);
             },
             draw: function draw(spt){

@@ -247,7 +247,7 @@ BlockProto.firstExpression = function blockFirstExpression(){
 };
 
 BlockProto.localOrSelf = function blockLocalOrSelf(){
-    if (this.isLocal()){
+    if (this.isInstance()){
         return this.getLocalForInstance();
     }
     return this;
@@ -571,13 +571,34 @@ ExpressionProto.removeInstances = function(){
 };
 
 ExpressionProto.setValue = function(val){
-    this._currentValue = val;
+    if (this.isInstance()){
+        var local = this.getLocalForInstance();
+        local._currentValue = val;
+    }else{
+        this._currentValue = val;
+    }
+};
+
+ExpressionProto.getValue = function(){
+    if (this.isInstance()){
+        var local = this.getLocalForInstance();
+        return local.getValue();
+    }
+    if (typeof(this._currentValue) !== 'undefined'){
+        return this._currentValue;
+    }
+    return this.run();
+    // return [dom.child(this.header(), 'wb-value').getValue()];
 };
 
 ExpressionProto.run = BlockProto.run;
 ExpressionProto.gatherValues = BlockProto.gatherValues; // should ExpressionProto straight-up inherit from BlockProto yet? Probably.
 ExpressionProto.isInstance = BlockProto.isInstance;
 ExpressionProto.getLocalForInstance = BlockProto.getLocalForInstance;
+ExpressionProto.gatherArguments = BlockProto.gatherArguments;
+ExpressionProto.header = BlockProto.header;
+ExpressionProto.firstExpression = BlockProto.firstExpression;
+ExpressionProto.localOrSelf = BlockProto.localOrSelf;
 
 window.WBExpression = document.registerElement('wb-expression', {prototype: ExpressionProto});
 
@@ -735,9 +756,11 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 var RowProto = Object.create(HTMLElement.prototype);
 RowProto.getValue = function(){
     // This will always return an array (maybe an empty array)
-    return dom
-        .children(this, 'wb-value[type]:not(.hide), wb-local')
-        .map(function(value){ return value.getValue()[0]; });
+    var valueBlocks = dom.children(this, 'wb-value[type]:not(.hide)');
+    var values = valueBlocks.map(function(block){
+        return block.getValue()[0];
+    });
+    return values;
 };
 RowProto.attachedCallback = insertIntoHeader;
 window.WBRow = document.registerElement('wb-row', {prototype: RowProto});
@@ -919,11 +942,11 @@ ValueProto.getValue = function(){
     // All versions of getValue eventually call this
     var block = dom.child(this, 'wb-expression');
     if (block){
-        return block.run();
+        return [block.run()];
     }
     var input = dom.child(this, 'input, select');
     if (!this.type){
-        this.type = self.getAttribute('type') || 'text';
+        this.type = this.getAttribute('type') || 'text';
     }
     var value;
     if (input){
@@ -934,9 +957,9 @@ ValueProto.getValue = function(){
     // FIXME: We need to be able to adapt return types based on arguments
     var primaryType = this.type.split(',')[0];
     if (convert[primaryType]){
-        return convert[primaryType](value);
+        return [convert[primaryType](value)];
     }else{
-        return value;
+        return [value];
     }
 };
 

@@ -20,7 +20,6 @@ sidebar{
     position: relative;
     border-radius: 5px;
     border: 4px #111111 outset;
-    float: left;
     margin-top: 10px;
     margin-left: 10px;
 }
@@ -193,16 +192,16 @@ sidebar button.availableBlocks{
 /* Show trash for wb-blockbox while dragging */
 
 wb-blockbox.trashcan > wb-search, wb-blockbox.trashcan wb-menu{
-    display: none;
+   display: none;
 }
 
 wb-blockbox.trashcan:after{
     content: '';
-    width: 100%;
-    height: 100%;
     position: absolute;
     left: 0;
     top: 0;
+    width: 100%;
+    height: 100%;
     background-repeat: no-repeat;
     background-image: url("../images/icon/recycle.svg");
     background-size: contain;

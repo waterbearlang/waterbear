@@ -17,7 +17,7 @@
     var workspace = dom.find(document.body, 'wb-workspace');
     var scriptspace = dom.find(document.body, 'wb-workspace > wb-contains');
     var selectedItem = null;
-    var BLOCK_MENU = document.querySelector('sidebar');
+    var BLOCK_BOX = document.querySelector('wb-blockbox');
 
 // FIXME: insert this into the document rather than including in markup
 var svgText = document.querySelector('.resize-tester');
@@ -843,7 +843,7 @@ ValueProto.deselect = function(){
 function toggleFilter(evt){
     var value = dom.closest(evt.target, 'wb-value');
 
-    if (BLOCK_MENU.getAttribute('filtered') === 'true'){
+    if (BLOCK_BOX.getAttribute('filtered') === 'true'){
         // if click outside of wb-contains then deselect the selectedItem
         if(!value && selectedItem) {
             selectedItem.deselect();
@@ -929,8 +929,8 @@ function startDragBlock(evt){
     //    return target.startDrag(evt);
 
     // Show trash can, should be in app.js, not block.js
-    blockTop = BLOCK_MENU.scrollTop;
-    BLOCK_MENU.classList.add('trashcan');
+    blockTop = BLOCK_BOX.scrollTop;
+    BLOCK_BOX.classList.add('trashcan');
 
     workspace.classList.add('block-dragging');
     // FIXME: Highlight droppable places (or grey out non-droppable)
@@ -997,7 +997,7 @@ function dragBlock(evt){
 
     // Check if the user dragged over the sidebar.
     if (dom.matches(potentialDropTarget, 'sidebar, sidebar *,wb-blockbox, wb-blockbox *')){
-        dropTarget = BLOCK_MENU;
+        dropTarget = BLOCK_BOX;
         dropTarget.classList.add('no-drop');
         app.warn('drop here to delete block(s)');
         return;
@@ -1144,7 +1144,7 @@ function endDragBlock(evt){
     if(dropTarget === originalParent){
         return cancelDragBlock();
     }
-    if (dropTarget === BLOCK_MENU){
+    if (dropTarget === BLOCK_BOX){
         // Drop on script menu to delete block, always delete clone
         deleteOriginalBlock(originalBlock, originalParent, nextElem);
         dragTarget.parentElement.removeChild(dragTarget);
@@ -1152,7 +1152,7 @@ function endDragBlock(evt){
         if (dom.matches(dropTarget, 'wb-value')) {
             dropTarget.appendChild(dragTarget);
             dropTarget.deselect();
-            BLOCK_MENU.removeAttribute('filtered');
+            BLOCK_BOX.removeAttribute('filtered');
             var addValueEvent = {type:'add-block', addedBlock:dragTarget, addedTo:dropTarget, nextBlock:dragTarget.nextElementSibling, originalParent:originalParent, originalNextEl: nextElem};
             if (dragStart === 'script'){
                 addValueEvent.type = 'move-block'
@@ -1228,8 +1228,8 @@ function resetDragging(){
     dropTarget = null;
     app.info('');
     // Hide trash can, should be in app.js, not block.js
-    BLOCK_MENU.classList.remove('trashcan');
-    BLOCK_MENU.scrollTop = blockTop;
+    BLOCK_BOX.classList.remove('trashcan');
+    BLOCK_BOX.scrollTop = blockTop;
     workspace.classList.remove('block-dragging');
     var dropTarget = dom.find(document.body, '.drop-target');
     if (dropTarget){

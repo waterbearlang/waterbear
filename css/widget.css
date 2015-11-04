@@ -208,12 +208,20 @@ sidebar[filtered=true] wb-accordion > :not(header){
     display: inline-block; /*display everything*/
 }
 
-sidebar[filtered=true] wb-step, sidebar[filtered=true] p, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]), sidebar[filtered=true] wb-accordion > header{
-    display: none!important; /* hide everything but the filtered expressions */
-    margin-bottom: 6px;
+wb-blockbox[filtered=true] wb-step, wb-blockbox[filtered=true] p, wb-blockbox[filtered=true] wb-context, wb-blockbox[filtered=true] wb-expression:not([filtered=true]) {
+    display: none;
 }
 
-sidebar[filtered=true] button.availableBlocks{
+wb-blockbox[filtered=true] wb-expression[filtered=true], wb-blockbox[filtered=true] wb-blocks {
+    display: block;
+}
+/*
+wb-blockbox[filtered=true] wb-step, wb-blockbox[filtered=true] p, wb-blockbox[filtered=true] wb-context, wb-blockbox[filtered=true] wb-expression:not([filtered=true]), wb-blockbox[filtered=true] wb-blocks > header{
+    display: none!important; /* hide everything but the filtered expressions */
+ /*   margin-bottom: 6px;
+}
+
+wb-blockbox[filtered=true] button.availableBlocks{
     display: block;
     position: relative;
     margin-left: -6px;
@@ -229,15 +237,15 @@ sidebar[filtered=true] button.availableBlocks{
     width: 100%;
 }
 
-sidebar[filtered=true] button.availableBlocks:after{
+wb-blockbox[filtered=true] button.availableBlocks:after{
     content: '';
     position: absolute;
     top: 0;
     right: 0;
     width: 15px;
     height: 100%;
-    background-color: #000000; /* over-ride colours in app.css */
-}
+    background-color: #000000; /* over-ride colours in app.css*/ 
+/*}*/
 
 /* depreciated
 wb-accordion > header {

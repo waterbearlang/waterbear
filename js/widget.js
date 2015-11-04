@@ -71,6 +71,7 @@ Event.on(document.body, 'editor:touchend', 'wb-accordion > header', accordionCli
 var MenuProto = Object.create(HTMLElement.prototype);
     
 MenuProto.select = function() {
+    app.clearFilter();
     //hide the currently opened selection
     var existing = dom.find('wb-menu[open=true]');
     if(existing) {
@@ -87,6 +88,7 @@ MenuProto.select = function() {
 }
 
 MenuProto.deselect = function() {
+    app.clearFilter();
     this.removeAttribute('open');
     var type = this.getAttribute('class');
     var blocks = document.getElementById(type);
@@ -204,7 +206,7 @@ Event.on(document.body, 'ui:drag-end', null, function(evt){
             splitters[i].previousElementSibling.style.flex = positions[i];
         }
     }
-});*/
+});
 
 Event.on(window, 'ui:dblclick', 'wb-splitter', function(evt){
     var panel = evt.target.previousElementSibling;
@@ -214,7 +216,7 @@ Event.on(window, 'ui:dblclick', 'wb-splitter', function(evt){
     }else{
         panel.style.flex = '0 0 0';
     }
-});
+});*/
 
 
 })();

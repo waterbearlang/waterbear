@@ -1,7 +1,7 @@
 (function(){
 'use strict';
     var workspace = dom.find(document.body, 'wb-workspace');
-    var BLOCK_MENU = document.querySelector('sidebar');
+    var BLOCK_BOX = document.querySelector('wb-blockbox');
 var canvasRef;
 
 // FIXME: This feedback is important and useful, but using it this way violates
@@ -35,27 +35,31 @@ function info(text){
 }
 
 function clearFilter(){
-    var sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    var sidebarBlocks = BLOCK_BOX.querySelectorAll('wb-expression');
     for(var i=0; i< sidebarBlocks.length; i++){
         sidebarBlocks[i].removeAttribute('filtered');
     }
-    BLOCK_MENU.removeAttribute('filtered');
+    BLOCK_BOX.removeAttribute('filtered');
 }
 
 function setFilter(item){
     var i;
     var sidebarBlocks=[];
-
+    
+    //deselect menu item that is selected
+    var menu = dom.find('wb-menu[open=true]');
+    menu.deselect();
+    
     var selectedType = item.getAttribute('type');
     if (selectedType){
         var selectedTypeList = selectedType.split(',');
         for(i=0; i<selectedTypeList.length; i++){
-            sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+            sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_BOX.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
         }
         for(i=0; i< sidebarBlocks.length; i++){
             sidebarBlocks[i].setAttribute('filtered', 'true');
         }
-        BLOCK_MENU.setAttribute('filtered', 'true');
+        BLOCK_BOX.setAttribute('filtered', 'true');
     }
 }
 
@@ -88,9 +92,7 @@ function startScript(evt, options) {
             Event.trigger(window, name, data);
         });
     };
-
     preload().whenLoaded(runScript.bind(null, options));
-    runtime.handleResize();
 }
 
 function stopScript(evt) {

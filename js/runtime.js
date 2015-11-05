@@ -286,20 +286,6 @@
                 return runtime.control._elapsed;
             },
             setVariable: function controlSetVariableStep(name, value){
-                // var valueBlock = this.gatherArguments()[0].children[2];
-                // var block = dom.child(valueBlock, 'wb-expression');
-                // if (block){
-                //     if (this._currentBlock && this._currentBlock === block){
-                //         // do nothing
-                //     }else{
-                //         this._currentBlock = block;
-                //         this._currentValue = block.run();
-                //     }
-                //     return [this._currentValue];
-                // }else{
-                //     this._currentBlock = null;
-                //     this._currentValue = null;
-                // }
                 this.getLocals()[0]._currentValue = this.gatherValues()[0];
             },
             getVariable: function controlGetVariableExpr(name){
@@ -406,7 +392,7 @@
             },
             ask: function controlAskStep(message, name){
                 var answer = prompt(message);
-                runtime.control.setVariable(name, answer);
+                this.getLocals()[0]._currentValue = answer;
             },
             comment: function controlCommentCtx(){
                 // do nothing, it's a comment

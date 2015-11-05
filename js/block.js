@@ -1299,6 +1299,7 @@ function endDragBlock(evt){
         return cancelDragBlock();
     }
     if(dropTarget === originalParent){
+        // Dragged back to where we started
         return cancelDragBlock();
     }
     if (dropTarget === BLOCK_MENU){

@@ -233,11 +233,12 @@
                     <wb-value type="number" value="0.25">mul</wb-value>-->
                 </wb-expression>
                 <wb-step ns="sound" fn="play">
-                    <wb-value type="text" value="sin">play wave</wb-value>
+                    <wb-value type="list" allow="literal" options="sin, saw, tri, pulse, fami" value="sin">play wave</wb-value>
+                    <wb-value type="number" value="1000">freq</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="keys">
                     <wb-value>keys</wb-value>
-                    <wb-value type="text" value="saw">wave</wb-value>
+                    <wb-value type="list" allow="literal" options="sin, saw, tri, pulse, fami" value="sin">wave</wb-value>
                     <wb-value type="number" value="0.25">vol</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="effect">

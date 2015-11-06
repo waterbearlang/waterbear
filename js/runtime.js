@@ -826,8 +826,8 @@
                 return console.log(url);
             },
 
-            play: function(text){
-                T(text).bang().play();
+            play: function(wave, freq){
+                T(wave, {freq:freq}).play();
             },
 
             keys: function(wave, vol){

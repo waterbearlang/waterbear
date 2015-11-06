@@ -227,11 +227,20 @@
                     Sound
                 </header>
                 <p>Play and manipulate existing sound files or synthesize new sounds.</p>
-                <!--<wb-expression type="sound" isasset="false" ns="sound" fn="get">
-                    <wb-value type="text" value="OscGen">sound object</wb-value>
-                    <wb-value type="text" value="saw">wave</wb-value>
-                    <wb-value type="number" value="0.25">mul</wb-value>-->
+                <wb-expression type="sound" isasset="false" ns="sound" fn="get">
+                    <wb-value type="list" allow="literal" options="sin, patch2, patch3" value="sin">instrument</wb-value>
                 </wb-expression>
+                <wb-step ns="sound" fn="note">
+                    <wb-value type="sound">play</wb-value>
+                    <wb-value type="list" allow="literal" options="C,D,E,F,G,A,B" value "C">note</wb-value>
+                    <wb-value type="number" value="0.5">beats</wb-value>
+                </wb-step>
+                <wb-step ns="sound" fn="rest">
+                    <wb-value type="number" value="0.5">rest</wb-value>
+                </wb-step>
+                <wb-step ns="sound" fn="tempo">
+                    <wb-value type="number" value="100">set tempo</wb-value>
+                </wb-step>
                 <wb-step ns="sound" fn="play">
                     <wb-value type="list" allow="literal" options="sin, saw, tri, pulse, fami" value="sin">play wave</wb-value>
                     <wb-value type="number" value="1000">freq</wb-value>

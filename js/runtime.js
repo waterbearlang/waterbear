@@ -822,12 +822,16 @@
 
         sound: {
 
-            get: function(url){
-                return console.log(url);
+            get: function(wave){
+                return wave;
             },
 
             play: function(wave, freq){
                 T(wave, {freq:freq}).play();
+            },
+
+            note: function(wave, freq){
+                T(wave, {freq:1000, time:"bpm120 116"}).play();
             },
 
             keys: function(wave, vol){

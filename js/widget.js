@@ -105,11 +105,16 @@ MenuProto.toggle = function() {
 window.WBMenu = document.registerElement('wb-menu', {prototype: MenuProto});
     
 function sideMenuClick(evt) {
+    if (Event.distancePointerMoved > 5){
+        return;
+    }
+    evt.preventDefault();
+    evt.stopPropagation();
     dom.closest(evt.target,'wb-menu').toggle();
 }
     
 Event.on(document.body, 'editor:click', 'wb-menu > header', sideMenuClick);
-    
+Event.on(document.body, 'editor:touchend', 'wb-menu > header', sideMenuClick);   
 /* For HBox, VBox, and Splitter:
 
   * Use % widths (or heights)
@@ -130,14 +135,14 @@ window.WBHBox = document.registerElement('wb-hbox', {prototype: HBoxProto});
 var VBoxProto = Object.create(HTMLElement.prototype);
 window.WBVBox = document.registerElement('wb-vbox', {prototype: VBoxProto});
 
-/*splitters removed so code is depreciated
+//splitters removed so code is depreciated
 /******************************
 *
 * SPLITTER
 *
 *******************************/
-
-/*var SplitterProto = Object.create(HTMLElement.prototype);
+/*
+var SplitterProto = Object.create(HTMLElement.prototype);
 SplitterProto.attachedCallback = function splitterAttached(){
     // console.log('splitting up');
 };
@@ -155,8 +160,8 @@ var direction = null;
 var minPosition = 0;
 var maxPosition = 0;
 var slop = 0;
-/* FIXME: next value should be determined dynamically */
-/*var splitterThickness = 8;
+//FIXME: next value should be determined dynamically 
+var splitterThickness = 8;
 
 Event.on(document.body, 'ui:drag-start', 'wb-splitter', function(evt){
     dragSplitter = evt.target;
@@ -168,7 +173,7 @@ Event.on(document.body, 'ui:drag-start', 'wb-splitter', function(evt){
     minPosition = direction === 'vertical' ? prevBox.top : prevBox.left;
     maxPosition = direction === 'vertical' ? nextBox.bottom : nextBox.right;
     slop = direction === 'vertical' ? evt.clientY - prevBox.bottom : evt.clientX - prevBox.right;
-    // maxPosition = maxPosition - /* evt.target.thickness ;
+    // maxPosition = maxPosition - evt.target.thickness ;
 });
 
 Event.on(document.body, 'ui:dragging', null, function(evt){
@@ -196,9 +201,9 @@ Event.on(document.body, 'ui:drag-end', null, function(evt){
     localStorage.__splitterPositions = JSON.stringify(splitters.map(function(splitter){
         return getComputedStyle(splitter.previousElementSibling)['flex'];
     }));
-});*/
+});
 
-/*Event.on(window, 'ui:load', null, function(evt){
+Event.on(window, 'ui:load', null, function(evt){
     if (localStorage.__splitterPositions){
         var splitters = dom.findAll('wb-splitter');
         var positions = JSON.parse(localStorage.__splitterPositions);

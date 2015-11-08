@@ -48,7 +48,9 @@ function setFilter(item){
     
     //deselect menu item that is selected
     var menu = dom.find('wb-menu[open=true]');
-    menu.deselect();
+    if(menu) {
+        menu.deselect();
+    }
     
     var selectedType = item.getAttribute('type');
     if (selectedType){

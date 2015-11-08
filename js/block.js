@@ -1249,7 +1249,7 @@ function resetDragging(){
  */
 function createVariableBlock(initialValue) {
    // Make ourselves a clone of the original.
-   var originalSetVariable = dom.find('sidebar wb-step[fn="setVariable"]');
+   var originalSetVariable = dom.find('wb-blockbox   wb-step[fn="setVariable"]');
    console.assert(originalSetVariable, 'Could not find setVariable block');
    var variableStep = dom.clone(originalSetVariable);
 

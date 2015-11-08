@@ -195,7 +195,7 @@ wb-blockbox.trashcan > wb-search, wb-blockbox.trashcan wb-menu{
    display: none;
 }
 
-wb-blockbox.trashcan:after{
+/*wb-blockbox.trashcan:after{
     content: '';
     position: absolute;
     left: 0;
@@ -207,7 +207,7 @@ wb-blockbox.trashcan:after{
     background-size: contain;
     background-position: 50%;
     z-index: 100;
-}
+}*/
 
 
 /* Feedback area for messages */
@@ -280,7 +280,7 @@ wb-blocks {
 
 wb-contains:empty::before{
     content: "Drag Blocks Here"; /* FIXME: Localization problem, all localizable content should be in HTML text */
-    width: 70%;
+    width: 100%;
     height: 100%;
     font-size: 20px;
     font-family: monospace;

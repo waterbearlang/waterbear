@@ -760,11 +760,9 @@
                 getContext().lineWidth = width;
             },
             circle: function circle(pt, rad){
-                return new util.Shape(function(ctx){
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                    this.radius = rad;
-                });
+                var satObject = new SAT.Circle(new SAT.Vector(pt.x, pt.y), rad);
+
+                return new util.Shape(satObject);
             },
             rectangle: function rectangle(pt, width, height, orientation){
 
@@ -1098,7 +1096,8 @@
                 return vec.magnitude();
             },
             degrees: function degrees(vec){
-                return vec.degrees();
+                //debugger;
+                return Math.atan2(vec.x, vec.y) / (Math.PI / 180);
             },
             normalize: function normalize(vec){
                 return vec.normalize();

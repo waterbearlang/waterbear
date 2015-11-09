@@ -26,6 +26,180 @@
     var selectedItem = null;
     var BLOCK_MENU = document.querySelector('sidebar');
 
+/************************
+ *
+ * Script Utils
+ *
+ ************************/
+
+ // FIXME: This should be a method on Step
+ // And really, Variable should be a subclass of Step, but that screws up the selectors
+ function setTypeOfVariable(variableStep, type){
+    // Set type of variable to match type of object
+    variableStep
+        .querySelector('[fn="getVariable"]') // get local expression
+        .setAttribute('type', type);
+ }
+
+ function updateLocalInstancesType(variableStep, type){
+     var parentContext = dom.closest(variableStep, 'wb-contains');
+     var localInstances = getLocalInstances(parentContext, variableStep.id);
+     localInstances.forEach(function(instance){
+         // set instance
+         var expr = dom.closest(instance, 'wb-expression');
+         expr.setAttribute('type', type);
+         // FIXME: needs to percolate to container, esp. if in setVariable
+         // Is this instance still valid now?
+         var types = dom.parent(expr, 'wb-value').getAttribute('type').split(',');
+         if (types.indexOf('any') < 0 && types.indexOf(type) < 0){
+             // FIXME: Should we just mark these and refuse to run the script
+             // while it is invalid? Not sure if auto-removing them is good UI.
+             // Maybe mark then and provide a button to remove all of them at
+             // user discretion?
+             app.warn('Removing instance of ' + instance.getAttribute('fn') + ' because it now has a type which is illegal in this position', true);
+             instance.parentElement.removeChild(instance);
+         }
+     });
+ }
+
+ function selectByValue(valueBlock){
+     // Todo:
+     // * make sure this is a valid block to select
+     // * move selection to next block as needed
+     var oldValue = dom.find(workspace, '.selected-value');
+     if (oldValue){
+         // clicking an item for a second time is not deselecting
+         if (oldValue === valueBlock){
+             /* nothing to do */
+             return;
+         }
+         oldValue.classList.remove('selected-value');
+         if (!valueBlock){
+             return;
+         }
+     }
+     if(valueBlock) {
+         valueBlock.classList.add('selected-value');
+     }
+ }
+
+ function selectByBlock(block){
+     // Todo:
+     // * make sure this is a valid block to select
+     // * move selection to next block as needed
+     var oldBlock = dom.find(workspace, '.selected-block');
+     if (oldBlock){
+         if (oldBlock === block){
+             /* nothing to do */
+             return;
+         }
+         oldBlock.classList.remove('selected-block');
+         if (!block){
+             return;
+         }
+     }
+     if (block) {
+         block.classList.add('selected-block');
+     }
+ }
+
+ // Manage block selections
+
+ function manageSelections(evt){
+     var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
+     if (!block) {
+         // clicking away should deselect
+         selectByValue(null);
+         selectByBlock(null);
+         return;
+     }
+     if (block.localName === 'wb-value' || block.localName === "wb-contains"){
+         selectByValue(block);
+         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
+     }else{
+         selectByBlock(block);
+     }
+ }
+
+ function handleInputOnBalance(evt) {
+     var input = dom.closest(evt.target, 'input');
+     if(input.min && input.value < input.min){
+         input.value = input.min;
+     }else if(input.max && input.value > input.max){
+         input.value = input.max;
+     }
+ }
+
+ function handleEnter(evt) {
+     var code = evt.keyCode ? evt.keyCode : evt.which;
+     if(code === 13){
+         var wb = dom.closest(evt.target, 'wb-value');
+             wb.deselect();
+             selectByValue(null);
+             selectByBlock(null);
+             app.clearFilter();
+             var localInput = wb.getElementsByTagName('input');
+             localInput[0].blur();
+     }
+     return false;
+ }
+
+ function updateVariableNameInInstances(newVariableName, localInstances){
+     localInstances.forEach(function(instance){
+         var wbValue = dom.find(instance, 'wb-value');
+         wbValue.setAttribute('value', newVariableName);
+         wbValue.innerHTML = newVariableName;
+     });
+ }
+
+// FIXME: insert this into the document rather than including in markup
+var svgText = document.querySelector('.resize-tester');
+function resize(input){
+    if (!input){
+        console.error('No input');
+        return;
+    }
+    var textStyle = window.getComputedStyle(input);
+    svgText.style.fontFamily = textStyle.fontFamily;
+    svgText.style.fontSize = textStyle.fontSize;
+    svgText.style.fontWeight = textStyle.fontWeight;
+    svgText.textContent = input.value || '';
+    var textwidth = svgText.getComputedTextLength();
+    input.style.width = Math.max((textwidth + 15), 30) + 'px';
+}
+
+// If the markup doesn't contain this element, add it
+// This is like how tables will insert <thead> elements
+// if they are left out
+function setDefaultByTag(element, tagname, top){
+    var test = dom.child(element, tagname);
+    if (!test){
+        test = elem(tagname);
+        if (top){
+            element.insertBefore(test, element.firstChild);
+        }else{
+            element.appendChild(test);
+        }
+    }
+    return test;
+}
+
+// Make sure these elements are always inserted into a header element
+// and that the header element exists
+function insertIntoHeader(){
+    var parent = this.parentElement.localName;
+    if (parent === 'header' || parent === 'wb-row'){
+        return;
+    }
+    var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
+    var head = setDefaultByTag(block, 'header');
+    head.appendChild(this, true);
+}
+
+function getLocalInstances(parentContext, setVarId){
+    return dom.findAll(parentContext, '[instanceof="' + setVarId + '"]');
+}
+
 /*****************
 *
 *  BlockProto
@@ -1091,181 +1265,6 @@ function addToContains(block, evt, addBlockEvent, originalBlock){
     }
     Undo.addNewEvent(addBlockEvent);
 }
-
-/************************
- *
- * Script Utils
- *
- ************************/
-
- // FIXME: This should be a method on Step
- // And really, Variable should be a subclass of Step, but that screws up the selectors
- function setTypeOfVariable(variableStep, type){
-    // Set type of variable to match type of object
-    variableStep
-        .querySelector('[fn="getVariable"]') // get local expression
-        .setAttribute('type', type);
- }
-
- function updateLocalInstancesType(variableStep, type){
-     var parentContext = dom.closest(variableStep, 'wb-contains');
-     var localInstances = getLocalInstances(parentContext, variableStep.id);
-     localInstances.forEach(function(instance){
-         // set instance
-         var expr = dom.closest(instance, 'wb-expression');
-         expr.setAttribute('type', type);
-         // FIXME: needs to percolate to container, esp. if in setVariable
-         // Is this instance still valid now?
-         var types = dom.parent(expr, 'wb-value').getAttribute('type').split(',');
-         if (types.indexOf('any') < 0 && types.indexOf(type) < 0){
-             // FIXME: Should we just mark these and refuse to run the script
-             // while it is invalid? Not sure if auto-removing them is good UI.
-             // Maybe mark then and provide a button to remove all of them at
-             // user discretion?
-             app.warn('Removing instance of ' + instance.getAttribute('fn') + ' because it now has a type which is illegal in this position', true);
-             instance.parentElement.removeChild(instance);
-         }
-     });
- }
-
- function selectByValue(valueBlock){
-     // Todo:
-     // * make sure this is a valid block to select
-     // * move selection to next block as needed
-     var oldValue = dom.find(workspace, '.selected-value');
-     if (oldValue){
-         // clicking an item for a second time is not deselecting
-         if (oldValue === valueBlock){
-             /* nothing to do */
-             return;
-         }
-         oldValue.classList.remove('selected-value');
-         if (!valueBlock){
-             return;
-         }
-     }
-     if(valueBlock) {
-         valueBlock.classList.add('selected-value');
-     }
- }
-
- function selectByBlock(block){
-     // Todo:
-     // * make sure this is a valid block to select
-     // * move selection to next block as needed
-     var oldBlock = dom.find(workspace, '.selected-block');
-     if (oldBlock){
-         if (oldBlock === block){
-             /* nothing to do */
-             return;
-         }
-         oldBlock.classList.remove('selected-block');
-         if (!block){
-             return;
-         }
-     }
-     if (block) {
-         block.classList.add('selected-block');
-     }
- }
-
- // Manage block selections
-
- function manageSelections(evt){
-     var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
-     if (!block) {
-         // clicking away should deselect
-         selectByValue(null);
-         selectByBlock(null);
-         return;
-     }
-     if (block.localName === 'wb-value' || block.localName === "wb-contains"){
-         selectByValue(block);
-         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
-     }else{
-         selectByBlock(block);
-     }
- }
-
- function handleInputOnBalance(evt) {
-     var input = dom.closest(evt.target, 'input');
-     if(input.min && input.value < input.min){
-         input.value = input.min;
-     }else if(input.max && input.value > input.max){
-         input.value = input.max;
-     }
- }
-
- function handleEnter(evt) {
-     var code = evt.keyCode ? evt.keyCode : evt.which;
-     if(code === 13){
-         var wb = dom.closest(evt.target, 'wb-value');
-             wb.deselect();
-             selectByValue(null);
-             selectByBlock(null);
-             app.clearFilter();
-             var localInput = wb.getElementsByTagName('input');
-             localInput[0].blur();
-     }
-     return false;
- }
-
- function updateVariableNameInInstances(newVariableName, localInstances){
-     localInstances.forEach(function(instance){
-         var wbValue = dom.find(instance, 'wb-value');
-         wbValue.setAttribute('value', newVariableName);
-         wbValue.innerHTML = newVariableName;
-     });
- }
-
-// FIXME: insert this into the document rather than including in markup
-var svgText = document.querySelector('.resize-tester');
-function resize(input){
-    if (!input){
-        console.error('No input');
-        return;
-    }
-    var textStyle = window.getComputedStyle(input);
-    svgText.style.fontFamily = textStyle.fontFamily;
-    svgText.style.fontSize = textStyle.fontSize;
-    svgText.style.fontWeight = textStyle.fontWeight;
-    svgText.textContent = input.value || '';
-    var textwidth = svgText.getComputedTextLength();
-    input.style.width = Math.max((textwidth + 15), 30) + 'px';
-}
-
-// If the markup doesn't contain this element, add it
-// This is like how tables will insert <thead> elements
-// if they are left out
-function setDefaultByTag(element, tagname, top){
-    var test = dom.child(element, tagname);
-    if (!test){
-        test = elem(tagname);
-        if (top){
-            element.insertBefore(test, element.firstChild);
-        }else{
-            element.appendChild(test);
-        }
-    }
-    return test;
-}
-
-// Make sure these elements are always inserted into a header element
-// and that the header element exists
-function insertIntoHeader(){
-    var parent = this.parentElement.localName;
-    if (parent === 'header' || parent === 'wb-row'){
-        return;
-    }
-    var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
-    var head = setDefaultByTag(block, 'header');
-    head.appendChild(this, true);
-}
-
-function getLocalInstances(parentContext, setVarId){
-    return dom.findAll(parentContext, '[instanceof="' + setVarId + '"]');
-}
-
 
 /**
     Variable Glossary:

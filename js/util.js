@@ -315,7 +315,7 @@
         }
         else if (this.satCircle){
             ctx.beginPath();
-            ctx.arc(this.satCircle.pos.x, this.satCircle.pos.y, this.satCircle.r, 0, Math.PI * 2, true);
+            ctx.arc(0, 0, this.satCircle.r, 0, Math.PI * 2, true);
         }
         ctx.fill();
         ctx.stroke();
@@ -943,6 +943,7 @@
     }
 
     Sprite.prototype.setVelocity = function(vec){
+        //debugger;
         this.velocity = new SAT.Vector(vec.x, vec.y);
     }
 
@@ -967,6 +968,7 @@
     }
 
     Sprite.prototype.rotate = function(r){
+        debugger;
         this.facing.rotate(r * Math.PI / 180);
     }
 
@@ -1040,7 +1042,7 @@
         return collision;
 
     }
-
+/*
     function checkForCollisionRectangleAndCircle(rectangle, circle){
 
         var rectangle_x;
@@ -1115,7 +1117,7 @@
 
         return collision;
     }
-
+*/
     Sprite.prototype.wrapAroundRect = function(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.position = new Vector(this.position.x - r.width, this.position.y);

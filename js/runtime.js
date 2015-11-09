@@ -865,6 +865,7 @@
                 spt.setVelocity(vec);
             },
             getVelocity: function spriteGetVelocityExpr(spt){
+                debugger;
                 return spt.velocity;
             },
             getSpeed: function spriteGetSpeedExpr(spt){
@@ -1096,7 +1097,7 @@
                 return vec.magnitude();
             },
             degrees: function degrees(vec){
-                //debugger;
+                debugger;
                 return Math.atan2(vec.x, vec.y) / (Math.PI / 180);
             },
             normalize: function normalize(vec){

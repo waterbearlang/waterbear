@@ -926,7 +926,13 @@
         this.drawable = drawable || defaultDrawable;
         //debugger;
         this.satObject = drawable.satPolygon|| drawable.satCircle;
-        this.position = this.satObject.pos;
+
+        if(this.satObject){
+            this.position = this.satObject.pos;
+        }
+        else{
+            this.position = new SAT.Vector();
+        }
         this.facing = new SAT.Vector(1,0);
         this.velocity = new SAT.Vector();
     }
@@ -961,7 +967,7 @@
     }
 
     Sprite.prototype.rotate = function(r){
-        this.facing.rotate(r);
+        this.facing.rotate(r * Math.PI / 180);
     }
 
     Sprite.prototype.rotateTo = function(r){
@@ -980,10 +986,15 @@
     }
 
     Sprite.prototype.draw = function(ctx){
+        //debugger;
         ctx.translate(this.position.x, this.position.y);
-        ctx.rotate(this.facing.angle); // drawable should be centered on 0,0
+        ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    Sprite.prototype.angle = function(){
+        return atan2(this.facing.y, this.facing.x);
     }
 
     Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){

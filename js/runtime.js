@@ -181,7 +181,10 @@
                 return a[i];
             },
             join: function arrayJoinExpr(a,s){
-                return a.join(s);
+                return a.concat(s);
+            },
+            makeString: function arrayMakeStringExpr(a){
+                return a.join();
             },
             append: function arrayAppendStep(a,item){
                 a.push(item);

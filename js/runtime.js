@@ -729,8 +729,6 @@
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                     this.radius = rad;
-
-                    // util.setLastPoint(pt);
                 });
             },
             rectangle: function rectangle(pt, width, height, orientation){
@@ -759,8 +757,6 @@
 
                     this.width = width;
                     this.height = height;
-
-                    // util.setLastPoint(pt);
                 });
             },
             ellipse: function(pt, rad1, rad2, rot){
@@ -769,8 +765,6 @@
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
-
-                    // util.setLastPoint(pt);
                 });
             },
             polygon: function(args){
@@ -789,39 +783,37 @@
                         }
                         if(i === points.length-1) {
                             ctx.lineTo(points[0].x, points[0].y);
-                            // util.setLastPoint(points[0]);
                         }
                     }
                 }, points);
             },
             lineTo: function(startPoint, toPoint){
-                debugger;
                 util.setLastPoint(toPoint);
-                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint, toPoint);
+                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint);
             },
             arc: function(radius, centerPoint, startAngle, endAngle, direction){
-                // TODO: calculate endPoint for arc
-                util.setLastPoint(centerPoint);
-                // convert angles from degrees to radians
                 startAngle = util.deg2rad(startAngle);
                 endAngle = util.deg2rad(endAngle);
-                var path = new util.Path(getContext().arcTo, new Array(centerPoint.x, centerPoint.y, radius,
-                                                                       startAngle, endAngle, direction),
-                                                                       startPoint, startPoint);
-                return path;
+
+                util.setLastPoint(new util.Vector(centerPoint.x + Math.cos(endAngle) * radius, centerPoint.y + Math.sin(endAngle) * radius));
+
+                return new util.Shape(function(ctx){
+                    ctx.beginPath()
+                    ctx.arc(centerPoint.x, centerPoint.y, radius, startAngle, endAngle, false);
+                });
             },
             bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
                 util.setLastPoint(toPoint);
                 var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
                                                                     controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y), startPoint, toPoint);
+                                                                    toPoint.y), startPoint);
                 return path;
             },
             quadraticCurve: function(startPoint, toPoint, controlPoint){
                 util.setLastPoint(toPoint);
                 var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
                                                                        controlPoint.y,toPoint.x, toPoint.y),
-                                                                       startPoint, toPoint);
+                                                                       startPoint);
                 return path;
             },
             path: function(args){

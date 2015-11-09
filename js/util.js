@@ -24,6 +24,7 @@
     function lastPoint(){
         return _lastPoint;
     }
+
     function setLastPoint(point){
         _lastPoint = point;
     }
@@ -266,11 +267,10 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints, startPoint, endPoint){
+    function Path(funcToCall, inputPoints, startPoint){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
         this.startPoint = startPoint;
-        this.endPoint = endPoint;
     }
 
     Path.prototype.draw = function(ctx){
@@ -288,9 +288,6 @@
         }
         ctx.fill();
         ctx.stroke();
-
-        // debugger;
-        // _lastPoint = this.endPoint;
     }
 
 
@@ -312,7 +309,6 @@
         }
     }
     Shape.prototype.draw = function(ctx){
-        debugger;
         if (this.pathArray){
             var i;
 

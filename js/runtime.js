@@ -760,37 +760,22 @@
                 getContext().lineWidth = width;
             },
             circle: function circle(pt, rad){
-                return new util.Shape(function(ctx){
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                    this.radius = rad;
-                });
+                var satObject = new SAT.Circle(new SAT.Vector(pt.x, pt.y), rad);
+
+                return new util.Shape(satObject);
             },
             rectangle: function rectangle(pt, width, height, orientation){
-                return new util.Shape(function(ctx){
-                    ctx.beginPath();
-                    var x = 0;
-                    var y = 0;
-                    if(orientation == "center"){
-                        x = pt.x - width/2;
-                        y = pt.y - height/2;
-                        this.centered = true;
-                    }
-                    else{
-                        x = pt.x;
-                        y = pt.y;
-                        this.centered = false;
-                    }
 
-                    ctx.moveTo(x, y);
-                    ctx.lineTo(x + width, y);
-                    ctx.lineTo(x + width, y + height);
-                    ctx.lineTo(x, y + height);
-                    ctx.lineTo(x, y);
+                // The starting point of the object is ignored for now until sprites come
+                // into the picture
+                var satObject = new SAT.Polygon(new SAT.Vector(), [
+                  new SAT.Vector(pt.x, pt.y),
+                  new SAT.Vector(width + pt.x, pt.y),
+                  new SAT.Vector(width + pt.x, height + pt.y),
+                  new SAT.Vector(pt.x, height + pt.y)
+                ]);;
 
-                    this.width = width;
-                    this.height = height;
-                });
+                return new util.Shape(satObject);
             },
             ellipse: function(pt, rad1, rad2, rot){
                 return new util.Shape(function(ctx){
@@ -1111,7 +1096,8 @@
                 return vec.magnitude();
             },
             degrees: function degrees(vec){
-                return vec.degrees();
+                //debugger;
+                return Math.atan2(vec.x, vec.y) / (Math.PI / 180);
             },
             normalize: function normalize(vec){
                 return vec.normalize();

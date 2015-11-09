@@ -272,19 +272,23 @@
 
     }
 
-
     //Shape
-    function Shape(pathArrayOrFunction){
-        if (type(pathArrayOrFunction) === 'function'){
-            this._draw = pathArrayOrFunction;
-        }else if (type(pathArrayOrFunction) === 'array'){
-            for(var i =0; i < pathArrayOrFunction.length; i++){
-                if(!(pathArrayOrFunction[i] instanceof Path)){
-                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
+    function Shape(pathArrayOrFunctionOrSAT){
+        if (type(pathArrayOrFunctionOrSAT) === 'function'){
+            this._draw = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'array'){
+            for(var i =0; i < pathArrayOrFunctionOrSAT.length; i++){
+                if(!(pathArrayOrFunctionOrSAT[i] instanceof Path)){
+                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunctionOrSAT[i] + " is not.");
                 }
             }
-            this.pathArray = pathArrayOrFunction;
+            this.pathArray = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'polygon'){
+            this.satPolygon = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'circle'){
+            this.satCircle = pathArrayOrFunctionOrSAT;
         }else{
+            debugger;
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
@@ -297,6 +301,21 @@
             }
         }else if (this._draw){
             this._draw(ctx);
+        }
+        else if (this.satPolygon){
+            ctx.beginPath();
+
+            ctx.moveTo(this.satPolygon.points[0].x, this.satPolygon.points[0].y);
+
+            for (var i = 1; i < this.satPolygon.points.length; i++) {
+                ctx.lineTo(this.satPolygon.points[i].x, this.satPolygon.points[i].y);
+            };
+
+            ctx.lineTo(this.satPolygon.points[0].x, this.satPolygon.points[0].y);
+        }
+        else if (this.satCircle){
+            ctx.beginPath();
+            ctx.arc(this.satCircle.pos.x, this.satCircle.pos.y, this.satCircle.r, 0, Math.PI * 2, true);
         }
         ctx.fill();
         ctx.stroke();
@@ -905,61 +924,77 @@
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
-        this.position = new Vector(0,0);
-        this.facing = new Vector(1,0);
-        this.velocity = new Vector(0,0);
+        //debugger;
+        this.satObject = drawable.satPolygon|| drawable.satCircle;
+
+        if(this.satObject){
+            this.position = this.satObject.pos;
+        }
+        else{
+            this.position = new SAT.Vector();
+        }
+        this.facing = new SAT.Vector(1,0);
+        this.velocity = new SAT.Vector();
     }
 
     Sprite.prototype.accelerate = function(speed){
-        this.velocity = add(this.velocity, multiply(this.facing, speed));
-        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+        var temp = new SAT.Vector(this.facing.x * speed, this.facing.y * speed);
+        this.velocity.add(temp);
     }
 
     Sprite.prototype.setVelocity = function(vec){
-        this.velocity = vec;
+        this.velocity = new SAT.Vector(vec.x, vec.y);
     }
 
     Sprite.prototype.getXvel = function(){
-        return this.velocity.getX();
+        return this.velocity.x;
     }
 
     Sprite.prototype.getYvel = function(){
-        return this.velocity.getY();
+        return this.velocity.y;
     }
 
     Sprite.prototype.getXpos = function(){
-        return this.position.getX();
+        return this.position.x;
     }
 
     Sprite.prototype.getYpos = function(){
-        return this.position.getY();
+        return this.position.x;
     }
 
     Sprite.prototype.applyForce = function(vec){
-        this.velocity = add(this.velocity, vec);
+        this.velocity.add(vec);
     }
 
     Sprite.prototype.rotate = function(r){
-        this.facing = this.facing.rotate(r);
+        this.facing.rotate(r * Math.PI / 180);
     }
 
     Sprite.prototype.rotateTo = function(r){
-        this.facing = this.facing.rotateTo(r);
+        debugger;
+        this.facing.angle = r;
     }
 
     Sprite.prototype.move = function(){
-        this.position = add(this.position, this.velocity);
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
     }
 
     Sprite.prototype.moveTo = function(pt){
-        this.position = new Vector(pt.x, pt.y);
+        this.position.x = pt.x;
+        this.position.y = pt.y;
     }
 
     Sprite.prototype.draw = function(ctx){
+        //debugger;
         ctx.translate(this.position.x, this.position.y);
-        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
+        ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+    }
+
+    Sprite.prototype.angle = function(){
+        return atan2(this.facing.y, this.facing.x);
     }
 
     Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
@@ -978,18 +1013,28 @@
     Sprite.prototype.checkForCollision = function checkForCollision(other){
 
         var collision = false;
+        var response = new SAT.Response();
 
-        if(this.drawable.width && other.drawable.width){
-            collision = checkForCollisionTwoRectangles(this, other);
+        var this_drawable = this.drawable;
+        var other_drawable = other.drawable;
+
+        //debugger;
+
+        if(this_drawable.satPolygon && other_drawable.satPolygon){
+            collision = SAT.testPolygonPolygon(
+                this_drawable.satPolygon, other_drawable.satPolygon, response);
         }
-        else if(this.drawable.radius && other.drawable.radius){
-            collision = checkForCollisionTwoCircles(this, other);
+        else if(this_drawable.satPolygon && other_drawable.satCircle){
+            collision = SAT.testPolygonCircle(
+                this_drawable.satPolygon, other_drawable.satCircle, response);
         }
-        else if(this.drawable.radius && other.drawable.width){
-            collision = checkForCollisionRectangleAndCircle(other, this);
+        else if(this_drawable.satCircle && other_drawable.satPolygon){
+            collision = SAT.testCirclePolygon(
+                this_drawable.satCircle, other_drawable.satPolygon, response);
         }
-        else if(this.drawable.width && other.drawable.radius){
-            collision = checkForCollisionRectangleAndCircle(this, other);
+        else if(this_drawable.satCircle && other_drawable.satCircle){
+            collision = SAT.testCircleCircle(
+                this_drawable.satCircle, other_drawable.satCircle, response);
         }
 
         return collision;

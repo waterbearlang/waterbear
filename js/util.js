@@ -182,6 +182,7 @@
         return atan2(this.y, this.x);
     }
     Vector.prototype.degrees = function(){
+        debugger
         return rad2deg(this.radians());
     }
 

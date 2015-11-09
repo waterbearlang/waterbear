@@ -1097,8 +1097,7 @@
                 return vec.magnitude();
             },
             degrees: function degrees(vec){
-                //debugger;
-                return Math.atan2(vec.x, vec.y) / (Math.PI / 180);
+                return Math.atan2(vec.y, vec.x) / (Math.PI / 180);
             },
             normalize: function normalize(vec){
                 return vec.normalize();

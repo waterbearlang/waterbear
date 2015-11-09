@@ -285,7 +285,7 @@
             elapsed: function controlElapsedExpr(){
                 return runtime.control._elapsed;
             },
-            setVariable: function controlSetVariableStep(name, value){
+            setVariable: function controlSetVariableStep(){
                 this.getLocals()[0]._currentValue = this.gatherValues()[0];
             },
             getVariable: function controlGetVariableExpr(name){
@@ -295,11 +295,12 @@
                 }
                 return local.run();
             },
-            updateVariable: function controlUpdateVariableStep(name, value){
+            updateVariable: function controlUpdateVariableStep(){
                 // Do I need to find the setVariable block and set the value there?
-                var instance = this.gatherArguments()[0];
+                var args = this.gatherArguments();
+                var instance = args[0];
                 var local = instance.localOrSelf();
-                local._currentValue = value;
+                local._currentValue = args[1].getValue();
             },
             // FIXME: This doesn't seem to have a block
             incrementVariable: function controlIncrementVariableExpr(variable, value){
@@ -387,8 +388,9 @@
                 }
             },
             ternary: function controlTernaryExpr(cond, iftrue, otherwise){
-                // FIXME: Implement short-circuit processing
-                return cond ? iftrue : otherwise;
+                var args = this.gatherArguments();
+                var cond = args[0].getValue();
+                return cond ? args[1].getValue() : args[2].getValue();
             },
             ask: function controlAskStep(message, name){
                 var answer = prompt(message);

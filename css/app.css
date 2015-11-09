@@ -76,11 +76,10 @@ body > output{
     color: #FFFFFF; 
     height: 45px;
     width: 100%;
-    font-size: 2vw;
     border: none;
-    text-align: center;
-    background: center;
     background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
     background-color: #9944ce; 
 }
 
@@ -191,23 +190,16 @@ sidebar button.availableBlocks{
 
 /* Show trash for wb-blockbox while dragging */
 
-wb-blockbox.trashcan > wb-search, wb-blockbox.trashcan wb-menu{
+wb-blockbox.trashcan > wb-search, wb-blockbox.trashcan > wb-blocks{
    display: none;
 }
 
-/*wb-blockbox.trashcan:after{
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+wb-blockbox.trashcan{
     background-repeat: no-repeat;
     background-image: url("../images/icon/recycle.svg");
     background-size: contain;
     background-position: 50%;
-    z-index: 100;
-}*/
+}
 
 
 /* Feedback area for messages */

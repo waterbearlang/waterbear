@@ -1,1 +1,28 @@
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 300 375" xml:space="preserve" style="" x="0px" y="0px" fill-rule="evenodd"><defs><style type="text/css"/></defs><path d="M 124.6875,15 14.999998,124.6902 124.6875,234.375 l 37.96875,-37.9674 -44.71875,-44.7174 86.0625,0 c 15.4251,0 27,11.5749 27,27 l 0,27 c 0,15.4224 -12.41946,25.1667 -27.84375,25.3098 l -22.78125,0 0,54 22.78125,0 C 247.56315,285 285,250.1025 285,205.6902 l 0,-27 c 0,-44.4042 -36.5931,-81 -81,-81 l -86.0625,0 L 162.65625,52.9701 124.6875,15 z" style="color:#000000;enable-background:accumulate;" fill="#000000" fill-opacity="1" fill-rule="nonzero" stroke="none" marker="none" visibility="visible" display="inline" overflow="visible"/><text x="0" y="315" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Created by Antonio Vicién Faure</text><text x="0" y="320" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text></svg>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+ "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+ width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000"
+ preserveAspectRatio="xMidYMid meet">
+<metadata>
+Created by potrace 1.13, written by Peter Selinger 2001-2015
+</metadata>
+<g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"
+fill="#000000" stroke="none">
+<path d="M1218 2992 c-1 -4 -39 -41 -83 -81 -44 -41 -190 -181 -325 -310 -135
+-130 -290 -279 -344 -331 -55 -52 -132 -126 -171 -165 -39 -38 -117 -114 -173
+-168 -56 -54 -102 -100 -102 -103 0 -7 67 -72 570 -554 135 -129 288 -276 340
+-326 52 -50 138 -132 190 -183 52 -50 100 -91 106 -91 10 0 151 131 343 319
+l76 73 -145 140 c-274 265 -330 321 -330 324 0 2 230 4 510 4 505 0 511 0 557
+-22 57 -27 112 -80 138 -133 18 -35 20 -65 23 -256 3 -203 2 -220 -18 -262
+-25 -54 -73 -99 -132 -126 -66 -29 -91 -33 -253 -40 l-150 -6 -3 -278 -2 -278
+217 4 c220 5 299 12 309 28 3 5 14 9 25 9 10 0 27 4 37 9 9 5 55 28 102 51 47
+23 87 45 90 49 3 4 17 14 31 23 46 29 140 120 183 178 52 69 88 136 129 242
+l32 83 3 288 3 288 -32 92 c-57 168 -113 262 -218 368 -64 63 -179 149 -200
+149 -6 0 -11 3 -11 8 0 8 -49 32 -67 32 -7 0 -13 5 -13 10 0 6 -11 10 -24 10
+-14 0 -28 5 -31 10 -3 6 -17 10 -30 10 -13 0 -27 5 -30 10 -3 6 -26 10 -50 10
+-24 0 -47 5 -50 10 -4 6 -197 10 -546 10 -296 0 -539 2 -539 5 0 2 53 55 117
+117 120 115 298 285 340 325 13 12 23 25 23 29 0 3 -55 58 -122 123 -67 64
+-159 153 -206 199 -87 86 -88 87 -94 74z"/>
+</g>
+</svg>

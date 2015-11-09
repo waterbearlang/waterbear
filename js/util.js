@@ -968,12 +968,12 @@
     }
 
     Sprite.prototype.rotate = function(r){
-        debugger;
+        //debugger;
         this.facing.rotate(r * Math.PI / 180);
     }
 
     Sprite.prototype.rotateTo = function(r){
-        debugger;
+        //debugger;
         this.facing.angle = r;
     }
 

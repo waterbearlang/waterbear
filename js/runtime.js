@@ -722,6 +722,12 @@
             setLineWidth: function(width){
                 getContext().lineWidth = width;
             },
+            setLineCap: function(capStyle){
+                getContext().lineCap = capStyle;
+            },
+            setLineJoin: function(joinStyle){
+                getContext().lineJoin = joinStyle;
+            },
             circle: function circle(pt, rad){
                 util.setLastPoint(pt);
 
@@ -825,12 +831,6 @@
             },
             lastPoint: function(){
                 return util.lastPoint();
-            },
-            lineStyle: function(width, color, capStyle, joinStyle){
-                getContext().lineWidth = width;
-                getContext().strokeStyle = color;
-                getContext().lineCap = capStyle;
-                getContext().lineJoin = joinStyle;
             }
         },
         size: {

@@ -931,14 +931,14 @@
                  <wb-step ns="shape" fn="draw">
                     <wb-value type="shape,path">draw the shape</wb-value>
                 </wb-step>
-                <wb-step ns="shape" type="shape" fn="lineStyle">
-                    <wb-value type="number">line width</wb-value>
-                    <wb-value type="color" value="#0000FF">line color</wb-value>
-                    <wb-value type="list" allow="literal" options="butt,round,square" value="butt">cap style</wb-value>
-                    <wb-value type="list" allow="literal" options="round,bevel,miter" value="round">join style</wb-value>
-                </wb-step>
                 <wb-step ns="shape" fn="setLineWidth">
                     <wb-value type="number" value="1">line width</wb-value>
+                </wb-step>
+                <wb-step ns="shape" fn="setLineCap">
+                    <wb-value type="list" allow="literal" options="butt,round,square" value="butt">line cap style</wb-value>
+                </wb-step>
+                <wb-step ns="shape" fn="setLineJoin">
+                    <wb-value type="list" allow="literal" options="round,bevel,miter" value="round">line join style</wb-value>
                 </wb-step>
                 <wb-expression type="shape" ns="shape" fn="circle">
                     <wb-value type="vector">circle at</wb-value>

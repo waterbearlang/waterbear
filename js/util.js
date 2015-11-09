@@ -7,6 +7,8 @@
 
     var cos = Math.cos, sin = Math.sin, atan2 = Math.atan2, sqrt = Math.sqrt, floor = Math.floor, PI = Math.PI;
     var DEGREE = PI / 180;
+    var _lastPoint = new Vector(0,0);
+    var drawingPath = false;
 
     // Polyfill for Function.prototype.bind (PhantomJS doesn't support it for
     // some bizarre reason).
@@ -17,6 +19,13 @@
                 return fn.apply(obj, arguments);
             };
         };
+    }
+
+    function lastPoint(){
+        return _lastPoint;
+    }
+    function setLastPoint(point){
+        _lastPoint = point;
     }
 
     // properly delete from a list
@@ -257,17 +266,20 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints, startPoint){
+    function Path(funcToCall, inputPoints, startPoint, endPoint){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
         this.startPoint = startPoint;
+        this.endPoint = endPoint;
     }
 
     Path.prototype.draw = function(ctx){
-        if (this.startPoint){
+        if (!drawingPath) {
             ctx.beginPath();
-            ctx.moveTo(this.startPoint.x, this.startPoint.y);
         }
+
+        ctx.moveTo(this.startPoint.x, this.startPoint.y);
+
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(ctx, this.inputPoints);
         }
@@ -276,6 +288,9 @@
         }
         ctx.fill();
         ctx.stroke();
+
+        // debugger;
+        // _lastPoint = this.endPoint;
     }
 
 
@@ -297,13 +312,19 @@
         }
     }
     Shape.prototype.draw = function(ctx){
+        debugger;
         if (this.pathArray){
             var i;
+
+            ctx.beginPath();
+            drawingPath = true;
             for(i=0; i<this.pathArray.length; i++){
                 this.pathArray[i].draw(ctx);
             }
+            drawingPath = false;
         }
         else if (this.path){
+            debugger;
             ctx.beginPath();
             ctx.moveTo(this.path.startPoint.x, this.path.startPoint.y);
             this.path.draw(ctx);
@@ -1163,7 +1184,9 @@
         geolocation: geolocationModule,
         motion: motionModule,
         WBImage: WBImage,
-        randomId: randomId
+        randomId: randomId,
+        lastPoint: lastPoint,
+        setLastPoint: setLastPoint
     };
 
 

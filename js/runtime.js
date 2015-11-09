@@ -43,6 +43,8 @@
         ctx.restore();
         ctx.strokeStyle = 'transparent';
         ctx.save();
+
+        util.setLastPoint(new util.Vector(0,0));
     }
 
     Event.on(window, 'ui:load', null, function(){
@@ -721,13 +723,19 @@
                 getContext().lineWidth = width;
             },
             circle: function circle(pt, rad){
+                util.setLastPoint(pt);
+
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                     this.radius = rad;
+
+                    // util.setLastPoint(pt);
                 });
             },
             rectangle: function rectangle(pt, width, height, orientation){
+                util.setLastPoint(pt);
+
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     var x = 0;
@@ -751,16 +759,24 @@
 
                     this.width = width;
                     this.height = height;
+
+                    // util.setLastPoint(pt);
                 });
             },
             ellipse: function(pt, rad1, rad2, rot){
+                util.setLastPoint(pt);
+
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+
+                    // util.setLastPoint(pt);
                 });
             },
             polygon: function(args){
                 var points = [].slice.call(arguments);
+                util.setLastPoint(points[0]);
+
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
                     var points = this.pointsArray;
@@ -771,29 +787,41 @@
                         else {
                             ctx.lineTo(points[i].x, points[i].y);
                         }
-                        if(i === points.length-1) ctx.lineTo(points[0].x, points[0].y);
+                        if(i === points.length-1) {
+                            ctx.lineTo(points[0].x, points[0].y);
+                            // util.setLastPoint(points[0]);
+                        }
                     }
                 }, points);
             },
             lineTo: function(startPoint, toPoint){
-                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint);
+                debugger;
+                util.setLastPoint(toPoint);
+                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint, toPoint);
             },
-            arc: function(radius, startPoint, controlPoint1, controlPoint2){
-                var path = new util.Path(getContext().arcTo, new Array(controlPoint1.x,
-                                                            controlPoint1.y,controlPoint2.x, controlPoint2.y,
-                                                            radius), startPoint);
+            arc: function(radius, centerPoint, startAngle, endAngle, direction){
+                // TODO: calculate endPoint for arc
+                util.setLastPoint(centerPoint);
+                // convert angles from degrees to radians
+                startAngle = util.deg2rad(startAngle);
+                endAngle = util.deg2rad(endAngle);
+                var path = new util.Path(getContext().arcTo, new Array(centerPoint.x, centerPoint.y, radius,
+                                                                       startAngle, endAngle, direction),
+                                                                       startPoint, startPoint);
                 return path;
             },
             bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
+                util.setLastPoint(toPoint);
                 var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
                                                                     controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y), startPoint);
+                                                                    toPoint.y), startPoint, toPoint);
                 return path;
             },
             quadraticCurve: function(startPoint, toPoint, controlPoint){
+                util.setLastPoint(toPoint);
                 var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
                                                                        controlPoint.y,toPoint.x, toPoint.y),
-                                                                       startPoint);
+                                                                       startPoint, toPoint);
                 return path;
             },
             path: function(args){
@@ -804,7 +832,7 @@
                 return new util.Path(getContext().closePath);
             },
             lastPoint: function(){
-                return false;
+                return util.lastPoint();
             },
             lineStyle: function(width, color, capStyle, joinStyle){
                 getContext().lineWidth = width;

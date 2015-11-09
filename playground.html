@@ -927,9 +927,9 @@
                     <img class="cat-icon" src="images/icon/shape.svg">
                     Shapes
                 </header>
-                <p>Shapes are simple pictures made by drawing a geometric shape rather than loading an image file.</p>
+                <p>Shapes are pictures made by drawing a geometric shape rather than loading an image file.</p>
                  <wb-step ns="shape" fn="draw">
-                    <wb-value type="shape,path">draw the shape</wb-value>
+                    <wb-value type="shape">draw the shape</wb-value>
                 </wb-step>
                 <wb-step ns="shape" fn="setLineWidth">
                     <wb-value type="number" value="1">line width</wb-value>
@@ -964,39 +964,37 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
-                <wb-expression ns="shape" type="path" fn="lineTo">
+                <wb-expression ns="shape" type="shape" fn="lineTo">
                     <wb-value type="vector">line from</wb-value>
                     <wb-value type="vector">to</wb-value>
 
                 </wb-expression>
-                <wb-expression ns="shape" type="path" fn="arc">
+                <wb-expression ns="shape" type="shape" fn="arc">
                     <wb-value type="number">arc with radius</wb-value>
                     <wb-value type="vector">centered at point</wb-value>
                     <wb-value type="number">start angle</wb-value>
                     <wb-value type="number">end angle</wb-value>
-                    <!-- <wb-value type="list" allow="literal" options="clockwise" value="counter-clockwise"> -->
+                    <!-- <wb-value type="list" allow="literal" options="clockwise,counter-clockwise" value="clockwise"> -->
                 </wb-expression>
-                <wb-expression ns="shape" type="path" fn="bezierCurve">
+                <wb-expression ns="shape" type="shape" fn="bezierCurve">
                     <wb-value type="vector">bezier curve from</wb-value>
                     <wb-value type="vector">to</wb-value>
                     <wb-value type="vector">first control point</wb-value>
                     <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
-                <wb-expression ns="shape" type="path" fn="quadraticCurve">
+                <wb-expression ns="shape" type="shape" fn="quadraticCurve">
                     <wb-value type="vector">quadratic curve from</wb-value>
                     <wb-value type="vector">to</wb-value>
                     <wb-value type="vector">control point</wb-value>
                 </wb-expression>
                 <wb-expression type="shape" ns="shape" fn="path">
-                    <wb-value>set of paths</wb-value>
+                    <wb-value>path</wb-value>
+                    <wb-value type="list" allow="literal" options="connected,connected and closed, disconnected" value="connected">type</wb-value>
                     <wb-row>
-                        <wb-value type="path"></wb-value>
+                        <wb-value type="shape"></wb-value>
                         <button class="remove-item">-</button>
                         <button class="add-item">+</button>
                     </wb-row>
-                </wb-expression>
-                <wb-expression ns="shape" type="path" fn="closePath">
-                    close path
                 </wb-expression>
                 <wb-expression ns="shape" type="vector" fn="lastPoint">
                     last point

@@ -732,7 +732,10 @@
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                     this.radius = rad;
                 });
@@ -741,7 +744,6 @@
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
                     var x = 0;
                     var y = 0;
                     if(orientation == "center"){
@@ -755,7 +757,14 @@
                         this.centered = false;
                     }
 
-                    ctx.moveTo(x, y);
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                    }
+                    else{
+                        ctx.lineTo(x, y);
+                    }
+
                     ctx.lineTo(x + width, y);
                     ctx.lineTo(x + width, y + height);
                     ctx.lineTo(x, y + height);
@@ -769,7 +778,10 @@
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
                 });
             },
@@ -778,10 +790,13 @@
                 util.setLastPoint(points[0]);
 
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
                     var points = this.pointsArray;
                     for(var i=0; i < points.length; i++) {
-                        if (i === 0) {
+                        if (i === 0 && !util.isDrawingPath()) {
                             ctx.moveTo(points[i].x, points[i].y);
                         }
                         else {
@@ -804,7 +819,10 @@
                 util.setLastPoint(new util.Vector(centerPoint.x + Math.cos(endAngle) * radius, centerPoint.y + Math.sin(endAngle) * radius));
 
                 return new util.Shape(function(ctx){
-                    ctx.beginPath()
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
                     ctx.arc(centerPoint.x, centerPoint.y, radius, startAngle, endAngle, false);
                 });
             },
@@ -822,12 +840,9 @@
                                                                        startPoint);
                 return path;
             },
-            path: function(args){
-                var paths = [].slice.call(arguments);
-                return new util.Shape(paths);
-            },
-            closePath: function(){
-                return new util.Path(getContext().closePath);
+            path: function(){
+                var args = [].slice.call(arguments);
+                return new util.Shape(args);
             },
             lastPoint: function(){
                 return util.lastPoint();

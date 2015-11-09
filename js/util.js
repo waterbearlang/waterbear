@@ -21,6 +21,10 @@
         };
     }
 
+    function isDrawingPath(){
+        return drawingPath;
+    }
+
     function lastPoint(){
         return _lastPoint;
     }
@@ -276,9 +280,8 @@
     Path.prototype.draw = function(ctx){
         if (!drawingPath) {
             ctx.beginPath();
+            ctx.moveTo(this.startPoint.x, this.startPoint.y);
         }
-
-        ctx.moveTo(this.startPoint.x, this.startPoint.y);
 
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(ctx, this.inputPoints);
@@ -308,26 +311,34 @@
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
+
+
     Shape.prototype.draw = function(ctx){
         if (this.pathArray){
             var i;
+            var paths = this.pathArray.slice(0, this.pathArray.length-1);
+            var type = this.pathArray[this.pathArray.length-1];
 
             ctx.beginPath();
-            drawingPath = true;
-            for(i=0; i<this.pathArray.length; i++){
-                this.pathArray[i].draw(ctx);
+
+            for(i=0; i<paths.length; i++){
+                paths[i].draw(ctx);
+
+                if (!drawingPath && (type == "connected" || type == "connected and closed")){
+                    drawingPath = true;
+                }
             }
+
+            if (type == "connected and closed"){
+                ctx.closePath()
+            }
+
             drawingPath = false;
-        }
-        else if (this.path){
-            debugger;
-            ctx.beginPath();
-            ctx.moveTo(this.path.startPoint.x, this.path.startPoint.y);
-            this.path.draw(ctx);
         }
         else if(this._draw){
             this._draw(ctx);
         }
+
         ctx.fill();
         ctx.stroke();
     }
@@ -1182,7 +1193,8 @@
         WBImage: WBImage,
         randomId: randomId,
         lastPoint: lastPoint,
-        setLastPoint: setLastPoint
+        setLastPoint: setLastPoint,
+        isDrawingPath: isDrawingPath
     };
 
 

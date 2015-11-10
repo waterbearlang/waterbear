@@ -40,6 +40,7 @@ function startScript(evt){
         evt.target.blur();
     }
     runtime.getStage().focus();
+    document.getElementById('playgroundBox').style.width = '100%';
     preload().whenLoaded(runScript);
 }
 

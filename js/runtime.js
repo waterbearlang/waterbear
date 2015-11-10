@@ -70,6 +70,33 @@
         }
     }
 
+//determines which tansition prefix is used in the current brower
+//taken from http://davidwalsh.name/css-animation-callback
+function whichTransitionEvent(){
+    var t;
+    var el = document.createElement('fakeelement');
+    var transitions = {
+      'transition':'transitionend',
+      'OTransition':'oTransitionEnd',
+      'MozTransition':'transitionend',
+      'WebkitTransition':'webkitTransitionEnd'
+    }
+
+    for(t in transitions){
+        if( el.style[t] !== undefined ){
+            return transitions[t];
+        }
+    }
+}
+
+function test(evt) {
+    console.log("hello, this is working");
+}
+
+//apply handler to canvas appearing
+var transitionEvent = whichTransitionEvent();
+Event.on('#playgroundBox', transitionEvent, null, handleResize);
+
     function canvasRect(){
         return new util.Rect(0,0,Event.stage.width,Event.stage.height);
     }

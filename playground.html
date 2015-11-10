@@ -14,26 +14,136 @@
 </head>
 <body>
     <header>
-        <a href="index.html"><img src="images/logo/waterbear_icon_logo.svg"></a>
+        <a href="index.html" ><img src="images/png/icon_60.png"></a>
     	<h1>Waterbear with Custom Elements</h1>
     </header>
-    <wb-hbox>
-        <wb-vbox>
-
-        <div class="menu">
-            <button class="open-files">File</button>
-            <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z">Undo</button>
-            <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z">Redo</button>
-            <button class="open-example">Examples</button>
-        </div>
         <wb-workbox>
         <sidebar>
-            <wb-search></wb-search>
-            <wb-accordion class="control">
+            <wb-menu class="control">
                 <header>
                     <img class="cat-icon" src="images/icon/control.svg">
                     Controls
                 </header>
+            </wb-menu>
+            <wb-menu class="sprite">
+                <header>
+                    <img class="cat-icon" src="images/icon/sprite.svg">
+                    Sprites
+                </header>
+
+            </wb-menu>
+            <wb-menu class="sound">
+                <header>
+                    <img class="cat-icon" src="images/icon/sound.svg">
+                    Sound
+                </header>
+            </wb-menu>
+            <wb-menu class="array">
+                <header>
+                    <img class="cat-icon" src="images/icon/array.svg">
+                    Arrays
+                </header>
+            </wb-menu>
+            <wb-menu class="boolean">
+                <header>
+                    <img class="cat-icon" src="images/icon/boolean.svg">
+                    Boolean
+                </header>
+            </wb-menu>
+            <wb-menu class="date">
+                <header>
+                    <img class="cat-icon big-icon" src="images/icon/calendar.svg">
+                    Date
+                </header>
+            </wb-menu>
+            <wb-menu class="stage">
+                <header>
+                    <img class="cat-icon" src="images/icon/stage.svg">
+                    Stage
+                </header>
+            </wb-menu>
+            <wb-menu class="color">
+                <header>
+                    <img class="cat-icon" src="images/icon/color.svg">
+                    Colors
+                </header>
+            </wb-menu>
+            <wb-menu class="image">
+                <header>
+                    <img class="cat-icon" src="images/icon/image.svg">
+                    Images
+                </header>
+            </wb-menu>
+            <wb-menu class="math">
+                <header>
+                    <img class="cat-icon" src="images/icon/math.svg">
+                    Math
+                </header>
+            </wb-menu>
+            <wb-menu class="random">
+                <header>
+                    <img class="cat-icon big-icon" src="images/icon/random.svg">
+                    Random
+                </header>
+            </wb-menu>
+            <wb-menu class="vector">
+                <header>
+                    <img class="cat-icon" src="images/icon/vector.svg">
+                    Vectors (Points)
+                </header>
+            </wb-menu>
+            <wb-menu class="object">
+                <header>
+                    <img class="cat-icon" src="images/icon/object.svg">
+                    Objects
+                </header>
+            </wb-menu>
+            <wb-menu class="string">
+                <header>
+                    <img class="cat-icon" src="images/icon/string.svg">
+                    Strings
+                </header>
+            </wb-menu>
+            <wb-menu class="path">
+                <header>
+                    <img class="cat-icon" src="images/icon/path.svg">
+                    Paths
+                </header>
+            </wb-menu>
+            <wb-menu class="shape">
+                <header>
+                    <img class="cat-icon" src="images/icon/shape.svg">
+                    Shapes
+                </header>
+            </wb-menu>
+            <wb-menu class="rect">
+                <header>
+                    <img class="cat-icon" src="images/icon/rect.svg">
+                    Rects
+                </header>
+            </wb-menu>
+            <wb-menu class="sense">
+                <header>
+                    <img class="cat-icon" src="images/icon/sense.svg">
+                    Input
+                </header>
+                </wb-menu>
+            <wb-menu class="geolocation">
+                    <header>
+                        <img class="cat-icon" src="images/icon/geolocation.svg">
+                        Geolocation
+                    </header>
+                </wb-menu>
+            <wb-menu class="size">
+                    <header>
+                        <img class="cat-icon" src="images/icon/size.svg">
+                        Sizes
+                    </header>
+                </wb-menu>
+        </sidebar>
+        <wb-blockbox>
+            <wb-search></wb-search>
+            <wb-blocks id="control">
                 <p>Contains flow control, messaging, looping, variables, and conditionals.</p>
                 <wb-context ns="control" toplevel="true" fn="eachFrame">
                     <wb-row>
@@ -144,12 +254,8 @@
                 <wb-step ns="control" fn="alert">
                     <wb-value type="text,string">alert</wb-value>
                 </wb-step>
-            </wb-accordion>
-            <wb-accordion class="sprite">
-                <header>
-                    <img class="cat-icon" src="images/icon/sprite.svg">
-                    Sprites
-                </header>
+                </wb-blocks>
+            <wb-blocks id='sprite'>
                 <p>Sprites are images or shapes that can have momentum and heading direction applied to them for animation and games.</p>
                 <wb-expression type="sprite" ns="sprite" fn="create">
                     <wb-value type="wb-image,shape,sprite">sprite with</wb-value>
@@ -220,12 +326,8 @@
                     <wb-value type="sprite">is collision</wb-value>
                     <wb-value type="sprite"></wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="sound">
-                <header>
-                    <img class="cat-icon" src="images/icon/sound.svg">
-                    Sound
-                </header>
+                </wb-blocks>
+            <wb-blocks id='sound'>
                 <p>Play and manipulate existing sound files or synthesize new sounds.</p>
                 <wb-expression type="sound" isasset="true" ns="sound" fn="get">
                     <wb-value type="text" value="test/monster.wav">sound from url</wb-value>
@@ -328,12 +430,8 @@
                         <wb-unit>Hz</wb-unit>
                     </wb-row>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="array">
-                <header>
-                    <img class="cat-icon" src="images/icon/array.svg">
-                    Arrays
-                </header>
+                </wb-blocks>
+            <wb-blocks id='array'>
                 <p>Arrays are lists of things. You can add, remove, and loop over these lists.</p>
                 <wb-expression type="array" ns="array" fn="create">
                     <wb-value>create array</wb-value>
@@ -378,13 +476,9 @@
                 <wb-expression type="array" ns="array" fn="reverse">
                     <wb-value type="array">reverse</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="boolean">
-                <header>
-                    <img class="cat-icon" src="images/icon/boolean.svg">
-                    Boolean
-                </header>
-                <p>Booleans are either True or False. There are many operations for comparing and mixing them.</p>
+                </wb-blocks>
+            <wb-blocks id='boolean'>
+            <p>Booleans are either True or False. There are many operations for comparing and mixing them.</p>
                 <wb-expression type="boolean" ns="boolean" fn="and">
                     <wb-value type="boolean" value="true"></wb-value>
                     <wb-value type="boolean" value="true">and</wb-value>
@@ -400,14 +494,9 @@
                 <wb-expression type="boolean" ns="boolean" fn="not">
                     <wb-value type="boolean" value="true">not</wb-value>
                 </wb-expression>
-            </wb-accordion>
-
-            <wb-accordion class="date">
-                <header>
-                    <img class="cat-icon big-icon" src="images/icon/calendar.svg">
-                    Date
-                </header>
-                <p>Dates are used to represent a date and to do basic calculations.</p>
+            </wb-blocks>
+            <wb-blocks id='date'>
+            <p>Dates are used to represent a date and to do basic calculations.</p>
                 <wb-expression type="date" ns="date" fn="now">today</wb-expression>
                 <wb-expression type="date" ns="date" fn="create">
                     <wb-value type="number">yyyy</wb-value>
@@ -444,13 +533,9 @@
                 <wb-expression type="date" ns="date" fn="formattedDate">
                     <wb-value type="date">date string</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="stage">
-                <header>
-                    <img class="cat-icon" src="images/icon/stage.svg">
-                    Stage
-                </header>
-                <p>Stage is the area where scripts are performed.</p>
+            </wb-blocks>
+            <wb-blocks id='stage'>
+            <p>Stage is the area where scripts are performed.</p>
                 <wb-step ns="stage" fn="clearTo">
                     <wb-value type="color,wb-image,shape">clear to</wb-value>
                 </wb-step>
@@ -475,13 +560,9 @@
 				<wb-expression type="number" ns="stage" fn="randomY">
 					<wb-value>Random y<wb-value>
 				</wb-value></wb-value></wb-expression>
-            </wb-accordion>
-            <wb-accordion class="color">
-                <header>
-                    <img class="cat-icon" src="images/icon/color.svg">
-                    Colors
-                </header>
-                <p>There are several ways to specify colors.</p>
+            </wb-blocks>
+            <wb-blocks id='color'>
+            <p>There are several ways to specify colors.</p>
                 <wb-expression type="color" ns="color" fn="namedColor">
                     <wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="black"></wb-value>
                 </wb-expression>
@@ -520,12 +601,8 @@
                     <wb-value type="color" value="#FF0000">shadow color</wb-value>
                     <wb-value type="number" value="2">shadow blur</wb-value>
                 </wb-step>
-            </wb-accordion>
-            <wb-accordion class="image">
-                <header>
-                    <img class="cat-icon" src="images/icon/image.svg">
-                    Images
-                </header>
+            </wb-blocks>
+            <wb-blocks id='image'>
                 <p>Images are pictures loaded from the web. They can be positioned and resized.</p>
                 <wb-expression type="wb-image" isasset="true" ns="image" fn="get">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
@@ -556,12 +633,8 @@
                     <wb-value type="wb-image" allow="block">draw</wb-value>
                     <wb-value type="vector" allow="block">at</wb-value>
                 </wb-step>
-            </wb-accordion>
-            <wb-accordion class="math">
-                <header>
-                    <img class="cat-icon" src="images/icon/math.svg">
-                    Math
-                </header>
+            </wb-blocks>
+            <wb-blocks id='math'>
                 <p>In addition to performing math on numbers you can also use many operations on arrays and vectors too.</p>
                 <wb-expression ns="math" type="number" fn="stringToNumber">
                     <wb-value type="string" value="0">as number</wb-value>
@@ -686,12 +759,8 @@
                 <wb-expression type="number" ns="math" fn="rad2deg">
                     <wb-value type="number" value="0">radians to degrees</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="random">
-                <header>
-                    <img class="cat-icon big-icon" src="images/icon/random.svg">
-                    Random
-                </header>
+            </wb-blocks>
+            <wb-blocks id='random'>
                 <p>There are many types of randomness in Waterbear.</p>
                 <wb-expression type="number" ns="random" fn="randFloat">
                     <wb-value>random float</wb-value>
@@ -708,12 +777,8 @@
                 <wb-expression type="any" ns="random" fn="choice">
                     <wb-value type="array">random item from</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="vector">
-                <header>
-                    <img class="cat-icon" src="images/icon/vector.svg">
-                    Vectors (Points)
-                </header>
+            </wb-blocks>
+            <wb-blocks id='vector'>
                 <p>Waterbear vectors are x,y coordinates that can be used as points, but also have a direction and magnitude (useful for speed, acceleration, distance).</p>
                 <wb-expression type="vector" ns="vector" fn="create">
                     <wb-value type="number" value="0">vector at x</wb-value>
@@ -775,12 +840,8 @@
                 <wb-expression type="array" ns="vector" fn="toArray">
                     <wb-value type="vector">as array</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="object">
-                <header>
-                    <img class="cat-icon" src="images/icon/object.svg">
-                    Objects
-                </header>
+            </wb-blocks>
+            <wb-blocks id='object'>
                 <p>Objects are general-purpose containers where you can associate names (keys) with objects (values) like in a dictionary.</p>
                 <wb-expression type="object" ns="object" fn="empty">
                     empty object
@@ -800,12 +861,8 @@
                 <wb-expression type="array" ns="object" fn="getKeys">
                     <wb-value type="object" allow="expression">keys from</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="string">
-                <header>
-                    <img class="cat-icon" src="images/icon/string.svg">
-                    Strings
-                </header>
+            </wb-blocks>
+            <wb-blocks id='string'>
                 <p>Strings are simple bits of text. You can search them, combine them, and break them up.</p>
                 <wb-expression ns="string" type="string" fn="toString">
                     <wb-value type="any">convert</wb-value>to string
@@ -878,7 +935,6 @@
                     <wb-value type="text,string"></wb-value>
                     <wb-value type="text,string">ends with</wb-value>
                 </wb-expression>
-                <p>The blocks below are for writing your text to the screen.</p>
                 <wb-step ns="string" fn="setFont">
                     <wb-row>
                         <wb-value type="number" value="12">font</wb-value>
@@ -1037,13 +1093,9 @@
                 <wb-expression type="number" ns="rect" fn="getHeight">
                     <wb-value type="rect" allow="expression">height of</wb-value>
                 </wb-expression>
-            </wb-accordion>
-            <wb-accordion class="sense">
-                <header>
-                    <img class="cat-icon" src="images/icon/sense.svg">
-                    Input
-                </header>
-                <p>Programs can get input from the mouse, touch, key presses, and more.</p>
+            </wb-blocks>
+            <wb-blocks id='sense'>
+            <p>Programs can get input from the mouse, touch, key presses, and more.</p>
                 <wb-expression type="number" ns="input" fn="mouseX">
                     <wb-value>Mouse x</wb-value>
                 </wb-expression>
@@ -1064,12 +1116,8 @@
                     <wb-expression type="motion" ns="motion" fn="tiltDirection">
                         tilt direction
                     </wb-expression>
-                </wb-accordion>
-                <wb-accordion class="geolocation">
-                    <header>
-                        <img class="cat-icon" src="images/icon/geolocation.svg">
-                        Geolocation
-                    </header>
+            </wb-blocks>
+            <wb-blocks id='geolocation'>
                     <p>Where in the world is your progam running?</p>
                     <wb-expression type="geolocation" ns="geolocation" fn="currentLocation">
                         my current location
@@ -1101,12 +1149,8 @@
                     <wb-expression type="number" ns="geolocation" fn="speed">
                         <wb-value type="geolocation" allow="expression">speed (m/s) of</wb-value>
                     </wb-expression>
-                </wb-accordion>
-                <wb-accordion class="size">
-                    <header>
-                        <img class="cat-icon" src="images/icon/size.svg">
-                        Sizes
-                    </header>
+            </wb-blocks>
+            <wb-blocks id='size'>
                     <p>A size captures both width and height in one convenient package.</p>
                     <wb-expression type="size" ns="size" fn="fromCoordinates">
                         <wb-value type="number" value="0">size from width</wb-value>
@@ -1130,26 +1174,27 @@
                     <wb-expression type="array" ns="size" fn="toArray">
                         <wb-value type="size" allow="expression">size as array</wb-value>
                     </wb-expression>
-                </wb-accordion>
-            </sidebar>
-            <wb-splitter></wb-splitter>
-            <wb-workspace>
-                <header>Workspace</header>
+            </wb-blocks>
+        </wb-blockbox>
+        <wb-workspace>
+                <div class="sideMenu">
+                    <button class="do-run"></button>
+                    <button class="open-files"></button>
+                    <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z"></button>
+                    <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z"></button>
+                    <button class="open-example"></button>
+                </div>
                 <wb-contains></wb-contains>
             </wb-workspace>
-        </wb-workbox>
-    </wb-vbox>
-    <wb-splitter></wb-splitter>
-    <wb-vbox>
-		<div class="menu">
-			<button class="do-run">Run</button>
-			<button class="do-stop">Stop</button>
-		</div>
+    </wb-workbox>
+    <wb-vbox id="playgroundBox">
         <wb-playground>
+            <div class="sideMenu">
+                <button class="do-stop"></button>
+            </div>
             <canvas></canvas>
         </wb-playground>
     </wb-vbox>
-    </wb-hbox>
     <output class="feedback"></output>
     <svg class="sekrit-svg"><text class="resize-tester"></text></svg>
     <script src="lib/ajax.js"></script>

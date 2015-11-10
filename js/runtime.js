@@ -43,6 +43,8 @@
         ctx.restore();
         ctx.strokeStyle = 'transparent';
         ctx.save();
+
+        util.setLastPoint(new util.Vector(0,0));
     }
 
     Event.on(window, 'ui:load', null, function(){
@@ -647,45 +649,6 @@
             }
         },
 
-        path:{
-
-            lineTo: function (toPoint){
-                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y))
-            },
-
-            bezierCurveTo: function(toPoint, controlPoint1, controlPoint2){
-                return new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                    toPoint.y));
-            },
-            moveTo: function(toPoint){
-                return new util.Path(getContext().moveTo, new Array(toPoint.x, toPoint.y));
-            },
-            quadraticCurveTo: function(toPoint, controlPoint){
-                return new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                    controlPoint.y,toPoint.x, toPoint.y));
-            },
-            arcTo: function(radius, controlPoint1, controlPoint2){
-                return new util.Path(getContext().arcTo, new Array(controlPoint1.x,
-                    controlPoint1.y,controlPoint2.x, controlPoint2.y,
-                    radius));
-            },
-            closePath: function(){
-                return new util.Path(getContext().closePath);
-            },
-            pathSet: function(args){
-                return new util.Shape(Array.prototype.slice.call(arguments));
-            },
-
-            lineStyle: function(width, color, capStyle, joinStyle){
-                getContext().lineWidth = width;
-                getContext().strokeStyle = color;
-                getContext().lineCap = capStyle;
-                getContext().lineJoin = joinStyle;
-            }
-
-        },
-
         random: {
             randFloat: Math.random,
             randInt: util.randInt,
@@ -744,16 +707,28 @@
             setLineWidth: function(width){
                 getContext().lineWidth = width;
             },
+            setLineCap: function(capStyle){
+                getContext().lineCap = capStyle;
+            },
+            setLineJoin: function(joinStyle){
+                getContext().lineJoin = joinStyle;
+            },
             circle: function circle(pt, rad){
+                util.setLastPoint(pt);
+
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
                     ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
                     this.radius = rad;
                 });
             },
             rectangle: function rectangle(pt, width, height, orientation){
+                util.setLastPoint(pt);
+
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
                     var x = 0;
                     var y = 0;
                     if(orientation == "center"){
@@ -767,7 +742,14 @@
                         this.centered = false;
                     }
 
-                    ctx.moveTo(x, y);
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                    }
+                    else{
+                        ctx.lineTo(x, y);
+                    }
+
                     ctx.lineTo(x + width, y);
                     ctx.lineTo(x + width, y + height);
                     ctx.lineTo(x, y + height);
@@ -778,11 +760,78 @@
                 });
             },
             ellipse: function(pt, rad1, rad2, rot){
+                util.setLastPoint(pt);
+
                 return new util.Shape(function(ctx){
-                    ctx.beginPath();
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
                 });
             },
+            polygon: function(args){
+                var points = [].slice.call(arguments);
+                util.setLastPoint(points[0]);
+
+                return new util.Shape(function(ctx){
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
+                    var points = this.pointsArray;
+                    for(var i=0; i < points.length; i++) {
+                        if (i === 0 && !util.isDrawingPath()) {
+                            ctx.moveTo(points[i].x, points[i].y);
+                        }
+                        else {
+                            ctx.lineTo(points[i].x, points[i].y);
+                        }
+                        if(i === points.length-1) {
+                            ctx.lineTo(points[0].x, points[0].y);
+                        }
+                    }
+                }, points);
+            },
+            lineTo: function(startPoint, toPoint){
+                util.setLastPoint(toPoint);
+                return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint);
+            },
+            arc: function(radius, centerPoint, startAngle, endAngle, direction){
+                startAngle = util.deg2rad(startAngle);
+                endAngle = util.deg2rad(endAngle);
+
+                util.setLastPoint(new util.Vector(centerPoint.x + Math.cos(endAngle) * radius, centerPoint.y + Math.sin(endAngle) * radius));
+
+                return new util.Shape(function(ctx){
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                    }
+
+                    ctx.arc(centerPoint.x, centerPoint.y, radius, startAngle, endAngle, false);
+                });
+            },
+            bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
+                util.setLastPoint(toPoint);
+                var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
+                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
+                                                                    toPoint.y), startPoint);
+                return path;
+            },
+            quadraticCurve: function(startPoint, toPoint, controlPoint){
+                util.setLastPoint(toPoint);
+                var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
+                                                                       controlPoint.y,toPoint.x, toPoint.y),
+                                                                       startPoint);
+                return path;
+            },
+            path: function(){
+                var args = [].slice.call(arguments);
+                return new util.Shape(args);
+            },
+            lastPoint: function(){
+                return util.lastPoint();
+            }
         },
         size: {
             fromCoordinates: function (width, widthUnits, height, heightUnits) {

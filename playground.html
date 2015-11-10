@@ -443,9 +443,13 @@
                     <wb-value type="array">item from</wb-value>
                     <wb-value type="number" value="0" min="0">at index</wb-value>
                 </wb-expression>
-                <wb-expression type="string" ns="array" fn="join">
-                    <wb-value type="array">join</wb-value>
-                    <wb-value type="string">with</wb-value>
+                <wb-expression type="array" ns="array" fn="join">
+                    <wb-value type="array">combine</wb-value>
+                    <wb-value type="array">with</wb-value>
+                </wb-expression>
+                <wb-expression type="string" ns="array" fn="makeString">
+                    <wb-value type="array">Make string from</wb-value> 
+                    <wb-value type="text">separated by</wb-value>
                 </wb-expression>
                 <wb-step ns="array" fn="append">
                     <wb-value type="array"></wb-value>
@@ -463,10 +467,10 @@
                     <wb-value type="number" min="0" value="0">remove item at</wb-value>
                 </wb-step>
                 <wb-expression type="any" ns="array" fn="pop">
-                    <wb-value type="array">take last value</wb-value>
+                    <wb-value type="array">remove last value</wb-value>
                 </wb-expression>
                 <wb-expression type="any" ns="array" fn="shift">
-                    <wb-value type="array">take first value</wb-value>
+                    <wb-value type="array">remove first value</wb-value>
                 </wb-expression>
                 <wb-expression type="array" ns="array" fn="reverse">
                     <wb-value type="array">reverse</wb-value>

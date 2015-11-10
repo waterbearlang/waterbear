@@ -97,7 +97,9 @@ function test(evt) {
 var transitionEvent = whichTransitionEvent();
 Event.on('#playgroundBox', transitionEvent, null, function(){
     handleResize();
+    if(document.getElementById('playgroundBox').style.width === '100%') {
     app.playgroundReady();
+    }
 });
 
     function canvasRect(){

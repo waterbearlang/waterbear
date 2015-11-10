@@ -52,7 +52,7 @@
                         </wb-local>
                     </wb-row>
                 </wb-context>
-                <wb-step ns="control" fn="setVariable">
+                <wb-step ns="control" fn="setVariable" specialform>
                     <wb-row>
                         <wb-value>set</wb-value>
 						<wb-local renameable="true">
@@ -116,7 +116,7 @@
                     </header>
                     <wb-contains></wb-contains>
                 </wb-context>
-                <wb-expression type="any" ns="control" fn="ternary">
+                <wb-expression type="any" ns="control" fn="ternary" specialform>
                     <wb-value type="boolean" value="true">if</wb-value>
                     <wb-value type="any">then</wb-value>
                     <wb-value type="any">else</wb-value>

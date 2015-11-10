@@ -1003,6 +1003,10 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
+    Sprite.prototype.toString = function(){
+        return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
+    };
+
     Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);

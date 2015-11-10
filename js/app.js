@@ -45,13 +45,13 @@ function clearFilter(){
 function setFilter(item){
     var i;
     var sidebarBlocks=[];
-    
+
     //deselect menu item that is selected
     var menu = dom.find('wb-menu[open=true]');
     if(menu) {
         menu.deselect();
     }
-    
+
     var selectedType = item.getAttribute('type');
     if (selectedType){
         var selectedTypeList = selectedType.split(',');
@@ -73,18 +73,18 @@ function setFilter(item){
 Event.on(document.body, 'ui:click', '.do-run', startScript);
 Event.on(document.body, 'ui:click','.do-stop', stopScript);
 
-
-function startScript(evt, options) {
+var options = {};
+function startScript(evt, opts) {
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
     runtime.resetStage();
     evt.target.blur();
     runtime.getStage().focus();
     document.getElementById('playgroundBox').style.width = '100%';
-    
+
     /* Add emitter. */
-    if (options === undefined) {
-        options = {};
+    if (opts !== undefined) {
+        options = opts;
     }
     /* Certain events DEMAND that the emitting be done asynchronously, so
      * use setImmediate to emulate this.
@@ -94,6 +94,10 @@ function startScript(evt, options) {
             Event.trigger(window, name, data);
         });
     };
+    // Now we wait for the playground to be ready. When animation triggered by setting the width above is finished it will call playgroundReady and start preloading.
+}
+
+function playgroundReady(){
     preload().whenLoaded(runScript.bind(null, options));
 }
 
@@ -127,11 +131,10 @@ function preload() {
 }
 
 function runScript(){
-    var globalScope = {};
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            block.run(globalScope);
+            block.run();
         }
     });
 }
@@ -243,6 +246,7 @@ window.app = {
     tip: tip,
     info: info,
     clearFilter: clearFilter,
-    setFilter: setFilter
+    setFilter: setFilter,
+    playgroundReady: playgroundReady
 };
 })();

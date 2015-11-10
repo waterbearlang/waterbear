@@ -7,6 +7,8 @@
 
     var cos = Math.cos, sin = Math.sin, atan2 = Math.atan2, sqrt = Math.sqrt, floor = Math.floor, PI = Math.PI;
     var DEGREE = PI / 180;
+    var _lastPoint = new Vector(0,0);
+    var drawingPath = false;
 
     // Polyfill for Function.prototype.bind (PhantomJS doesn't support it for
     // some bizarre reason).
@@ -17,6 +19,18 @@
                 return fn.apply(obj, arguments);
             };
         };
+    }
+
+    function isDrawingPath(){
+        return drawingPath;
+    }
+
+    function lastPoint(){
+        return _lastPoint;
+    }
+
+    function setLastPoint(point){
+        _lastPoint = point;
     }
 
     // properly delete from a list
@@ -257,47 +271,74 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints){
+    function Path(funcToCall, inputPoints, startPoint){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
+        this.startPoint = startPoint;
     }
 
     Path.prototype.draw = function(ctx){
+        if (!drawingPath) {
+            ctx.beginPath();
+            ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        }
+
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
             this.funcToCall.apply(ctx, new Array());
         }
-
+        ctx.fill();
+        ctx.stroke();
     }
 
 
     //Shape
-    function Shape(pathArrayOrFunction){
+    function Shape(pathArrayOrFunction, pointsArray){
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
-        }else if (type(pathArrayOrFunction) === 'array'){
-            for(var i =0; i < pathArrayOrFunction.length; i++){
-                if(!(pathArrayOrFunction[i] instanceof Path)){
-                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
-                }
-            }
+            if (pointsArray != undefined)
+                this.pointsArray = pointsArray;
+        }
+        else if (type(pathArrayOrFunction) === 'array'){
             this.pathArray = pathArrayOrFunction;
-        }else{
+        }
+        else if (pathArrayOrFunction instanceof Path) {
+            this.path = pathArrayOrFunction;
+        }
+        else{
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
+
+
     Shape.prototype.draw = function(ctx){
         if (this.pathArray){
-            ctx.beginPath();
             var i;
-            for(i=0; i<this.pathArray.length; i++){
-                this.pathArray[i].draw(ctx);
+            var paths = this.pathArray.slice(0, this.pathArray.length-1);
+            var type = this.pathArray[this.pathArray.length-1];
+
+            ctx.beginPath();
+
+            for(i=0; i<paths.length; i++){
+                paths[i].draw(ctx);
+
+                if (!drawingPath && (type == "connected" || type == "connected and closed")){
+                    drawingPath = true;
+                }
             }
-        }else if (this._draw){
+
+            if (type == "connected and closed"){
+                ctx.closePath()
+            }
+
+            drawingPath = false;
+        }
+        else if(this._draw){
             this._draw(ctx);
         }
+
         ctx.fill();
         ctx.stroke();
     }
@@ -962,6 +1003,10 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
+    Sprite.prototype.toString = function(){
+        return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
+    };
+
     Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
@@ -1150,7 +1195,10 @@
         geolocation: geolocationModule,
         motion: motionModule,
         WBImage: WBImage,
-        randomId: randomId
+        randomId: randomId,
+        lastPoint: lastPoint,
+        setLastPoint: setLastPoint,
+        isDrawingPath: isDrawingPath
     };
 
 

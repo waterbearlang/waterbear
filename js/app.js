@@ -127,11 +127,10 @@ function preload() {
 }
 
 function runScript(){
-    var globalScope = {};
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            block.run(globalScope);
+            block.run();
         }
     });
 }

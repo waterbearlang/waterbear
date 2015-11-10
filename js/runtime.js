@@ -180,11 +180,11 @@
             itemAt: function arrayItemFromExpr(a,i){
                 return a[i];
             },
-            join: function arrayJoinExpr(a,s){
-                return a.concat(s);
+            join: function arrayJoinExpr(a1,a2){
+                return a1.concat(a2);
             },
-            makeString: function arrayMakeStringExpr(a){
-                return a.join();
+            makeString: function arrayMakeStringExpr(a,s){
+                return a.join(s);
             },
             append: function arrayAppendStep(a,item){
                 a.push(item);

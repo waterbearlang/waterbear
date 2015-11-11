@@ -5,8 +5,9 @@
 
                             </wb-expression>
                         </wb-local>
-                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" options="center,bottom left corner,use vector" value="center">rectangle origin<select style="width: 45.2178px;"><option>center</option><option>bottom left corner</option><option>use vector</option></select></wb-value><wb-value type="vector">vector origin<input type="vector" readonly="" style="width: 30px;"></wb-value><wb-value type="number" min="0" class="" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="50">height<input type="number" min="0" style="width: 30px;"></wb-value></header>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" filtered="true" class="selected-block" style=""><header><wb-value type="vector" class="selected-value">rectangle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class="" style=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
 
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="50">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="50" class="">height<input type="number" min="0" style="width: 30px;"></wb-value></header>
 
 
 

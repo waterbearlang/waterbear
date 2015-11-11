@@ -828,6 +828,16 @@
                                                                        startPoint);
                 return path;
             },
+            clip: function(){
+                return new util.Shape(
+                    function(ctx){
+                        ctx.clip();
+                        if (!util.isDrawingPath()){
+                            ctx.beginPath();
+                        }
+                    }
+                );
+            },
             path: function(){
                 var args = [].slice.call(arguments);
                 return new util.Shape(args);

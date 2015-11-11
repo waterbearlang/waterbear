@@ -355,7 +355,7 @@
                     <wb-value type="array">with</wb-value>
                 </wb-expression>
                 <wb-expression type="string" ns="array" fn="makeString">
-                    <wb-value type="array">Make string from</wb-value> 
+                    <wb-value type="array">Make string from</wb-value>
                     <wb-value type="text">separated by</wb-value>
                 </wb-expression>
                 <wb-step ns="array" fn="append">
@@ -758,6 +758,10 @@
 					<wb-value type="vector"></wb-value>
                     <wb-value type="number" value="1">×</wb-value>
 				</wb-expression>
+				<wb-expression type="vector" ns="math" fn="add">
+					<wb-value type="vector"></wb-value>
+					<wb-value type="vector">+</wb-value>
+				</wb-expression>
                 <wb-expression type="vector" ns="vector" fn="normalize">
                     <wb-value type="vector">normalize</wb-value>
                 </wb-expression>
@@ -991,6 +995,9 @@
                     <wb-value type="vector">to</wb-value>
                     <wb-value type="vector">control point</wb-value>
                 </wb-expression>
+				<wb-expression ns="shape" type="shape" fn="clip">
+					<wb-value>clip</wb-value>
+				</wb-expression>
                 <wb-expression type="shape" ns="shape" fn="path">
                     <wb-value>path</wb-value>
                     <wb-value type="list" allow="literal" options="connected,connected and closed, disconnected" value="connected">type</wb-value>

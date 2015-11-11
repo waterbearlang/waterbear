@@ -367,7 +367,7 @@
                             if (!list){
                                 // handle the case where the value changes after starting the loop
                                 return;
-                            } 
+                            }
                             break;
                     }
                     this.gatherSteps().forEach(runBlock);

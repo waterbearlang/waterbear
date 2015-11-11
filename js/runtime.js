@@ -81,6 +81,12 @@
         clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
+        for (var prop in assets.sounds){
+            if (!assets.sounds.hasOwnProperty(prop)){
+                continue;
+            }
+            assets.sounds[prop].pause();
+        }
     }
 
     // utility for iterating over child blocks
@@ -881,7 +887,9 @@
                 sound.volume = volume;
             },
             pause: function(sound){
-                sound.pause();
+                if (assets.sounds[sound.name]){
+                    assets.sounds[sound.name].pause();
+                }
             },
             playFrom: function(sound, time){
                 sound.playFrom(time);

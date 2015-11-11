@@ -228,6 +228,12 @@
         },
 
         'boolean': {
+            'true': function booleanTrue(){
+                return true;
+            },
+            'false': function booleanFalse(){
+                return false;
+            },
             and: function booleanAndExpr(a,b){
                 return a && b;
             },
@@ -302,17 +308,19 @@
             },
             updateVariable: function controlUpdateVariableStep(){
                 // Do I need to find the setVariable block and set the value there?
-                var args = this.gatherArguments();
-                var instance = args[0];
+                var row = this.gatherArguments()[0];
+                var instance = row.firstElementChild.lastElementChild;
                 var local = instance.localOrSelf();
-                local._currentValue = args[1].getValue();
+                local._currentValue = row.lastElementChild.getValue()[0];
             },
             // FIXME: This doesn't seem to have a block
             incrementVariable: function controlIncrementVariableExpr(variable, value){
                 this[name] += value;
             },
-            loopOver: function controlLoopOverCtx(list) {
+            loopOver: function controlLoopOverCtx() {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
+                var listElem = this.gatherArguments()[0];
+                var list = listElem.getValue()[0];
                 var locals = this.getLocals();
                 var index = locals[0];
                 var value = locals[1];
@@ -337,6 +345,7 @@
                 /* For every element in the container place
                  * the index and value into the scope. */
                 for (i = 0; i < len; i++){
+                    list = listElem.getValue()[0];
                     switch(type){
                         // FIXME: Get names of index & value from block
                         case 'array': // fall through
@@ -356,9 +365,9 @@
                             index.setValue(i);
                             value.setValue(list);
                             if (!list){
-                                // hopefully this will handle the case where the value changes after starting the loop
+                                // handle the case where the value changes after starting the loop
                                 return;
-                            }
+                            } 
                             break;
                     }
                     this.gatherSteps().forEach(runBlock);

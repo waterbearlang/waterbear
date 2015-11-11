@@ -355,7 +355,7 @@
                     <wb-value type="array">with</wb-value>
                 </wb-expression>
                 <wb-expression type="string" ns="array" fn="makeString">
-                    <wb-value type="array">Make string from</wb-value> 
+                    <wb-value type="array">Make string from</wb-value>
                     <wb-value type="text">separated by</wb-value>
                 </wb-expression>
                 <wb-step ns="array" fn="append">
@@ -389,6 +389,12 @@
                     Boolean
                 </header>
                 <p>Booleans are either True or False. There are many operations for comparing and mixing them.</p>
+				<wb-expression type="boolean" ns="boolean" fn="true">
+					<wb-value value="true">true</wb-value>
+				</wb-expression>
+				<wb-expression type="boolean" ns="boolean" fn="false">
+					<wb-value value="false">false</wb-value>
+				</wb-expression>
                 <wb-expression type="boolean" ns="boolean" fn="and">
                     <wb-value type="boolean" value="true"></wb-value>
                     <wb-value type="boolean" value="true">and</wb-value>

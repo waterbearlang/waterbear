@@ -1,0 +1,54 @@
+<wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="wb-image" ns="control" fn="getVariable" id="ke26e78" class=""><header><wb-value type="text" allow="literal" value="sketch" class=""><input type="text" style="width: 46.8452px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="image" fn="create" class="" style=""><header><wb-value type="number" value="50">blank image with width<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="50">height<input type="number" style="width: 30px;"></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="" value="#ffffff">clear to<input type="color" style="width: 41.748px;"></wb-value></header>
+                    
+                </wb-step><wb-context ns="image" fn="drawOnImage" class="" style=""><header><wb-disclosure></wb-disclosure><wb-value type="wb-image" allow="block" class="">draw on<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="k926ffc" class="" instanceof="ke26e78" style=""><header><wb-value type="text" allow="literal" value="sketch" class="">sketch</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+				<wb-contains class=""><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#0000FF" class="">fill style<input type="color" style="width: 54.918px;" class="hide"><wb-expression type="color" ns="color" fn="namedColor" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="transparent" class=""><select style="width: 40.5181px;" class=""><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="color" fn="stroke" class="selected-block" style=""><header><wb-value type="color" value="#ca492f" class="selected-value" selected="true">stroke style<input type="color" style="width: 55.7183px;"></wb-value></header>
+                    
+                </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" class="" style=""><header><wb-value type="vector" class="">rectangle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class="" style=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="number" min="0" value="50" class="">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" value="50">height<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner">anchored at<select style="width: 45.5132px;"><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="color" fn="stroke" class="" style=""><header><wb-value type="color" value="#342fb4" class="" selected="true">stroke style<input type="color" style="width: 57.2007px;"></wb-value></header>
+                    
+                </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="star" class="" style=""><header><wb-value type="vector" class="">star at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" filtered="true" class="" style=""><header><wb-value type="number" value="25" class="" selected="true">vector at x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="25">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" class="" value="7" selected="true">points<input type="number" style="width: 30px;"></wb-value><wb-value type="number" class="" value="11">inner radius<input type="number" style="width: 30px;"></wb-value><wb-value type="number" class="" value="25">outer radius<input type="number" style="width: 30px;"></wb-value></header>
+					
+					
+					
+					
+				</wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-step ns="image" fn="drawAtPoint" class="" style=""><header><wb-value type="wb-image" allow="block" class="">draw<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="k5e8a4e" class="" instanceof="ke26e78" style=""><header><wb-value type="text" allow="literal" value="sketch" class="">sketch</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" allow="block" class="">at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="stage" fn="centerPoint" filtered="true" class="" style=""><header><wb-value>Center point</wb-value></header>
+					
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-step>

@@ -570,6 +570,9 @@
                     <wb-value type="wb-image" allow="block">draw</wb-value>
                     <wb-value type="vector" allow="block">at</wb-value>
                 </wb-step>
+				<wb-context ns="image" fn="drawOnImage">
+					<wb-value type="wb-image" allow="block">draw on</wb-value>
+				</wb-context>
             </wb-accordion>
             <wb-accordion class="math">
                 <header>
@@ -978,6 +981,17 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
+				<wb-expression type="shape" ns="shape" fn="regularPolygon">
+					<wb-value type="vector">regular polygon at</wb-value>
+					<wb-value type="number">sides</wb-value>
+					<wb-value type="number">corner radius</wb-value>
+				</wb-expression>
+				<wb-expression type="shape" ns="shape" fn="star">
+					<wb-value type="vector">star at</wb-value>
+					<wb-value type="number">points</wb-value>
+					<wb-value type="number">inner radius</wb-value>
+					<wb-value type="number">outer radius</wb-value>
+				</wb-expression>
                 <wb-expression ns="shape" type="shape" fn="lineTo">
                     <wb-value type="vector">line from</wb-value>
                     <wb-value type="vector">to</wb-value>

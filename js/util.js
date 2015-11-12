@@ -298,16 +298,14 @@
     function Shape(pathArrayOrFunction, pointsArray){
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
-            if (pointsArray != undefined)
+            if (pointsArray != undefined){
                 this.pointsArray = pointsArray;
-        }
-        else if (type(pathArrayOrFunction) === 'array'){
+            }
+        }else if (type(pathArrayOrFunction) === 'array'){
             this.pathArray = pathArrayOrFunction;
-        }
-        else if (pathArrayOrFunction instanceof Path) {
+        }else if (pathArrayOrFunction instanceof Path) {
             this.path = pathArrayOrFunction;
-        }
-        else{
+        }else{
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
@@ -886,10 +884,37 @@
         this._image = new Image();
         this._image.addEventListener('load', selfLoad, false);
         this._image.src = src;
+        this._canvas = null;
+        this._ctx = null;
     }
 
+    WBImage.create = function createWBImage(width, height){
+        var image = Object.create(WBImage.prototype); // skip constructor
+        image.name = '';
+        image.width = width;
+        image.height = height;
+        image._image = null;
+        image._canvas = dom.html('canvas', {width: width, height: height});
+        return image;
+    };
+
     WBImage.prototype.draw = function(ctx){
-        ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        if (this._canvas){
+            // debugger;
+            ctx.drawImage(this._canvas, -this.width/2, -this.height/2, this.width, this.height);
+        }else{
+            ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        }
+    };
+
+    WBImage.prototype.getContext = function(){
+        if (!this._ctx){
+            if (!this._canvas){
+                this._canvas = dom.html('canvas', {width: this.width, height: this.height});
+            }
+            this._ctx = this._canvas.getContext('2d');
+        }
+        return this._ctx;
     };
 
     WBImage.prototype.drawAtPoint = function(ctx, pt){

@@ -184,18 +184,6 @@ function setDefaultByTag(element, tagname, top){
     return test;
 }
 
-// Make sure these elements are always inserted into a header element
-// and that the header element exists
-function insertIntoHeader(){
-    var parent = this.parentElement.localName;
-    if (parent === 'header' || parent === 'wb-row'){
-        return;
-    }
-    var block = dom.closest(this, 'wb-step, wb-context, wb-expression');
-    var head = setDefaultByTag(block, 'header');
-    head.appendChild(this, true);
-}
-
 function getLocalInstances(parentContext, setVarId){
     return dom.findAll(parentContext, '[instanceof="' + setVarId + '"]');
 }
@@ -207,11 +195,22 @@ function getLocalInstances(parentContext, setVarId){
 *  Not actually instantiated, but used as a superclass for other blocks
 *
 ******************/
+var headerOnly = ['wb-row', 'wb-value', 'wb-disclosure', 'wb-local'];
 
 var BlockProto = Object.create(HTMLElement.prototype);
 BlockProto.createdCallback = function blockCreated(){
     // Add required structure
-    setDefaultByTag(this, 'header', true);
+    var header = setDefaultByTag(this, 'header', true);
+    // Put blocks that should only live in the header there
+    if (this.getAttribute('context') === 'true'){
+        setDefaultByTag(this, 'wb-disclosure');
+    }
+    var children = [].slice.call(this.children);
+    children.forEach(function(child){
+        if (headerOnly.indexOf(child.localName) > -1){
+            header.appendChild(child);
+        }
+    });
 };
 BlockProto.attachedCallback = function blockAttached(){
     // Attached only fires the first time an element is added to the DOM
@@ -232,6 +231,7 @@ BlockProto.attachedCallback = function blockAttached(){
     if (parent){
         setDefaultByTag(parent, 'wb-contains').appendChild(this);
     }
+    console.log('attached callback, children: %s', [].slice.call(this.children).map(function(child){ return child.localName; }).join(', '));
 };
 
 BlockProto.header = function blockHeader(){
@@ -529,12 +529,6 @@ window.WBWorkspace = document.registerElement('wb-workspace', {prototype: Worksp
 ******************/
 
 var ExpressionProto = Object.create(BlockProto);
-ExpressionProto.createdCallback = function expressionCreated(){
-    setDefaultByTag(this, 'header', true);
-    if (this.getAttribute('context') === 'true'){
-        setDefaultByTag(this, 'wb-disclosure');
-    }
-};
 ExpressionProto.attachedCallback = function expressionAttached(){
     if (!this.parentElement){
         return;
@@ -745,7 +739,7 @@ window.WBUnit = document.registerElement('wb-unit', {prototype: UnitProto});
 *
 *  Instantiated as new WBRow or as <wb-row>
 *
-*  Rows can be used wherever a <wb-value> could go. They are used to group
+*  Rows can be used wherever a <wb-value> could go (except inside other wb-rows). They are used to group
 *  values, units, and locals on a single line when they belong together.
 *
 ******************/
@@ -758,7 +752,6 @@ RowProto.getValue = function(){
     });
     return values;
 };
-RowProto.attachedCallback = insertIntoHeader;
 window.WBRow = document.registerElement('wb-row', {prototype: RowProto});
 
 
@@ -773,7 +766,6 @@ window.WBRow = document.registerElement('wb-row', {prototype: RowProto});
 ******************/
 
 var DisclosureProto = Object.create(HTMLElement.prototype);
-DisclosureProto.attachedCallback = insertIntoHeader;
 window.WBDisclosure = document.registerElement('wb-disclosure', {prototype: DisclosureProto});
 
 function toggleClosed(evt){
@@ -800,7 +792,6 @@ function toggleClosed(evt){
 
 var LocalProto = Object.create(HTMLElement.prototype);
 LocalProto.run = BlockProto.run;
-LocalProto.attachedCallback = insertIntoHeader;
 LocalProto.getValue = function(){
     // wb-value already returns an array
     return dom.find(this, 'wb-value').getValue();
@@ -959,7 +950,6 @@ ValueProto.getValue = function(){
     }
 };
 
-ValueProto.attachedCallback = insertIntoHeader;
 window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 //toggle an input's selection

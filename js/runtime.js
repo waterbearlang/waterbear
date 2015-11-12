@@ -816,27 +816,37 @@
             },
             bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
                 util.setLastPoint(toPoint);
-                var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y), startPoint);
+                var path = new util.Path(
+                    getContext().bezierCurveTo,
+                    new Array(controlPoint1.x,
+                        controlPoint1.y,
+                        controlPoint2.x,
+                        controlPoint2.y,
+                        toPoint.x,
+                        toPoint.y),
+                    startPoint
+                );
                 return path;
             },
             quadraticCurve: function(startPoint, toPoint, controlPoint){
                 util.setLastPoint(toPoint);
-                var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                                                                       controlPoint.y,toPoint.x, toPoint.y),
-                                                                       startPoint);
+                var path = new util.Path(
+                    getContext().quadraticCurveTo,
+                    new Array(
+                        controlPoint.x,
+                        controlPoint.y,
+                        toPoint.x,
+                        toPoint.y),
+                    startPoint
+                );
                 return path;
             },
-            clip: function(){
-                return new util.Shape(
-                    function(ctx){
-                        ctx.clip();
-                        if (!util.isDrawingPath()){
-                            ctx.beginPath();
-                        }
-                    }
-                );
+            withClip: function withClipCtx(shape){
+                getContext().save();
+                shape.draw(getContext());
+                getContext().clip();
+                this.gatherSteps().forEach(runBlock);
+                getContext().restore();
             },
             path: function(){
                 var args = [].slice.call(arguments);
@@ -1202,7 +1212,25 @@
                 var date = new Date(prevDate.valueOf());
                 date.setFullYear(date.getFullYear() + years);
                 return date;
-            }
+            },
+            dayOfWeek: function(date){
+                return date.getDay();
+            },
+            getDay: function(date){
+                return date.getDate();
+            },
+            getMonth: function(date){
+                return date.getMonth();
+            },
+            getMonthName: function(date){
+                return ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November',
+                        'December'][date.getMonth()];
+            },
+            getYear: function(date){
+                return date.getFullYear();
+            },
+
         }
     };
 

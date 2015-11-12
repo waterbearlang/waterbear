@@ -59,17 +59,9 @@
                 </wb-expression></wb-value>
                     </wb-row></header>
                     
-                </wb-step><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="" value="#ffffff">clear to<input type="color" style="width: 41.748px;"></wb-value></header>
+                </wb-step><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="" value="#ffffff">clear to<input type="color" style="width: 41.748px;" class=""></wb-value></header>
                     
-                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
-                        <wb-value>set</wb-value>
-						<wb-local renameable="true">
-							<wb-expression type="shape" ns="control" fn="getVariable" id="k274385" class=""><header><wb-value type="text" allow="literal" value="path" class="" selected="true"><input type="text" style="width: 36.4844px;" class=""></wb-value></header>
-								
-							</wb-expression>
-						</wb-local>
-                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="path" class="selected-block" style=""><header><wb-row>
-                        <wb-value type="shape" class=""><input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
+                </wb-step><wb-context ns="shape" type="shape" fn="withClip" class="" style=""><header><wb-disclosure></wb-disclosure><wb-value type="shape" class="">clip with<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
                         <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="stage" fn="centerPoint" filtered="true" class="" style=""><header><wb-value>Center point</wb-value></header>
 					
 				</wb-expression></wb-value>
@@ -102,16 +94,16 @@
                     </wb-row><wb-value>polygon with points</wb-value></header>
                     
                     
-                </wb-expression></wb-value>
-                        <button class="remove-item">-</button>
-                        <button class="add-item">+</button>
-                    </wb-row><wb-row>
-                        <wb-value type="shape" class="selected-value"><input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression ns="shape" type="shape" fn="clip" filtered="true" class="" style=""><header><wb-value>clip</wb-value></header>
+                </wb-expression></wb-value></header>
 					
-				</wb-expression></wb-value>
-                        <button class="remove-item">-</button>
-                        <button class="add-item">+</button>
-                    </wb-row><wb-row>
+				<wb-contains class=""><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="k274385" class=""><header><wb-value type="text" allow="literal" value="path" class="" selected="true"><input type="text" style="width: 36.4844px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="path" class="" style=""><header><wb-row>
                         <wb-value type="shape" class=""><input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
                         <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="stage" fn="centerPoint" filtered="true" class="" style=""><header><wb-value>Center point</wb-value></header>
 					
@@ -325,5 +317,24 @@
                 </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="k49fb8" class="" instanceof="k274385" style=""><header><wb-value type="text" allow="literal" value="path" class="" selected="true">path</wb-value></header>
 								
 							</wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" class="selected-block" style=""><header><wb-value type="vector" class="">rectangle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="mod" filtered="true" class="" style=""><header><wb-value type="number" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="k19f7c4" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number" value="0" class="">modulus<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="stageWidth" filtered="true" class="" style=""><header><wb-value>Stage Width</wb-value></header>
+					
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="20">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" class="">height<input type="number" min="0" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="stageHeight" filtered="true" class="" style=""><header><wb-value>Stage Height</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="list" allow="literal" options="center,corner" value="corner" class="selected-value">anchored at<select style="width: 45.5132px;" class=""><option>center</option><option selected="selected">corner</option></select></wb-value></header>
+                    
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
                     
                 </wb-step></wb-contains></wb-context>

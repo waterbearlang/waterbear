@@ -445,9 +445,6 @@
                 <wb-expression type="date" ns="date" fn="getYear">
                     <wb-value type="date">get year</wb-value>
                 </wb-expression>
-                <wb-expression type="date" ns="date" fn="formattedDate">
-                    <wb-value type="date">date string</wb-value>
-                </wb-expression>
             </wb-accordion>
             <wb-accordion class="stage">
                 <header>
@@ -995,9 +992,9 @@
                     <wb-value type="vector">to</wb-value>
                     <wb-value type="vector">control point</wb-value>
                 </wb-expression>
-				<wb-expression ns="shape" type="shape" fn="clip">
-					<wb-value>clip</wb-value>
-				</wb-expression>
+				<wb-context ns="shape" type="shape" fn="withClip">
+					<wb-value type="shape">clip with</wb-value>
+				</wb-context>
                 <wb-expression type="shape" ns="shape" fn="path">
                     <wb-value>path</wb-value>
                     <wb-value type="list" allow="literal" options="connected,connected and closed, disconnected" value="connected">type</wb-value>

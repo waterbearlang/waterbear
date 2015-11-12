@@ -821,19 +821,65 @@
         },
 
         sound: {
-
             get: function(wave){
                 return wave;
             },
-
-            play: function(wave, freq){
-                T(wave, {freq:freq}).play();
+            playNote: function(wave, note, octave){
+                var freq;
+                switch(note){
+                    case "A":
+                        freq = 55.000;
+                        break;
+                    case "A#/Bb":
+                        freq = 58.270;
+                        break;
+                    case "B":
+                        freq = 61.735;
+                        break;
+                    case "C":
+                        freq = 65.406;
+                        break;
+                    case "C#/Db":
+                        freq = 69.296;
+                        break;
+                    case "D":
+                        freq = 73.416;
+                        break;
+                    case "D#/Eb":
+                        freq = 77.782;
+                        break;
+                    case "E":
+                        freq = 82.407;
+                        break;
+                    case "F":
+                        freq = 87.307;
+                        break;
+                    case "F#/Gb":
+                        freq = 92.499;
+                        break;
+                    case "G":
+                        freq = 97.999;
+                        break;
+                    case "G#/Ab":
+                        freq = 103.826;
+                        break;
+                }
+                parseInt(octave);
+                freq = freq * Math.pow(2, octave-1);
+                var osc = T(wave);
+                var env = T("perc", {a:50, r:500});
+                var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
+                var noteNum  = 69;
+                var velocity = 64;
+                T("interval", {interval:"L4", timeout:"L4"}, function() {
+                    oscenv.noteOnWithFreq(freq, velocity);
+                }).on("ended", function() {
+                    this.stop();
+                }).set({buddies:oscenv}).start();
             },
-
-            note: function(wave, freq){
-                T(wave, {freq:1000, time:"bpm120 116"}).play();
+            pause: function(sound){
+                note.pause();
             },
-
             keys: function(wave, vol){
                 var synth = T("OscGen", {wave:wave, mul:vol}).play();
 
@@ -854,7 +900,6 @@
 
                 alert("Play notes on the keyboard");
             },
-
             effect: function(){
                 // Change from 1760Hz to 220Hz in 200ms.
                 var table = [1760, [110, "200ms"]];

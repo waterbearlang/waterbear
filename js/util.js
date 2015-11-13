@@ -913,6 +913,9 @@
                 this._canvas = dom.html('canvas', {width: this.width, height: this.height});
             }
             this._ctx = this._canvas.getContext('2d');
+            if (this._image){
+                this._ctx.drawImage(this._image, 0, 0);
+            }
         }
         return this._ctx;
     };

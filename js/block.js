@@ -231,7 +231,6 @@ BlockProto.attachedCallback = function blockAttached(){
     if (parent){
         setDefaultByTag(parent, 'wb-contains').appendChild(this);
     }
-    console.log('attached callback, children: %s', [].slice.call(this.children).map(function(child){ return child.localName; }).join(', '));
 };
 
 BlockProto.header = function blockHeader(){

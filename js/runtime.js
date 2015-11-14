@@ -867,15 +867,25 @@
                 parseInt(octave);
                 freq = freq * Math.pow(2, octave-1);
                 var osc = T(wave);
-                var env = T("perc", {a:50, r:500});
+                var env = T("perc", {a:20, r:500});
                 var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
-                var noteNum  = 69;
                 var velocity = 64;
-                T("interval", {interval:"L4", timeout:"L4"}, function() {
+                oscenv.noteOnWithFreq(freq, velocity);
+                T("interval", {interval:"L2", timeout:"L2"}, function() {
                     oscenv.noteOnWithFreq(freq, velocity);
                 }).on("ended", function() {
                     this.stop();
                 }).set({buddies:oscenv}).start();
+            },
+            mml: function(sound, mml){
+                var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
+                T("mml", {mml:mml}, gen).on("ended", function() {
+                    gen.pause();
+                    this.stop();
+                }).start();
+            },
+            tempo: function(tempo){
+                timbre.tempo = tempo;
             },
             pause: function(sound){
                 note.pause();

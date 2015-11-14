@@ -821,10 +821,17 @@
         },
 
         sound: {
-            get: function(wave){
-                return wave;
+            get: function(wave, a, r){
+                var osc = T(wave);
+                var env = T("perc", {a:a, r:r});
+                var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
+                return oscenv;
             },
-            playNote: function(wave, note, octave){
+            getAudio: function(file){
+                var audio = T("audio", {load:file});
+                return audio;
+            },
+            playNote: function(oscenv, note, octave, velocity){
                 var freq;
                 switch(note){
                     case "A":
@@ -866,16 +873,16 @@
                 }
                 parseInt(octave);
                 freq = freq * Math.pow(2, octave-1);
-                var osc = T(wave);
-                var env = T("perc", {a:20, r:500});
-                var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
-                var velocity = 64;
-                oscenv.noteOnWithFreq(freq, velocity);
-                T("interval", {interval:"L2", timeout:"L2"}, function() {
-                    oscenv.noteOnWithFreq(freq, velocity);
-                }).on("ended", function() {
-                    this.stop();
-                }).set({buddies:oscenv}).start();
+                if (oscenv){
+                    T("interval", {interval:"L2", timeout:"L2"}, function() {
+                        oscenv.noteOnWithFreq(freq, velocity);
+                    }).on("ended", function() {
+                        this.stop();
+                    }).set({buddies:oscenv}).start();
+                }
+            },
+            playAudio: function(audio){
+                audio.play();
             },
             mml: function(sound, mml){
                 var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();

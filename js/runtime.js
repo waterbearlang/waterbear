@@ -910,17 +910,32 @@
 
                 alert("Play notes on the keyboard");
             },
-            effect: function(){
-                // Change from 1760Hz to 220Hz in 200ms.
-                var table = [1760, [110, "200ms"]];
+            effect: function(effect){
+                switch(effect) {
+                    case "laser":
+                        var table = [1760, [110, "200ms"]];
 
-                var freq = T("env", {table:table}).on("bang", function() {
-                    VCO.mul = 0.2;
-                }).on("ended", function() {
-                    VCO.mul = 0;
-                });
-                var VCO = T("saw", {freq:freq, mul:0}).play();
-                freq.bang();
+                        var freq = T("env", {table:table}).on("bang", function() {
+                            VCO.mul = 0.2;
+                        }).on("ended", function() {
+                            VCO.mul = 0;
+                        });
+                        var VCO = T("saw", {freq:freq, mul:0}).play();
+                        freq.bang();
+                        break;
+                    case "alarm":
+                        var table = [440, [880, 500], [660, 250]];
+                        var env   = T("env", {table:table}).bang();
+                        var synth = T("saw", {freq:env, mul:0.25});
+
+                        var interval = T("interval", {interval:1000}, function(count) {
+                          if (count === 3) {
+                            interval.stop();
+                          }
+                          env.bang();
+                        }).set({buddies:synth}).start();
+                        break;
+                }
             }
         },
 

@@ -12,79 +12,6 @@
 /* TODO: control */
 
 QUnit.module('control');
-QUnit.test('setVariable', function(assert){
-    var control = runtime.control;
-    var scope1 = {};
-    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
-    var scope3 = Object.create(scope2);
-    control.setVariable.call(scope1, ['firstname', 'Baba']);
-    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
-    control.setVariable.call(scope3, ['who', 'on first']);
-    assert.ok(scope1['firstname'] === 'Baba');
-    assert.ok(scope1['lastname'] === undefined); // shouldn't leak scopes
-    assert.ok(scope1['who'] === undefined);
-    assert.ok(scope2['firstname'] === 'Baba'); // scope chaining should work
-    assert.ok(scope2['lastname'] === "O'Reilly");
-    assert.ok(scope2['who'] === undefined);
-    assert.ok(scope3['firstname'] === 'Baba');
-    assert.ok(scope3['lastname'] === "O'Reilly");
-    assert.ok(scope3['who'] === 'on first');
-});
-QUnit.test('getVariable', function(assert){
-    var control = runtime.control;
-    var scope1 = {};
-    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
-    var scope3 = Object.create(scope2);
-    control.setVariable.call(scope1, ['firstname', 'Baba']);
-    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
-    control.setVariable.call(scope3, ['who', 'on first']);
-    assert.ok(control.getVariable.call(scope1, 'firstname') === 'Baba');
-    assert.ok(control.getVariable.call(scope1, 'lastname') === undefined); // shouldn't leak scopes
-    assert.ok(control.getVariable.call(scope1, 'who') === undefined);
-    assert.ok(control.getVariable.call(scope2, 'firstname') === 'Baba'); // scope chaining should work
-    assert.ok(control.getVariable.call(scope2, 'lastname') === "O'Reilly");
-    assert.ok(control.getVariable.call(scope2, 'who') === undefined);
-    assert.ok(control.getVariable.call(scope3, 'firstname') === 'Baba');
-    assert.ok(control.getVariable.call(scope3, 'lastname') === "O'Reilly");
-    assert.ok(control.getVariable.call(scope3, 'who') === 'on first');
-});
-QUnit.test('updateVariable', function(assert){
-    var control = runtime.control;
-    var scope1 = {};
-    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
-    var scope3 = Object.create(scope2);
-    function getValueBlock(value){
-        var outer = document.createElement('wb-expression');
-        var inner = document.createElement('wb-value');
-        inner.setAttribute('value', value);
-        outer.appendChild(inner);
-        // PhantomJS doesn't understand custom elements
-        inner.getValue = function(){
-            return this.getAttribute('value');
-        }
-        return outer;
-    }
-    control.setVariable.call(scope1, ['first', 'upper']);
-    control.setVariable.call(scope2, ['second', 'centre']);
-    control.setVariable.call(scope3, ['third', 'lowest']);
-    // updateVariable should walk the scope chain to set the variable
-    // at the level it was originally created
-    scope1._block = getValueBlock('first');
-    control.updateVariable.call(scope3, ['upper', 'top']);
-    scope2._block = getValueBlock('second');
-    control.updateVariable.call(scope3, ['centre', 'middle']);
-    scope3._block = getValueBlock('third');
-    control.updateVariable.call(scope3, ['lowest', 'bottom']);
-    assert.ok(control.getVariable.call(scope1, 'first') === 'top');
-    assert.ok(control.getVariable.call(scope1, 'second') === undefined); // shouldn't leak scopes
-    assert.ok(control.getVariable.call(scope1, 'third') === undefined);
-    assert.ok(control.getVariable.call(scope2, 'first') === 'top'); // scope chaining should work
-    assert.ok(control.getVariable.call(scope2, 'second') === 'middle');
-    assert.ok(control.getVariable.call(scope2, 'third') === undefined);
-    assert.ok(control.getVariable.call(scope3, 'first') === 'top');
-    assert.ok(control.getVariable.call(scope3, 'second') === 'middle');
-    assert.ok(control.getVariable.call(scope3, 'third') === 'bottom');
-});
 
 /* sprite */
 
@@ -95,6 +22,123 @@ QUnit.test('updateVariable', function(assert){
 
 /* TODO: sound */
 /* TODO: arrays */
+QUnit.module('arrays');
+QUnit.test('create', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var create = array.create('item1',image,sprite);
+    assert.ok(create[0] === 'item1');
+    //test items other than strings
+    assert.ok(create[1] === image);
+    assert.ok(create[2] === sprite);
+    assert.ok(create[0] !== image);
+});
+QUnit.test('copy', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var original = ['item1',image,sprite];
+    var copy = array.copy(original);
+    assert.ok(copy[0] === original[0]);
+    assert.ok(copy[1] === original[1]);
+    assert.ok(copy[2] === original[2]);
+    assert.ok(copy[0] !== original[2]);
+});
+QUnit.test('itemAt', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var original = ['item1',image,sprite];
+    assert.ok(array.itemAt(original,0) === 'item1');
+    assert.ok(array.itemAt(original,1) === image);
+    assert.ok(array.itemAt(original,2) === sprite);
+});
+QUnit.test('join', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    var array2 = ['item4','item5'];
+    var joined = array.join(array1,array2);
+    assert.ok(joined[3] === 'item4');
+    assert.ok(joined[4] === 'item5');
+});
+QUnit.test('makeString', function(assert){
+    var array = runtime.array;
+    var array1 = ['the','boy','went'];
+    var sentence = array.makeString(array1);
+    assert.ok(sentence === "the,boy,went");
+});
+QUnit.test('append', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var appended = ['item1',sprite];
+    array.append(appended,'newItem');
+    array.append(appended,image);
+    assert.ok(appended[0] === 'item1');
+    assert.ok(appended[1] === sprite);
+    assert.ok(appended[2] === 'newItem');
+    assert.ok(appended[3] === image);
+});
+QUnit.test('prepend', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var prependArray = ['item1',sprite];
+    array.prepend(prependArray,'newItem');
+    array.prepend(prependArray, image);
+    assert.ok(prependArray[0] === image);
+    assert.ok(prependArray[1] === 'newItem');
+    assert.ok(prependArray[2] === 'item1');
+    assert.ok(prependArray[3] === sprite);
+});
+QUnit.test('length', function(assert){
+    var array = runtime.array; 
+    var lengthArray = ['one','two','three'];
+    assert.ok(array.length(lengthArray) === 3);
+});
+QUnit.test('removeItem', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.removeItem(array1,1);
+    assert.ok(array1[0] === 'item1');
+    assert.ok(array1[1] === sprite);
+    assert.ok(array1.length === 2);  
+});
+QUnit.test('pop', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.pop(array1);
+    assert.ok(array1[0] === 'item1');
+    assert.ok(array1[1] === image);
+    assert.ok(array1.length === 2);
+});
+QUnit.test('shift', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.shift(array1);
+    assert.ok(array1[0] === image);
+    assert.ok(array1[1] === sprite);
+    assert.ok(array1.length === 2);
+});
+QUnit.test('reverse', function(assert){
+    var array = runtime.array; 
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.reverse(array1);
+    assert.ok(array1[0] === sprite);
+    assert.ok(array1[1] === image);
+    assert.ok(array1[2] === 'item1');
+});
 
 QUnit.module('boolean');
 QUnit.test('and', function(assert){

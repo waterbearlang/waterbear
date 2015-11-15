@@ -120,11 +120,10 @@ function preload() {
 }
 
 function runScript(){
-    var globalScope = {};
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            block.run(globalScope);
+            block.run();
         }
     });
 }
@@ -196,6 +195,7 @@ function handleExampleButton(evt){
         {
             overlayClose: true, // Can't close the modal by clicking on the overlay.
             buttons: [
+                handleExample('Clipping Demo', 'clipping'),
                 handleExample('Space Bear', 'waterbear_in_space'),
                 handleExample('Noise 3D', 'noise3d'),
                 handleExample('Dance', 'dance'),

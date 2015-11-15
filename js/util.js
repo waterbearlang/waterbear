@@ -7,6 +7,8 @@
 
     var cos = Math.cos, sin = Math.sin, atan2 = Math.atan2, sqrt = Math.sqrt, floor = Math.floor, PI = Math.PI;
     var DEGREE = PI / 180;
+    var _lastPoint = new Vector(0,0);
+    var drawingPath = false;
 
     // Polyfill for Function.prototype.bind (PhantomJS doesn't support it for
     // some bizarre reason).
@@ -17,6 +19,18 @@
                 return fn.apply(obj, arguments);
             };
         };
+    }
+
+    function isDrawingPath(){
+        return drawingPath;
+    }
+
+    function lastPoint(){
+        return _lastPoint;
+    }
+
+    function setLastPoint(point){
+        _lastPoint = point;
     }
 
     // properly delete from a list
@@ -258,55 +272,87 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints){
+    function Path(funcToCall, inputPoints, startPoint){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
+        this.startPoint = startPoint;
     }
 
     Path.prototype.draw = function(ctx){
+        if (!drawingPath) {
+            ctx.beginPath();
+            ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        }
+
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
             this.funcToCall.apply(ctx, new Array());
         }
-
+        ctx.fill();
+        ctx.stroke();
     }
 
     //Shape
-    function Shape(pathArrayOrFunctionOrSAT){
+    function Shape(pathArrayOrFunctionOrSAT, pointsArray){
         if (type(pathArrayOrFunctionOrSAT) === 'function'){
             this._draw = pathArrayOrFunctionOrSAT;
-        }else if (type(pathArrayOrFunctionOrSAT) === 'array'){
-            for(var i =0; i < pathArrayOrFunctionOrSAT.length; i++){
-                if(!(pathArrayOrFunctionOrSAT[i] instanceof Path)){
-                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunctionOrSAT[i] + " is not.");
-                }
-            }
+            if (pointsArray != undefined)
+                this.pointsArray = pointsArray;
+        }
+        else if (type(pathArrayOrFunctionOrSAT) === 'array'){
             this.pathArray = pathArrayOrFunctionOrSAT;
+        }
+        else if (pathArrayOrFunctionOrSAT instanceof Path) {
+            this.path = pathArrayOrFunctionOrSAT;
         }else if (type(pathArrayOrFunctionOrSAT) === 'polygon'){
             this.satPolygon = pathArrayOrFunctionOrSAT;
         }else if (type(pathArrayOrFunctionOrSAT) === 'circle'){
             this.satCircle = pathArrayOrFunctionOrSAT;
         }else{
-            debugger;
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
+
+
     Shape.prototype.draw = function(ctx){
         if (this.pathArray){
-            ctx.beginPath();
             var i;
-            for(i=0; i<this.pathArray.length; i++){
-                this.pathArray[i].draw(ctx);
+            var paths = this.pathArray.slice(0, this.pathArray.length-1);
+            var type = this.pathArray[this.pathArray.length-1];
+
+            ctx.beginPath();
+
+            for(i=0; i<paths.length; i++){
+                paths[i].draw(ctx);
+
+                if (!drawingPath && (type == "connected" || type == "connected and closed")){
+                    drawingPath = true;
+                }
             }
-        }else if (this._draw){
+
+            if (type == "connected and closed"){
+                ctx.closePath()
+            }
+
+            drawingPath = false;
+        }
+        else if(this._draw){
             this._draw(ctx);
         }
         else if (this.satPolygon){
-            ctx.beginPath();
 
-            ctx.moveTo(this.satPolygon.points[0].x, this.satPolygon.points[0].y);
+            var x = this.satPolygon.points[0].x;
+            var y = this.satPolygon.points[0].y;
+
+            if (!util.isDrawingPath()){
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+            else{
+                ctx.lineTo(x, y);
+            }
 
             for (var i = 1; i < this.satPolygon.points.length; i++) {
                 ctx.lineTo(this.satPolygon.points[i].x, this.satPolygon.points[i].y);
@@ -999,6 +1045,9 @@
     Sprite.prototype.angle = function(){
         return atan2(this.facing.y, this.facing.x);
     }
+    Sprite.prototype.toString = function(){
+        return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
+    };
 
     Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
@@ -1198,7 +1247,10 @@
         geolocation: geolocationModule,
         motion: motionModule,
         WBImage: WBImage,
-        randomId: randomId
+        randomId: randomId,
+        lastPoint: lastPoint,
+        setLastPoint: setLastPoint,
+        isDrawingPath: isDrawingPath
     };
 
 

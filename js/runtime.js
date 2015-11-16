@@ -736,7 +736,7 @@
 
                 return new util.Shape(satObject);
             },
-            rectangle: function rectangle(pt, width, height, orientation){
+            rectangle: function rectangle(pt, width, height){
                 util.setLastPoint(pt);
 
                 // The starting point of the object is ignored for now until sprites come

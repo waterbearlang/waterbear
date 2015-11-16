@@ -195,6 +195,7 @@ function handleExampleButton(evt){
         {
             overlayClose: true, // Can't close the modal by clicking on the overlay.
             buttons: [
+                handleExample('Pastels', 'pastels'),
                 handleExample('Clipping Demo', 'clipping'),
                 handleExample('Space Bear', 'waterbear_in_space'),
                 handleExample('Noise 3D', 'noise3d'),

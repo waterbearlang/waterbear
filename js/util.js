@@ -971,8 +971,8 @@
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
-        //debugger;
-        this.satObject = drawable.satPolygon|| drawable.satCircle;
+
+        this.satObject = this.drawable.satPolygon || this.drawable.satCircle;
 
         if(this.satObject){
             this.position = this.satObject.pos;

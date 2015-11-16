@@ -743,22 +743,12 @@
                     this.radius = rad;
                 });
             },
-            rectangle: function rectangle(pt, width, height, orientation){
+            rectangle: function rectangle(pt, width, height){
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
-                    var x = 0;
-                    var y = 0;
-                    if(orientation == "center"){
-                        x = pt.x - width/2;
-                        y = pt.y - height/2;
-                        this.centered = true;
-                    }
-                    else{
-                        x = pt.x;
-                        y = pt.y;
-                        this.centered = false;
-                    }
+                    var x = pt.x;
+                    var y = pt.y;
 
                     if (!util.isDrawingPath()){
                         ctx.beginPath();

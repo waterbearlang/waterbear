@@ -196,7 +196,6 @@
         return atan2(this.y, this.x);
     }
     Vector.prototype.degrees = function(){
-        debugger
         return rad2deg(this.radians());
     }
 
@@ -990,7 +989,6 @@
     }
 
     Sprite.prototype.setVelocity = function(vec){
-        //debugger;
         this.velocity = new SAT.Vector(vec.x, vec.y);
     }
 
@@ -1015,12 +1013,10 @@
     }
 
     Sprite.prototype.rotate = function(r){
-        //debugger;
         this.facing.rotate(r * Math.PI / 180);
     }
 
     Sprite.prototype.rotateTo = function(r){
-        //debugger;
         this.facing.angle = r;
     }
 
@@ -1035,7 +1031,6 @@
     }
 
     Sprite.prototype.draw = function(ctx){
-        //debugger;
         ctx.translate(this.position.x, this.position.y);
         ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
@@ -1070,8 +1065,6 @@
         var this_drawable = this.drawable;
         var other_drawable = other.drawable;
 
-        //debugger;
-
         if(this_drawable.satPolygon && other_drawable.satPolygon){
             collision = SAT.testPolygonPolygon(
                 this_drawable.satPolygon, other_drawable.satPolygon, response);
@@ -1092,82 +1085,7 @@
         return collision;
 
     }
-/*
-    function checkForCollisionRectangleAndCircle(rectangle, circle){
 
-        var rectangle_x;
-        var rectangle_y;
-
-        if(rectangle.drawable.centered){
-            rectangle_x = rectangle.position.x - rectangle.drawable.width/2;
-            rectangle_y = rectangle.position.y - rectangle.drawable.height/2;
-        }
-        else{
-            rectangle_x = rectangle.position.x;
-            rectangle_y = rectangle.position.y;
-        }
-
-        var rect = new SAT.Box(new SAT.Vector(rectangle_x, rectangle_y), rectangle.drawable.width, rectangle.drawable.height);
-        var circ = new SAT.Circle(new SAT.Vector(circle.position.x, circle.position.y), circle.drawable.radius);
-
-        var response = new SAT.Response();
-
-        var collision = SAT.testPolygonCircle(rect.toPolygon(), circ, response)
-
-        return collision;
-
-    }
-
-
-    function checkForCollisionTwoCircles(this_, other){
-
-        var this_circle = new SAT.Circle(new SAT.Vector(this_.position.x, this_.position.y), this_.drawable.radius);
-        var other_circle = new SAT.Circle(new SAT.Vector(other.position.x, other.position.y), other.drawable.radius);
-
-        var response = new SAT.Response();
-
-        var collision = SAT.testCircleCircle(this_circle, other_circle, response)
-
-        return collision;
-
-    }
-
-    function checkForCollisionTwoRectangles(this_, other){
-
-        var this_x;
-        var this_y;
-        var other_x;
-        var other_y;
-
-        if(this_.drawable.centered){
-            this_x = this_.position.x - this_.drawable.width/2;
-            this_y = this_.position.y - this_.drawable.height/2;
-        }
-        else{
-            this_x = this_.position.x;
-            this_y = this_.position.y;
-        }
-
-
-        if(other.drawable.centered){
-            other_x = other.position.x - other.drawable.width/2;
-            other_y = other.position.y - other.drawable.height/2;
-        }
-        else{
-            other_x = other.position.x;
-            other_y = other.position.y;
-        }
-
-        var this_rect = new SAT.Box(new SAT.Vector(this_x, this_y), this_.drawable.width, this_.drawable.height);
-        var other_rect = new SAT.Box(new SAT.Vector(other_x, other_y), other.drawable.width, other.drawable.height);
-
-        var response = new SAT.Response();
-
-        var collision = SAT.testPolygonPolygon(this_rect.toPolygon(), other_rect.toPolygon(), response)
-
-        return collision;
-    }
-*/
     Sprite.prototype.wrapAroundRect = function(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.position = new Vector(this.position.x - r.width, this.position.y);

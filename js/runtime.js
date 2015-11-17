@@ -919,7 +919,6 @@
                 spt.setVelocity(vec);
             },
             getVelocity: function spriteGetVelocityExpr(spt){
-                //debugger;
                 return spt.velocity;
             },
             getSpeed: function spriteGetSpeedExpr(spt){

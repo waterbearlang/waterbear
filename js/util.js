@@ -361,7 +361,7 @@
         }
         else if (this.satCircle){
             ctx.beginPath();
-            ctx.arc(0, 0, this.satCircle.r, 0, Math.PI * 2, true);
+            ctx.arc(this.satCircle.pos.x, this.satCircle.pos.y, this.satCircle.r, 0, Math.PI * 2, true);
         }
         ctx.fill();
         ctx.stroke();

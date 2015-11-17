@@ -46,7 +46,7 @@ QUnit.test('copy', function(assert){
     assert.ok(copy[0] !== original[2]);
 });
 QUnit.test('itemAt', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var original = ['item1',image,sprite];
@@ -71,7 +71,7 @@ QUnit.test('makeString', function(assert){
     assert.ok(sentence === "the,boy,went");
 });
 QUnit.test('append', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var appended = ['item1',sprite];
@@ -83,7 +83,7 @@ QUnit.test('append', function(assert){
     assert.ok(appended[3] === image);
 });
 QUnit.test('prepend', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var prependArray = ['item1',sprite];
@@ -95,22 +95,22 @@ QUnit.test('prepend', function(assert){
     assert.ok(prependArray[3] === sprite);
 });
 QUnit.test('length', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var lengthArray = ['one','two','three'];
     assert.ok(array.length(lengthArray) === 3);
 });
 QUnit.test('removeItem', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var array1 = ['item1',image,sprite];
     array.removeItem(array1,1);
     assert.ok(array1[0] === 'item1');
     assert.ok(array1[1] === sprite);
-    assert.ok(array1.length === 2);  
+    assert.ok(array1.length === 2);
 });
 QUnit.test('pop', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var array1 = ['item1',image,sprite];
@@ -120,7 +120,7 @@ QUnit.test('pop', function(assert){
     assert.ok(array1.length === 2);
 });
 QUnit.test('shift', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var array1 = ['item1',image,sprite];
@@ -130,7 +130,7 @@ QUnit.test('shift', function(assert){
     assert.ok(array1.length === 2);
 });
 QUnit.test('reverse', function(assert){
-    var array = runtime.array; 
+    var array = runtime.array;
     var image = runtime.image.get('images/mascot/mascot-steampunk.png');
     var sprite = runtime.sprite.create();
     var array1 = ['item1',image,sprite];

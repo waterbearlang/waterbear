@@ -9,7 +9,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+    "test": "phantomjs test/all-blocks-have-functions.js ; karma start test/karma.conf.js",
+    "start": "echo \"open http://localhost:8000/playground.html in your web browser\";static -p 8000"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "karma-coverage": "^0.5.2",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-qunit": "^0.1.5",
+    "node-static": "^0.7.7",
     "parse5": "^1.5.0",
     "phantomjs": "^1.9.18",
     "qunitjs": "^1.19.0"

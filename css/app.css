@@ -26,7 +26,7 @@ sidebar{
 
 body > header{
     flex: 0 0 80px;
-    background: #9944ce;
+    background: #80BDD1;
     color: #FFFFFF;
 }
 
@@ -80,7 +80,7 @@ body > output{
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50%;
-    background-color: #9944ce; 
+    background-color: #80BDD1; 
 }
 
 .sideMenu button[disabled] {

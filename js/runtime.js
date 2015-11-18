@@ -113,6 +113,12 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
         clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
+        for (var prop in assets.sounds){
+            if (!assets.sounds.hasOwnProperty(prop)){
+                continue;
+            }
+            assets.sounds[prop].pause();
+        }
     }
 
     // utility for iterating over child blocks
@@ -260,6 +266,12 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
         },
 
         'boolean': {
+            'true': function booleanTrue(){
+                return true;
+            },
+            'false': function booleanFalse(){
+                return false;
+            },
             and: function booleanAndExpr(a,b){
                 return a && b;
             },
@@ -334,17 +346,19 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
             },
             updateVariable: function controlUpdateVariableStep(){
                 // Do I need to find the setVariable block and set the value there?
-                var args = this.gatherArguments();
-                var instance = args[0];
+                var row = this.gatherArguments()[0];
+                var instance = row.firstElementChild.lastElementChild;
                 var local = instance.localOrSelf();
-                local._currentValue = args[1].getValue();
+                local._currentValue = row.lastElementChild.getValue()[0];
             },
             // FIXME: This doesn't seem to have a block
             incrementVariable: function controlIncrementVariableExpr(variable, value){
                 this[name] += value;
             },
-            loopOver: function controlLoopOverCtx(list) {
+            loopOver: function controlLoopOverCtx() {
                 // FIXME: this has to work over arrays, strings, objects, and numbers
+                var listElem = this.gatherArguments()[0];
+                var list = listElem.getValue()[0];
                 var locals = this.getLocals();
                 var index = locals[0];
                 var value = locals[1];
@@ -369,6 +383,7 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 /* For every element in the container place
                  * the index and value into the scope. */
                 for (i = 0; i < len; i++){
+                    list = listElem.getValue()[0];
                     switch(type){
                         // FIXME: Get names of index & value from block
                         case 'array': // fall through
@@ -388,7 +403,7 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                             index.setValue(i);
                             value.setValue(list);
                             if (!list){
-                                // hopefully this will handle the case where the value changes after starting the loop
+                                // handle the case where the value changes after starting the loop
                                 return;
                             }
                             break;
@@ -760,22 +775,12 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                     this.radius = rad;
                 });
             },
-            rectangle: function rectangle(pt, width, height, orientation){
+            rectangle: function rectangle(pt, width, height){
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
-                    var x = 0;
-                    var y = 0;
-                    if(orientation == "center"){
-                        x = pt.x - width/2;
-                        y = pt.y - height/2;
-                        this.centered = true;
-                    }
-                    else{
-                        x = pt.x;
-                        y = pt.y;
-                        this.centered = false;
-                    }
+                    var x = pt.x;
+                    var y = pt.y;
 
                     if (!util.isDrawingPath()){
                         ctx.beginPath();
@@ -848,17 +853,37 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
             },
             bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
                 util.setLastPoint(toPoint);
-                var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y), startPoint);
+                var path = new util.Path(
+                    getContext().bezierCurveTo,
+                    new Array(controlPoint1.x,
+                        controlPoint1.y,
+                        controlPoint2.x,
+                        controlPoint2.y,
+                        toPoint.x,
+                        toPoint.y),
+                    startPoint
+                );
                 return path;
             },
             quadraticCurve: function(startPoint, toPoint, controlPoint){
                 util.setLastPoint(toPoint);
-                var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                                                                       controlPoint.y,toPoint.x, toPoint.y),
-                                                                       startPoint);
+                var path = new util.Path(
+                    getContext().quadraticCurveTo,
+                    new Array(
+                        controlPoint.x,
+                        controlPoint.y,
+                        toPoint.x,
+                        toPoint.y),
+                    startPoint
+                );
                 return path;
+            },
+            withClip: function withClipCtx(shape){
+                getContext().save();
+                shape.draw(getContext());
+                getContext().clip();
+                this.gatherSteps().forEach(runBlock);
+                getContext().restore();
             },
             path: function(){
                 var args = [].slice.call(arguments);
@@ -904,7 +929,9 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 sound.volume = volume;
             },
             pause: function(sound){
-                sound.pause();
+                if (assets.sounds[sound.name]){
+                    assets.sounds[sound.name].pause();
+                }
             },
             playFrom: function(sound, time){
                 sound.playFrom(time);
@@ -1224,7 +1251,25 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 var date = new Date(prevDate.valueOf());
                 date.setFullYear(date.getFullYear() + years);
                 return date;
-            }
+            },
+            dayOfWeek: function(date){
+                return date.getDay();
+            },
+            getDay: function(date){
+                return date.getDate();
+            },
+            getMonth: function(date){
+                return date.getMonth();
+            },
+            getMonthName: function(date){
+                return ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November',
+                        'December'][date.getMonth()];
+            },
+            getYear: function(date){
+                return date.getFullYear();
+            },
+
         }
     };
 

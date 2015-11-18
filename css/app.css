@@ -95,7 +95,7 @@ body > output{
 .do-stop{ background-image: url(../images/icon/stop.svg);}
 
 .open-files:hover, .undo:hover, .redo:hover, .open-example:hover, .do-run:hover, .do-stop:hover {
-    background-color: #bb61f4;
+    background-color: #9DDDF2;
 }
 
 .open-example {

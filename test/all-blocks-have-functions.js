@@ -1,20 +1,13 @@
 /**
  * Use with PhantomJS:
  *
- *      phantomjs test/all-blocks-have-functions.js playground.html
+ *      phantomjs test/all-blocks-have-functions.js
  *
  * Tests if all blocks in the page sidebar have defined functions.
  */
 var webPage = require('webpage');
 var system = require('system');
-var pageName;
-
-if (system.args.length <= 1) {
-    console.error('Must provide playground.html');
-    phantom.exit(-1);
-} else {
-    pageName = system.args[1];
-}
+var pageName = 'playground.html';
 
 var page = webPage.create();
 

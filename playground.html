@@ -672,7 +672,7 @@
                     <wb-value type="number" value="0">arcosine</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="math" fn="atan">
-                    <wb-value type="number" value="0">arctangent</wb-value>
+                    <wb-value type="number,vector" value="0">arctangent</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="math" fn="pi">
                     <wb-value>pi</wb-value>
@@ -1015,6 +1015,13 @@
                 </wb-expression>
                 <wb-expression ns="shape" type="vector" fn="bezierPoint">
                     <wb-value type="number" min="0" max="1">bezier point at position</wb-value>
+                    <wb-value type="vector">start point</wb-value>
+                    <wb-value type="vector">end point</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
+                </wb-expression>
+                <wb-expression ns="shape" type="vector" fn="bezierTangent">
+                    <wb-value type="number" min="0" max="1">tangent to bezier curve at position</wb-value>
                     <wb-value type="vector">start point</wb-value>
                     <wb-value type="vector">end point</wb-value>
                     <wb-value type="vector">first control point</wb-value>

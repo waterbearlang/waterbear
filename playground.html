@@ -236,26 +236,25 @@
                     <wb-value type="text" value="/sounds/pianoA.wav">audio</wb-value>
                 </wb-expression>
                 <wb-step ns="sound" fn="playNote">
-                    <wb-value type="sound">play</wb-value>
-                    <wb-value type="list" allow="literal" options="A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab" value="A">note</wb-value>
+                    <wb-value type="list" allow="literal" options="C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B,Rest" value="C">note</wb-value>
                     <wb-value type="list" allow="literal" options="1,2,3,4,5,6,7,8" value="4">octave</wb-value>
-                    <wb-value type="number" value="64">velocity</wb-value>
+                    <wb-value type="list" allow="literal" options="1/32,1/16,1/8,1/4,1/2,1" value="1/4">beats</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="playAudio">
                     <wb-value type="audio">play audio</wb-value>
+                </wb-step>
+                <wb-step ns="sound" fn="playInstrument">
+                    <wb-value type="sound">play instrument</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="mml">
                     <wb-value type="sound">instrument</wb-value>
                     <wb-value type="text">mml</wb-value>
                 </wb-step>
-                <wb-step ns="sound" fn="rest">
-                    <wb-value type="number" value="0.5">rest</wb-value>
-                </wb-step>
                 <wb-step ns="sound" fn="tempo">
-                    <wb-value type="number" value="100">set tempo</wb-value>
+                    <wb-value type="number" value="120">set tempo</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="pause">
-                    <wb-value type="sound">pause</wb-value>
+                    <wb-value type="audio">pause</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="keys">
                     <wb-value>keys</wb-value>

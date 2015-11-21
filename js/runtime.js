@@ -4,6 +4,8 @@
     // Dependencies: ctx, canvas, Event, runtime
     // canvas/stage stuff
     var _canvas, _ctx;
+    var song = "o4 l4 V12 ";
+    var current_octave = 4;
     function canvas(){
         if (!_canvas){
             if (dom.find){
@@ -831,58 +833,95 @@
                 var audio = T("audio", {load:file});
                 return audio;
             },
-            playNote: function(oscenv, note, octave, velocity){
-                var freq;
+            playNote: function(note, octave, beats){
                 switch(note){
                     case "A":
-                        freq = 55.000;
+                        note = "a";
                         break;
                     case "A#/Bb":
-                        freq = 58.270;
+                        note = "a#";
                         break;
                     case "B":
-                        freq = 61.735;
+                        note = "b";
                         break;
                     case "C":
-                        freq = 65.406;
+                        note = "c";
                         break;
                     case "C#/Db":
-                        freq = 69.296;
+                        note = "c#";
                         break;
                     case "D":
-                        freq = 73.416;
+                        note = "d";
                         break;
                     case "D#/Eb":
-                        freq = 77.782;
+                        note = "d#";
                         break;
                     case "E":
-                        freq = 82.407;
+                        note = "e";
                         break;
                     case "F":
-                        freq = 87.307;
+                        note = "f";
                         break;
                     case "F#/Gb":
-                        freq = 92.499;
+                        note = "f#";
                         break;
                     case "G":
-                        freq = 97.999;
+                        note = "g";
                         break;
                     case "G#/Ab":
-                        freq = 103.826;
+                        note = "g#";
+                        break;
+                    case "Rest":
+                        note = "r";
                         break;
                 }
-                parseInt(octave);
-                freq = freq * Math.pow(2, octave-1);
-                if (oscenv){
-                    T("interval", {interval:"L2", timeout:"L2"}, function() {
-                        oscenv.noteOnWithFreq(freq, velocity);
-                    }).on("ended", function() {
-                        this.stop();
-                    }).set({buddies:oscenv}).start();
+                if (octave > current_octave) {
+                    var octave_diff = octave - current_octave;
+                    for (var i = 0; i < octave_diff; i++) {
+                        song += "<";
+                    }
                 }
+                else if (octave < current_octave) {
+                    var octave_diff = current_octave - octave;
+                    for (var i = 0; i < octave_diff; i++) {
+                        song += ">";
+                    }
+                }
+                current_octave = octave;
+                var length;
+                switch(beats){
+                    case "1/32":
+                        length = "32";
+                        break;
+                    case "1/16":
+                        length = "16";
+                        break;
+                    case "1/8":
+                        length = "8";
+                        break;
+                    case "1/4":
+                        length = "4";
+                        break;
+                    case "1/2":
+                        length = "2";
+                        break;
+                    case "1":
+                        length = "1";
+                        break;
+                }
+                var newNote = note + length;
+                song += newNote;
             },
             playAudio: function(audio){
                 audio.play();
+            },
+            playInstrument: function(sound){
+                console.log(song);
+                T("mml", {mml:song}, sound).on("ended", function() {
+                    sound.pause();
+                    this.stop();
+                }).start();
+                song = "o4 l4 V12 ";
             },
             mml: function(sound, mml){
                 var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
@@ -892,10 +931,10 @@
                 }).start();
             },
             tempo: function(tempo){
-                timbre.tempo = tempo;
+                song += ("t" + tempo + " ");
             },
             pause: function(sound){
-                note.pause();
+                sound.pause();
             },
             keys: function(wave, vol){
                 var synth = T("OscGen", {wave:wave, mul:vol}).play();

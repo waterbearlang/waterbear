@@ -782,6 +782,8 @@
                 });
             },
             triangle: function(p1, p2, p3){
+                util.setLastPoint(p1);
+
                 return new util.Shape(function(ctx){
                     ctx.beginPath();
 

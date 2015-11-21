@@ -80,7 +80,7 @@ function startScript(evt, opts) {
     runtime.resetStage();
     evt.target.blur();
     runtime.getStage().focus();
-    document.getElementById('playgroundBox').style.width = '100%';
+    document.getElementById('playgroundBox').style.width = '53%';
 
     /* Add emitter. */
     if (opts !== undefined) {

@@ -25,7 +25,7 @@ sidebar{
 }
 
 body > header{
-    flex: 0 0 80px;
+    flex: 0 0 30px;
     background: #80BDD1;
     color: #FFFFFF;
 }
@@ -40,8 +40,9 @@ body > header img{
 body > header > h1{
     display: inline-block;
     text-align: center;
-    font-size: 40px;
+    font-size: 25px;
     color: #fff;
+    margin-left:40%;
 }
 
 body > output{
@@ -255,10 +256,10 @@ wb-blocks {
 }
 
 #playgroundBox {
-    margin-top: 7%;
+    margin-top: 3%;
     position: absolute;
     top: 0px;
-    right: 0px;
+    /*right: 0px;*/
     bottom: 0px;
     width: 0;
     

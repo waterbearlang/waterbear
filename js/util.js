@@ -1,3 +1,5 @@
+
+
 // Utility functions
 
 (function(){
@@ -5,6 +7,8 @@
 
     var cos = Math.cos, sin = Math.sin, atan2 = Math.atan2, sqrt = Math.sqrt, floor = Math.floor, PI = Math.PI;
     var DEGREE = PI / 180;
+    var _lastPoint = new Vector(0,0);
+    var drawingPath = false;
 
     // Polyfill for Function.prototype.bind (PhantomJS doesn't support it for
     // some bizarre reason).
@@ -15,6 +19,18 @@
                 return fn.apply(obj, arguments);
             };
         };
+    }
+
+    function isDrawingPath(){
+        return drawingPath;
+    }
+
+    function lastPoint(){
+        return _lastPoint;
+    }
+
+    function setLastPoint(point){
+        _lastPoint = point;
     }
 
     // properly delete from a list
@@ -255,47 +271,74 @@
     };
 
     //Paths
-    function Path(funcToCall, inputPoints){
+    function Path(funcToCall, inputPoints, startPoint){
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
+        this.startPoint = startPoint;
     }
 
     Path.prototype.draw = function(ctx){
+        if (!drawingPath) {
+            ctx.beginPath();
+            ctx.moveTo(this.startPoint.x, this.startPoint.y);
+        }
+
         if(this.inputPoints !== undefined){
             this.funcToCall.apply(ctx, this.inputPoints);
         }
         else{
             this.funcToCall.apply(ctx, new Array());
         }
-
+        ctx.fill();
+        ctx.stroke();
     }
 
 
     //Shape
-    function Shape(pathArrayOrFunction){
+    function Shape(pathArrayOrFunction, pointsArray){
         if (type(pathArrayOrFunction) === 'function'){
             this._draw = pathArrayOrFunction;
-        }else if (type(pathArrayOrFunction) === 'array'){
-            for(var i =0; i < pathArrayOrFunction.length; i++){
-                if(!(pathArrayOrFunction[i] instanceof Path)){
-                    throw new Error('Only paths may be added to a Shape, ' + pathArrayOrFunction[i] + " is not.");
-                }
-            }
+            if (pointsArray != undefined)
+                this.pointsArray = pointsArray;
+        }
+        else if (type(pathArrayOrFunction) === 'array'){
             this.pathArray = pathArrayOrFunction;
-        }else{
+        }
+        else if (pathArrayOrFunction instanceof Path) {
+            this.path = pathArrayOrFunction;
+        }
+        else{
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
+
+
     Shape.prototype.draw = function(ctx){
         if (this.pathArray){
-            ctx.beginPath();
             var i;
-            for(i=0; i<this.pathArray.length; i++){
-                this.pathArray[i].draw(ctx);
+            var paths = this.pathArray.slice(0, this.pathArray.length-1);
+            var type = this.pathArray[this.pathArray.length-1];
+
+            ctx.beginPath();
+
+            for(i=0; i<paths.length; i++){
+                paths[i].draw(ctx);
+
+                if (!drawingPath && (type == "connected" || type == "connected and closed")){
+                    drawingPath = true;
+                }
             }
-        }else if (this._draw){
+
+            if (type == "connected and closed"){
+                ctx.closePath()
+            }
+
+            drawingPath = false;
+        }
+        else if(this._draw){
             this._draw(ctx);
         }
+
         ctx.fill();
         ctx.stroke();
     }
@@ -960,6 +1003,10 @@
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
+    Sprite.prototype.toString = function(){
+        return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
+    };
+
     Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
@@ -995,45 +1042,25 @@
     }
 
     function checkForCollisionRectangleAndCircle(rectangle, circle){
-        // Solution came from `http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection`
 
-        var center_x;
-        var center_y;
+        var rectangle_x;
+        var rectangle_y;
 
         if(rectangle.drawable.centered){
-            center_x = rectangle.position.x;
-            center_y = rectangle.position.y;
+            rectangle_x = rectangle.position.x - rectangle.drawable.width/2;
+            rectangle_y = rectangle.position.y - rectangle.drawable.height/2;
         }
         else{
-            center_x = rectangle.position.x + rectangle.drawable.width/2;
-            center_y = rectangle.position.y + rectangle.drawable.height/2;
+            rectangle_x = rectangle.position.x;
+            rectangle_y = rectangle.position.y;
         }
 
-        var distance_x = Math.abs(circle.position.x - center_x);
-        var distance_y = Math.abs(circle.position.y - center_y);
+        var rect = new SAT.Box(new SAT.Vector(rectangle_x, rectangle_y), rectangle.drawable.width, rectangle.drawable.height);
+        var circ = new SAT.Circle(new SAT.Vector(circle.position.x, circle.position.y), circle.drawable.radius);
 
-        var collision = false;
+        var response = new SAT.Response();
 
-
-        if(distance_x > rectangle.drawable.width/2 + circle.drawable.radius){
-            collision = false;
-        }
-        else if(distance_y > rectangle.drawable.height/2 + circle.drawable.radius){
-            collision = false;
-        }
-        else if(distance_x <= rectangle.drawable.width/2){
-            collision = true;
-        }
-        else if(distance_y <= rectangle.drawable.height/2){
-            collision = true;
-        }
-        else{
-            var corner_distance = Math.pow(distance_x - rectangle.width/2, 2) +
-                                Math.pow(distance_y - rectangle.height/2, 2);
-
-            collision = corner_distance <= Math.pow(circle.drawable.radius, 2);
-
-        }
+        var collision = SAT.testPolygonCircle(rect.toPolygon(), circ, response)
 
         return collision;
 
@@ -1042,12 +1069,14 @@
 
     function checkForCollisionTwoCircles(this_, other){
 
-        var diff_x = this_.position.x - other.position.x;
-        var diff_y = this_.position.y - other.position.y;
+        var this_circle = new SAT.Circle(new SAT.Vector(this_.position.x, this_.position.y), this_.drawable.radius);
+        var other_circle = new SAT.Circle(new SAT.Vector(other.position.x, other.position.y), other.drawable.radius);
 
-        var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+        var response = new SAT.Response();
 
-        return distance < this_.drawable.radius + other.drawable.radius;
+        var collision = SAT.testCircleCircle(this_circle, other_circle, response)
+
+        return collision;
 
     }
 
@@ -1077,10 +1106,14 @@
             other_y = other.position.y;
         }
 
-        return this_x < other_x + other.drawable.width &&
-                this_x + this_.drawable.width > other_x &&
-                this_y < other_y + other.drawable.height &&
-                this_.drawable.height + this_y > other_y;
+        var this_rect = new SAT.Box(new SAT.Vector(this_x, this_y), this_.drawable.width, this_.drawable.height);
+        var other_rect = new SAT.Box(new SAT.Vector(other_x, other_y), other.drawable.width, other.drawable.height);
+
+        var response = new SAT.Response();
+
+        var collision = SAT.testPolygonPolygon(this_rect.toPolygon(), other_rect.toPolygon(), response)
+
+        return collision;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){
@@ -1162,7 +1195,10 @@
         geolocation: geolocationModule,
         motion: motionModule,
         WBImage: WBImage,
-        randomId: randomId
+        randomId: randomId,
+        lastPoint: lastPoint,
+        setLastPoint: setLastPoint,
+        isDrawingPath: isDrawingPath
     };
 
 

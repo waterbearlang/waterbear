@@ -12,79 +12,6 @@
 /* TODO: control */
 
 QUnit.module('control');
-QUnit.test('setVariable', function(assert){
-    var control = runtime.control;
-    var scope1 = {};
-    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
-    var scope3 = Object.create(scope2);
-    control.setVariable.call(scope1, ['firstname', 'Baba']);
-    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
-    control.setVariable.call(scope3, ['who', 'on first']);
-    assert.ok(scope1['firstname'] === 'Baba');
-    assert.ok(scope1['lastname'] === undefined); // shouldn't leak scopes
-    assert.ok(scope1['who'] === undefined);
-    assert.ok(scope2['firstname'] === 'Baba'); // scope chaining should work
-    assert.ok(scope2['lastname'] === "O'Reilly");
-    assert.ok(scope2['who'] === undefined);
-    assert.ok(scope3['firstname'] === 'Baba');
-    assert.ok(scope3['lastname'] === "O'Reilly");
-    assert.ok(scope3['who'] === 'on first');
-});
-QUnit.test('getVariable', function(assert){
-    var control = runtime.control;
-    var scope1 = {};
-    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
-    var scope3 = Object.create(scope2);
-    control.setVariable.call(scope1, ['firstname', 'Baba']);
-    control.setVariable.call(scope2, ['lastname', "O'Reilly"]);
-    control.setVariable.call(scope3, ['who', 'on first']);
-    assert.ok(control.getVariable.call(scope1, 'firstname') === 'Baba');
-    assert.ok(control.getVariable.call(scope1, 'lastname') === undefined); // shouldn't leak scopes
-    assert.ok(control.getVariable.call(scope1, 'who') === undefined);
-    assert.ok(control.getVariable.call(scope2, 'firstname') === 'Baba'); // scope chaining should work
-    assert.ok(control.getVariable.call(scope2, 'lastname') === "O'Reilly");
-    assert.ok(control.getVariable.call(scope2, 'who') === undefined);
-    assert.ok(control.getVariable.call(scope3, 'firstname') === 'Baba');
-    assert.ok(control.getVariable.call(scope3, 'lastname') === "O'Reilly");
-    assert.ok(control.getVariable.call(scope3, 'who') === 'on first');
-});
-QUnit.test('updateVariable', function(assert){
-    var control = runtime.control;
-    var scope1 = {};
-    var scope2 = Object.create(scope1); // create a scope with scope1 as its prototype
-    var scope3 = Object.create(scope2);
-    function getValueBlock(value){
-        var outer = document.createElement('wb-expression');
-        var inner = document.createElement('wb-value');
-        inner.setAttribute('value', value);
-        outer.appendChild(inner);
-        // PhantomJS doesn't understand custom elements
-        inner.getValue = function(){
-            return this.getAttribute('value');
-        }
-        return outer;
-    }
-    control.setVariable.call(scope1, ['first', 'upper']);
-    control.setVariable.call(scope2, ['second', 'centre']);
-    control.setVariable.call(scope3, ['third', 'lowest']);
-    // updateVariable should walk the scope chain to set the variable
-    // at the level it was originally created
-    scope1._block = getValueBlock('first');
-    control.updateVariable.call(scope3, ['upper', 'top']);
-    scope2._block = getValueBlock('second');
-    control.updateVariable.call(scope3, ['centre', 'middle']);
-    scope3._block = getValueBlock('third');
-    control.updateVariable.call(scope3, ['lowest', 'bottom']);
-    assert.ok(control.getVariable.call(scope1, 'first') === 'top');
-    assert.ok(control.getVariable.call(scope1, 'second') === undefined); // shouldn't leak scopes
-    assert.ok(control.getVariable.call(scope1, 'third') === undefined);
-    assert.ok(control.getVariable.call(scope2, 'first') === 'top'); // scope chaining should work
-    assert.ok(control.getVariable.call(scope2, 'second') === 'middle');
-    assert.ok(control.getVariable.call(scope2, 'third') === undefined);
-    assert.ok(control.getVariable.call(scope3, 'first') === 'top');
-    assert.ok(control.getVariable.call(scope3, 'second') === 'middle');
-    assert.ok(control.getVariable.call(scope3, 'third') === 'bottom');
-});
 
 /* sprite */
 
@@ -95,6 +22,123 @@ QUnit.test('updateVariable', function(assert){
 
 /* TODO: sound */
 /* TODO: arrays */
+QUnit.module('arrays');
+QUnit.test('create', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var create = array.create('item1',image,sprite);
+    assert.ok(create[0] === 'item1');
+    //test items other than strings
+    assert.ok(create[1] === image);
+    assert.ok(create[2] === sprite);
+    assert.ok(create[0] !== image);
+});
+QUnit.test('copy', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var original = ['item1',image,sprite];
+    var copy = array.copy(original);
+    assert.ok(copy[0] === original[0]);
+    assert.ok(copy[1] === original[1]);
+    assert.ok(copy[2] === original[2]);
+    assert.ok(copy[0] !== original[2]);
+});
+QUnit.test('itemAt', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var original = ['item1',image,sprite];
+    assert.ok(array.itemAt(original,0) === 'item1');
+    assert.ok(array.itemAt(original,1) === image);
+    assert.ok(array.itemAt(original,2) === sprite);
+});
+QUnit.test('join', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    var array2 = ['item4','item5'];
+    var joined = array.join(array1,array2);
+    assert.ok(joined[3] === 'item4');
+    assert.ok(joined[4] === 'item5');
+});
+QUnit.test('makeString', function(assert){
+    var array = runtime.array;
+    var array1 = ['the','boy','went'];
+    var sentence = array.makeString(array1);
+    assert.ok(sentence === "the,boy,went");
+});
+QUnit.test('append', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var appended = ['item1',sprite];
+    array.append(appended,'newItem');
+    array.append(appended,image);
+    assert.ok(appended[0] === 'item1');
+    assert.ok(appended[1] === sprite);
+    assert.ok(appended[2] === 'newItem');
+    assert.ok(appended[3] === image);
+});
+QUnit.test('prepend', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var prependArray = ['item1',sprite];
+    array.prepend(prependArray,'newItem');
+    array.prepend(prependArray, image);
+    assert.ok(prependArray[0] === image);
+    assert.ok(prependArray[1] === 'newItem');
+    assert.ok(prependArray[2] === 'item1');
+    assert.ok(prependArray[3] === sprite);
+});
+QUnit.test('length', function(assert){
+    var array = runtime.array;
+    var lengthArray = ['one','two','three'];
+    assert.ok(array.length(lengthArray) === 3);
+});
+QUnit.test('removeItem', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.removeItem(array1,1);
+    assert.ok(array1[0] === 'item1');
+    assert.ok(array1[1] === sprite);
+    assert.ok(array1.length === 2);
+});
+QUnit.test('pop', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.pop(array1);
+    assert.ok(array1[0] === 'item1');
+    assert.ok(array1[1] === image);
+    assert.ok(array1.length === 2);
+});
+QUnit.test('shift', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.shift(array1);
+    assert.ok(array1[0] === image);
+    assert.ok(array1[1] === sprite);
+    assert.ok(array1.length === 2);
+});
+QUnit.test('reverse', function(assert){
+    var array = runtime.array;
+    var image = runtime.image.get('images/mascot/mascot-steampunk.png');
+    var sprite = runtime.sprite.create();
+    var array1 = ['item1',image,sprite];
+    array.reverse(array1);
+    assert.ok(array1[0] === sprite);
+    assert.ok(array1[1] === image);
+    assert.ok(array1[2] === 'item1');
+});
 
 QUnit.module('boolean');
 QUnit.test('and', function(assert){
@@ -150,6 +194,359 @@ QUnit.test('not', function(assert){
 /* TODO: colors */
 /* TODO: images */
 /* TODO: math */
+QUnit.module('math');
+QUnit.test('add',function(assert){
+    var math = runtime.math;
+    var array = [2,2,2,2];
+    var array2 = [5,5,5,5];
+
+    //array to number
+    assert.ok(math.add(3,2) === 5);
+    var numAdd = math.add(array,1);
+    assert.ok(numAdd[0] === 3);
+    
+    //array to array
+    var arrAdd = math.add(array,array2);
+    assert.ok(arrAdd[0] === 2);
+    assert.ok(arrAdd[4] === 5);
+    
+    //array to vector
+    var vecArray = [new util.Vector(2,2)];
+    var vector1 = new util.Vector(1,1);
+    var vecAdd = math.add(vecArray,vector1);
+    assert.ok(vecAdd[0].x === 3);
+    assert.ok(vecAdd[0].y === 3);
+    
+    //vector to vector
+    var vector2 = new util.Vector(5,5);
+    var newVec = math.add(vector1,vector2);
+    assert.ok(newVec.x === 6);
+    assert.ok(newVec.y === 6);
+    
+    //vector to number
+    var newNum = math.add(vector1,4);
+    assert.ok(newNum.x === 5);
+    assert.ok(newNum.y === 5);
+    
+    //number to number
+    var num = math.add(4,3);
+    assert.ok(num === 7);
+    
+});
+QUnit.test('subtract',function(assert){
+    var math = runtime.math;
+    var array = [2,2,2,2,5,3];
+    var array2 = [5,3];
+
+    //array from number
+    var numSub = math.subtract(array,1);
+    assert.ok(numSub[0] === 1);
+    assert.ok(numSub[4] === 4);
+    
+    /*array from array
+    var arrSub = math.subtract(array2,array);
+    assert.ok(arrSub[0] === 2);
+    assert.ok(arrSub[4] === NULL);
+    */
+    //array from vector
+    var vecArray = [new util.Vector(2,2)];
+    var vector1 = new util.Vector(1,1);
+    var vecSub = math.subtract(vecArray,vector1);
+    assert.ok(vecSub[0].x === 1);
+    assert.ok(vecSub[0].y === 1);
+    
+    //vector from vector
+    var vector2 = new util.Vector(5,5);
+    var newVec = math.subtract(vector2,vector1);
+    assert.ok(newVec.x === 4);
+    assert.ok(newVec.y === 4);
+    
+    //vector from number
+    var newNum = math.subtract(vector2,4);
+    assert.ok(newNum.x === 1);
+    assert.ok(newNum.y === 1);
+    
+    //number from number
+    var num = math.subtract(4,3);
+    assert.ok(num === 1);
+});
+QUnit.test('multiply',function(assert){
+    var math = runtime.math;
+    var array = [2,3,4];
+    
+    //number by number
+    assert.ok(math.multiply(4,3) === 12);
+    
+    //array by number
+    var arrMult = math.multiply(array,2);
+    assert.ok(arrMult[0] === 4);
+    assert.ok(arrMult[2] == 8);
+    
+    //array by vector
+    var vecMult = math.multiply(array,new util.Vector(1,1));
+    assert.ok(vecMult[0].x === 2);
+    assert.ok(vecMult[0].y === 2);
+    
+    //vector by number
+    var vec = math.multiply(new util.Vector(1,1),5);
+    assert.ok(vec.x === 5);
+    assert.ok(vec.y === 5);
+    
+    //vector by vector
+    var dotProd = math.multiply(new util.Vector(1,1), new util.Vector(4,4));
+    assert.ok(dotProd === 8);
+    
+    //number by vector
+    var newVec = math.multiply(4,new util.Vector(1,1));
+    assert.ok(newVec.x === 4);
+    assert.ok(newVec.y === 4);
+    
+});
+QUnit.test('divide',function(assert){
+    var math = runtime.math;
+    
+    //array by number
+    var array = [2,4,6];
+    var arrDiv = math.divide(array,2);
+    assert.ok(arrDiv[2] === 3);
+    
+    //vector by number
+    var vec = new util.Vector(4,4);
+    var vecDiv = math.divide(vec,2);
+    assert.ok(vecDiv.x === 2);
+    assert.ok(vecDiv.y === 2);
+    
+    //number by number
+    assert.ok(math.divide(4,2) === 2);
+    //assert.ok(math.divide(4,0) === NaN);
+    
+});
+QUnit.test('equal',function(assert){
+    var math = runtime.math;
+    
+    //numbers
+    assert.ok(math.equal(5,5));
+    
+    //vectors
+    var vec = new util.Vector(1,1);
+    assert.ok(math.equal(vec,vec));
+    
+    //arrays
+    var array = [2,2,2];
+    assert.ok(math.equal(array,array));
+    
+});
+QUnit.test('notequal',function(assert){
+    var math = runtime.math;
+    
+    //numbers
+    assert.ok(math.notEqual(4,2));
+    
+    //vectors
+    assert.ok(math.notEqual(new util.Vector(1,1),new util.Vector(1,1)));
+    
+    //arrays
+    assert.ok(math.notEqual([2,2,2],[2,2,2]));
+    
+});
+QUnit.test('lessthan',function(assert){
+    var math = runtime.math;
+    
+    //numbers
+    assert.ok(math.lt(5,8));
+    assert.raises(math.lt(8,8));
+    
+    //dates
+    var date1 = new Date(1990,3,4);
+    var date2 = new Date(1995,5,3);
+    assert.ok(math.lt(date1,date2));
+    assert.raises(math.lt(date1,date1));
+    
+});
+QUnit.test('lessthanequal',function(assert){
+    var math = runtime.math;
+    
+    //numbers 
+    assert.ok(math.lte(5,7));
+    assert.ok(math.lte(4,4));
+    
+    //dates
+    var date1 = new Date(1990,3,4);
+    var date2 = new Date(1995,5,3);
+    var date3 = new Date(1990,3,4);
+    assert.ok(math.lte(date1,date2));
+    assert.ok(math.lte(date1,date3));
+    
+});
+QUnit.test('greaterthan',function(assert){
+    var math = runtime.math;
+    
+    //numbers
+    assert.ok(math.gt(8,5));
+    assert.raises(math.gt(8,8));
+    
+    //dates
+    var date1 = new Date(1990,3,4);
+    var date2 = new Date(1995,5,3);
+    assert.ok(math.gt(date2,date1));
+    assert.raises(math.gt(date1,date1));
+    
+});
+QUnit.test('greaterthanequal',function(assert){
+    var math = runtime.math;
+    
+    //numbers 
+    assert.ok(math.gte(7,5));
+    assert.ok(math.gte(4,4));
+    
+    //dates
+    var date1 = new Date(1990,3,4);
+    var date2 = new Date(1995,5,3);
+    var date3 = new Date(1990,3,4);
+    assert.ok(math.gte(date2,date1));
+    assert.ok(math.gte(date1,date3));
+    
+});
+QUnit.test('mod',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.mod(4,2) === 0);
+    assert.ok(math.mod(4,3) === 1);
+});
+QUnit.test('round',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.round(4.5632) === 5);
+    assert.ok(math.round(3.21232) === 3);
+});
+QUnit.test('abs',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.abs(5.32) === 5.32);
+    assert.ok(math.abs(-4.5) === 4.5);
+});
+QUnit.test('sgn',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.sgn(5.32) === 1);
+    assert.ok(math.sgn(-4.33) === -1);
+});
+QUnit.test('floor',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.floor(4.9999) === 4);
+    assert.ok(math.floor(-3.9999) === -4);
+});
+QUnit.test('ceiling',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.ceil(4.1) === 5);
+    assert.ok(math.ceil(-5.1) === -5);
+});
+QUnit.test('sqrt',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.sqrt(16) === 4);
+    //assert.ok(math.sqrt(-4) === NaN);
+});
+QUnit.test('cbrt',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.cbrt(8) === 2);
+    //assert.ok(math.cbrt(-8) === NaN);
+});
+QUnit.test('root',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.root(16,4) === 2);
+    //assert.ok(math.root(-16,4) === NaN);
+});
+QUnit.test('log',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.log(50,10) === 1.6989700043360185);
+});
+QUnit.test('max',function(assert){
+    var math = runtime.math;
+    var array1 = [4,6,2,1,7];
+    var array2 = [-4,-1,-10];
+    
+    assert.ok(math.max(array1) === 7);
+    assert.ok(math.max(array2) === -1);
+});
+QUnit.test('min',function(assert){
+    var math = runtime.math;
+    var array1 = [4,1,6,4];
+    var array2 = [-1,-6,-11];
+    
+    assert.ok(math.min(array1) === 1);
+    assert.ok(math.min(array2) === -11);
+});
+QUnit.test('cos',function(assert){
+    var math = runtime.math;
+
+    assert.ok(math.cos(45) === 0.7071067811865476);
+});
+QUnit.test('sin',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.sin(45) === 0.7071067811865475);
+});
+QUnit.test('tan',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.tan(45) === 0.9999999999999999);
+});
+QUnit.test('asin',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.asin(45) === 0.9033391107665127);
+});
+QUnit.test('acos',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.acos(45) === 0.6674572160283838);
+})
+QUnit.test('atan',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.atan(45) === 0.6657737500283538);
+});
+QUnit.test('pow',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.pow(2,3) === 8);
+});
+QUnit.test('pi',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.pi() === 3.141592653589793);
+});
+QUnit.test('e',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.e() === 2.718281828459045);
+});
+QUnit.test('tau',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.tau() === 6.283185307179586);
+});
+QUnit.test('deg2rad',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.deg2rad(45) === 0.7853981633974483);
+});
+QUnit.test('rad2deg',function(assert){
+    var math = runtime.math;
+    
+    assert.ok(math.rad2deg(0.7853981633974483) === 45);
+});
+QUnit.test('stringtonumber',function(assert){
+    var math = runtime.math;
+    var string = math.stringToNumber("50");
+    assert.ok(string === 50);
+});
 /* TODO: random */
 
 /* vectors */

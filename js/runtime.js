@@ -869,6 +869,21 @@
             },
             lastPoint: function(){
                 return util.lastPoint();
+            },
+            bezierPoint: function(position, startPoint, toPoint, controlPoint1, controlPoint2){
+                var adjustedPosition = 1-position;
+
+                var x =  Math.pow(adjustedPosition,3)*startPoint.x +
+                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.x +
+                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.x +
+                 Math.pow(position,3)*toPoint.x;
+
+                var y =  Math.pow(adjustedPosition,3)*startPoint.y +
+                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.y +
+                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.y +
+                 Math.pow(position,3)*toPoint.y;
+
+                return new util.Vector(x, y);
             }
         },
         size: {

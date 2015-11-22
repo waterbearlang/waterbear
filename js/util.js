@@ -342,25 +342,28 @@
         }
         else if (this.satPolygon){
 
+            var origin = this.satPolygon.pos;
+
             var x = this.satPolygon.points[0].x;
             var y = this.satPolygon.points[0].y;
 
             if (!util.isDrawingPath()){
                 ctx.beginPath();
-                ctx.moveTo(x, y);
+                ctx.moveTo(x + origin.x, y + origin.y);
             }
             else{
                 ctx.lineTo(x, y);
             }
 
             for (var i = 1; i < this.satPolygon.points.length; i++) {
-                ctx.lineTo(this.satPolygon.points[i].x, this.satPolygon.points[i].y);
+                ctx.lineTo(this.satPolygon.points[i].x + origin.x, this.satPolygon.points[i].y + origin.y);
             };
 
-            ctx.lineTo(this.satPolygon.points[0].x, this.satPolygon.points[0].y);
+            ctx.lineTo(this.satPolygon.points[0].x + origin.x, this.satPolygon.points[0].y + origin.y);
         }
         else if (this.satCircle){
             ctx.beginPath();
+
             ctx.arc(this.satCircle.pos.x, this.satCircle.pos.y, this.satCircle.r, 0, Math.PI * 2, true);
         }
         ctx.fill();
@@ -1031,7 +1034,10 @@
     }
 
     Sprite.prototype.draw = function(ctx){
-        ctx.translate(this.position.x, this.position.y);
+        if(!this.satObject)
+        {
+            ctx.translate(this.position.x, this.position.y);
+        }
         ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix

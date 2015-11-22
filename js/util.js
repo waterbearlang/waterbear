@@ -342,24 +342,23 @@
         }
         else if (this.satPolygon){
 
-            var origin = this.satPolygon.pos;
 
             var x = this.satPolygon.points[0].x;
             var y = this.satPolygon.points[0].y;
 
             if (!util.isDrawingPath()){
                 ctx.beginPath();
-                ctx.moveTo(x + origin.x, y + origin.y);
+                ctx.moveTo(x , y );
             }
             else{
                 ctx.lineTo(x, y);
             }
 
             for (var i = 1; i < this.satPolygon.points.length; i++) {
-                ctx.lineTo(this.satPolygon.points[i].x + origin.x, this.satPolygon.points[i].y + origin.y);
+                ctx.lineTo(this.satPolygon.points[i].x , this.satPolygon.points[i].y );
             };
 
-            ctx.lineTo(this.satPolygon.points[0].x + origin.x, this.satPolygon.points[0].y + origin.y);
+            ctx.lineTo(this.satPolygon.points[0].x , this.satPolygon.points[0].y );
         }
         else if (this.satCircle){
             ctx.beginPath();
@@ -1034,7 +1033,7 @@
     }
 
     Sprite.prototype.draw = function(ctx){
-        if(!this.satObject)
+        if(!this.drawable.satCircle)
         {
             ctx.translate(this.position.x, this.position.y);
         }

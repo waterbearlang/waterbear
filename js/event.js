@@ -14,6 +14,17 @@
         return false;
     }
 
+    if (!CustomEvent){
+        var CustomEvent = function CustomEvent ( event, params ) {
+            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            var evt = document.createEvent( 'CustomEvent' );
+            evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+            return evt;
+        }
+        CustomEvent.prototype = window.Event.prototype;
+        window.CustomEvent = CustomEvent;
+    }
+
     // Move these to utils.js
 
     // Maintain references to events so we can mass-remove them later
@@ -224,6 +235,11 @@
 
     /* Add custom events for adding and removing blocks from the DOM */
     function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
+
+        if (typeof MutationObserver === 'undefined'){
+            console.warn('If you see this and you are not running tests in PhantomJS you have problems');
+            return;
+        }
 
         var blockObserver = new MutationObserver(function(mutations){
             mutations.forEach(function(mutation){

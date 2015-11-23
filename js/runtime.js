@@ -608,6 +608,9 @@
                 return Math.acos(util.deg2rad(a));
             },
             atan: function mathAtanExpr(a){
+                if(a instanceof util.Vector )
+                    return Math.atan2(a.y, a.x);
+
                 return Math.atan(util.deg2rad(a));
             },
             pow: function mathPowerExpr(a,b){
@@ -778,6 +781,18 @@
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
                 });
             },
+            triangle: function(p1, p2, p3){
+                util.setLastPoint(p1);
+
+                return new util.Shape(function(ctx){
+                    ctx.beginPath();
+
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.lineTo(p3.x, p3.y);
+                    ctx.lineTo(p1.x, p1.y);
+                });
+            },
             polygon: function(args){
                 var points = [].slice.call(arguments);
                 util.setLastPoint(points[0]);
@@ -859,6 +874,40 @@
             },
             lastPoint: function(){
                 return util.lastPoint();
+            },
+            bezierPoint: function(position, startPoint, toPoint, controlPoint1, controlPoint2){
+                var adjustedPosition = 1-position;
+
+                var x =  Math.pow(adjustedPosition,3)*startPoint.x +
+                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.x +
+                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.x +
+                 Math.pow(position,3)*toPoint.x;
+
+                var y =  Math.pow(adjustedPosition,3)*startPoint.y +
+                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.y +
+                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.y +
+                 Math.pow(position,3)*toPoint.y;
+
+                return new util.Vector(x, y);
+            },
+            bezierTangent: function(position, startPoint, toPoint, controlPoint1, controlPoint2) {
+                var adjustedPosition = 1-position;
+
+                var x = 3*toPoint.x*Math.pow(position,2) -
+                 3*controlPoint2.x*Math.pow(position,2) +
+                 6*controlPoint2.x*adjustedPosition*position -
+                 6*controlPoint1.x*adjustedPosition*position +
+                 3*controlPoint1.x*Math.pow(adjustedPosition,2) -
+                 3*startPoint.x*Math.pow(adjustedPosition,2);
+
+                var y = 3*toPoint.y*Math.pow(position,2) -
+                 3*controlPoint2.y*Math.pow(position,2) +
+                 6*controlPoint2.y*adjustedPosition*position -
+                 6*controlPoint1.y*adjustedPosition*position +
+                 3*controlPoint1.y*Math.pow(adjustedPosition,2) -
+                 3*startPoint.y*Math.pow(adjustedPosition,2);
+
+                 return new util.Vector(x, y);
             }
         },
         size: {

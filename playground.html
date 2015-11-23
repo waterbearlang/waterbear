@@ -608,7 +608,7 @@
                     <wb-value type="number" value="0">arcosine</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="math" fn="atan">
-                    <wb-value type="number" value="0">arctangent</wb-value>
+                    <wb-value type="number,vector" value="0">arctangent</wb-value>
                 </wb-expression>
                 <wb-expression type="number" ns="math" fn="pi">
                     <wb-value>pi</wb-value>
@@ -898,6 +898,11 @@
                     <wb-value type="number" min="0">width</wb-value>
                     <wb-value type="number" min="0">height</wb-value>
                 </wb-expression>
+                <wb-expression type="shape" ns="shape" fn="triangle">
+                    <wb-value type="vector">triangle with points a</wb-value>
+                    <wb-value type="vector">b</wb-value>
+                    <wb-value type="vector">c</wb-value>
+                </wb-expression>
                 <wb-expression type="shape" ns="shape" fn="polygon">
                     <wb-value>polygon with points</wb-value>
                     <wb-row>
@@ -943,6 +948,20 @@
                 </wb-expression>
                 <wb-expression ns="shape" type="vector" fn="lastPoint">
                     last point
+                </wb-expression>
+                <wb-expression ns="shape" type="vector" fn="bezierPoint">
+                    <wb-value type="number" min="0" max="1">bezier point at position</wb-value>
+                    <wb-value type="vector">start point</wb-value>
+                    <wb-value type="vector">end point</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
+                </wb-expression>
+                <wb-expression ns="shape" type="vector" fn="bezierTangent">
+                    <wb-value type="number" min="0" max="1">tangent to bezier curve at position</wb-value>
+                    <wb-value type="vector">start point</wb-value>
+                    <wb-value type="vector">end point</wb-value>
+                    <wb-value type="vector">first control point</wb-value>
+                    <wb-value type="vector">second control point</wb-value>
                 </wb-expression>
             </wb-accordion>
             <wb-accordion class="rect">

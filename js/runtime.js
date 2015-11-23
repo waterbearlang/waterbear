@@ -1,9 +1,11 @@
 (function(global){
     'use strict';
 
-    // Dependencies: ctx, canvas, Event, runtime, sound, soundEffect,
+    // Dependencies: ctx, canvas, Event, runtime
     // canvas/stage stuff
     var _canvas, _ctx;
+    var song = "o4 l4 V12 ";
+    var current_octave = 4;
     function canvas(){
         if (!_canvas){
             if (dom.find){
@@ -932,53 +934,167 @@
         },
 
         sound: {
-
-            get: function(url){
-                return assets.sounds[url]; // already cached by sounds library
+            get: function(wave, a, r){
+                var osc = T(wave);
+                var env = T("perc", {a:a, r:r});
+                var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
+                return oscenv;
             },
-            play: function(sound){
-                sound.play();
+            getAudio: function(file){
+                var audio = T("audio", {load:file});
+                return audio;
             },
-            setLoop: function(sound, flag){
-                sound.loop = flag;
+            playNote: function(note, octave, beats){
+                switch(note){
+                    case "A":
+                        note = "a";
+                        break;
+                    case "A#/Bb":
+                        note = "a#";
+                        break;
+                    case "B":
+                        note = "b";
+                        break;
+                    case "C":
+                        note = "c";
+                        break;
+                    case "C#/Db":
+                        note = "c#";
+                        break;
+                    case "D":
+                        note = "d";
+                        break;
+                    case "D#/Eb":
+                        note = "d#";
+                        break;
+                    case "E":
+                        note = "e";
+                        break;
+                    case "F":
+                        note = "f";
+                        break;
+                    case "F#/Gb":
+                        note = "f#";
+                        break;
+                    case "G":
+                        note = "g";
+                        break;
+                    case "G#/Ab":
+                        note = "g#";
+                        break;
+                    case "Rest":
+                        note = "r";
+                        break;
+                }
+                if (octave > current_octave) {
+                    var octave_diff = octave - current_octave;
+                    for (var i = 0; i < octave_diff; i++) {
+                        song += "<";
+                    }
+                }
+                else if (octave < current_octave) {
+                    var octave_diff = current_octave - octave;
+                    for (var i = 0; i < octave_diff; i++) {
+                        song += ">";
+                    }
+                }
+                current_octave = octave;
+                var length;
+                switch(beats){
+                    case "1/32":
+                        length = "32";
+                        break;
+                    case "1/16":
+                        length = "16";
+                        break;
+                    case "1/8":
+                        length = "8";
+                        break;
+                    case "1/4":
+                        length = "4";
+                        break;
+                    case "1/2":
+                        length = "2";
+                        break;
+                    case "1":
+                        length = "1";
+                        break;
+                }
+                var newNote = note + length;
+                song += newNote;
             },
-            setVolume: function(sound, volume){
-                sound.volume = volume;
+            playAudio: function(audio){
+                audio.play();
+            },
+            playInstrument: function(sound){
+                console.log(song);
+                T("mml", {mml:song}, sound).on("ended", function() {
+                    sound.pause();
+                    this.stop();
+                }).start();
+                song = "o4 l4 V12 ";
+            },
+            mml: function(sound, mml){
+                var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
+                T("mml", {mml:mml}, gen).on("ended", function() {
+                    gen.pause();
+                    this.stop();
+                }).start();
+            },
+            tempo: function(tempo){
+                song += ("t" + tempo + " ");
             },
             pause: function(sound){
                 if (assets.sounds[sound.name]){
                     assets.sounds[sound.name].pause();
                 }
             },
-            playFrom: function(sound, time){
-                sound.playFrom(time);
+            keys: function(wave, vol){
+                var synth = T("OscGen", {wave:wave, mul:vol}).play();
+
+                var keydict = T("ndict.key");
+                var midicps = T("midicps");
+                T("keyboard").on("keydown", function(e) {
+                  var midi = keydict.at(e.keyCode);
+                  if (midi) {
+                    var freq = midicps.at(midi);
+                    synth.noteOnWithFreq(freq, 100);
+                  }
+                }).on("keyup", function(e) {
+                  var midi = keydict.at(e.keyCode);
+                  if (midi) {
+                    synth.noteOff(midi, 100);
+                  }
+                }).start();
+
+                alert("Play notes on the keyboard");
             },
-            pan: function(sound, balance){
-                sound.pan = balance;
-            },
-            echo_DelayFeedbackFilter: function(sound, delay, feedback, filter){
-                sound.setEcho(delay, feedback, filter);
-            },
-            stopEcho: function(sound){
-                sound.echo = false;
-            },
-            reverb_DurationDecayReverse: function(sound, duration, decay, reverse){
-                sound.setReverb(duration, decay, reverse);
-            },
-            stopReverb: function(sound){
-                sound.reverb = false;
-            },
-            effect: function(frequency, attack, decay, wait, echoDelay, echoFeedback, echoFilter, waveform, volume, balance, pitchBend, reverseBend, random, dissonance){
-                return {
-                    play: function(){
-                        soundEffect(
-                            frequency, attack, decay, waveform,
-                            volume, balance, wait,
-                            pitchBend, reverseBend, random, dissonance,
-                            [echoDelay, echoFeedback, echoFilter]
-                        );
-                    }
-                };
+            effect: function(effect){
+                switch(effect) {
+                    case "laser":
+                        var table = [1760, [110, "200ms"]];
+
+                        var freq = T("env", {table:table}).on("bang", function() {
+                            VCO.mul = 0.2;
+                        }).on("ended", function() {
+                            VCO.mul = 0;
+                        });
+                        var VCO = T("saw", {freq:freq, mul:0}).play();
+                        freq.bang();
+                        break;
+                    case "alarm":
+                        var table = [440, [880, 500], [660, 250]];
+                        var env   = T("env", {table:table}).bang();
+                        var synth = T("saw", {freq:env, mul:0.25});
+
+                        var interval = T("interval", {interval:1000}, function(count) {
+                          if (count === 3) {
+                            interval.stop();
+                          }
+                          env.bang();
+                        }).set({buddies:synth}).start();
+                        break;
+                }
             }
         },
 

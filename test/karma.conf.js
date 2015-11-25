@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '..',
 
 
     // frameworks to use
@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      { pattern: 'lib/timbre.js', watched: false},
       { pattern: 'lib/*.js', watched: false },
       'js/util.js',
       'js/event.js',
@@ -29,7 +30,7 @@ module.exports = function(config) {
       'test/test-helpers.js',
       'test/sinon-1.12.2.js',
       'test/runtime.js',
-      //'test/all-blocks-have-functions.js'
+    //   'test/all-blocks-have-functions.js'
     ],
 
 

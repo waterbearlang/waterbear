@@ -26,9 +26,11 @@ module.exports = function(config) {
       //'js/app*.js',
       'js/widget.js',
       'js/runtime.js',
+      'lib/ajax.js',
       'test/test-helpers.js',
       'test/sinon-1.12.2.js',
       'test/runtime.js',
+      'test/playground.js',
     //   'test/all-blocks-have-functions.js'
     ],
 

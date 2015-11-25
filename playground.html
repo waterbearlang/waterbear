@@ -1181,7 +1181,7 @@
         </wb-blockbox>
         <wb-workspace>
                 <div class="sideMenu">
-                    <button class="do-run"></button>
+                    <button id="playButton" class="do-run"></button>
                     <button class="open-files"></button>
                     <button class="undo" id="undoButton" title="Ctrl-Z or ⌘-Z"></button>
                     <button class="redo" id="redoButton" title="Ctrl-Y or ⌘-Shift-Z"></button>
@@ -1192,9 +1192,6 @@
     </wb-workbox>
     <wb-vbox id="playgroundBox">
         <wb-playground>
-            <div class="sideMenu">
-                <button class="do-stop"></button>
-            </div>
             <canvas></canvas>
         </wb-playground>
     </wb-vbox>

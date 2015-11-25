@@ -70,10 +70,21 @@ function setFilter(item){
 /*
  * Run/Stop
  */
-Event.on(document.body, 'ui:click', '.do-run', startScript);
-Event.on(document.body, 'ui:click','.do-stop', stopScript);
+Event.on(document.body, 'ui:click', '#playButton', changeScript);
 
 var options = {};
+    
+function changeScript(evt,opts) {
+    var state = document.getElementById('playButton').className;
+    if (state === 'do-run') {
+        document.getElementById('playButton').className = 'do-stop';
+        startScript(evt,opts);
+    }else{
+        document.getElementById('playButton').className = 'do-run';
+        stopScript(evt);
+    }
+}
+    
 function startScript(evt, opts) {
     // Do any necessary cleanup (e.g., clear event handlers).
     stopScript(evt);
@@ -81,7 +92,6 @@ function startScript(evt, opts) {
     evt.target.blur();
     runtime.getStage().focus();
     document.getElementById('playgroundBox').style.width = '53%';
-
     /* Add emitter. */
     if (opts !== undefined) {
         options = opts;

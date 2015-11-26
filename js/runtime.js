@@ -526,6 +526,15 @@
             scale: function imageScaleStep(img, scaleFactor){
                 img.scale(scaleFactor);
             },
+            flipHorizontal: function imageFlipHorizontal(img){
+                img.flipH();
+            },
+            flipVertical: function imageFlipVertical(img){
+                img.flipV();
+            },
+            flipBoth: function imageFlipBoth(img){
+                img.flipBoth();
+            },
             drawOnImage: function drawOnImageCtx(img){
                 var oldContext = _ctx;
                 _ctx = img.getContext();
@@ -839,7 +848,12 @@
                 }
                 return new util.Shape(function(ctx){
                     var start = points[noSides-1];
-                    ctx.moveTo(start.x, start.y);
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                        ctx.moveTo(start.x, start.y);
+                    }else{
+                        ctx.moveTo(start.x, start.y);
+                    }
                     points.forEach(function(pt){
                         ctx.lineTo(pt.x, pt.y);
                     });
@@ -861,7 +875,12 @@
                 }
                 return new util.Shape(function(ctx){
                     var start = points[points.length - 1];
-                    ctx.moveTo(start.x, start.y);
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                        ctx.moveTo(start.x, start.y);
+                    }else{
+                        ctx.lineTo(start.x, start.y);
+                    }
                     points.forEach(function(pt){
                         ctx.lineTo(pt.x, pt.y);
                     });

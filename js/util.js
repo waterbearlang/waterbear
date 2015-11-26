@@ -328,7 +328,7 @@
             }
 
             if (type == "connected and closed"){
-                ctx.closePath()
+                ctx.closePath();
             }
 
             drawingPath = false;
@@ -382,13 +382,17 @@
         .fn();
 
     var equal = new Method()
-        .when(['date', 'date'], function(a,b){ console.log("date === date"); return a.valueOf() === b.valueOf(); })
-        .default(function(a,b){ console.log("Default"); return a === b; })
+        .when(['date', 'date'], function(a,b){
+             return a.valueOf() === b.valueOf();
+         })
+        .default(function(a,b){ return a === b; })
         .fn();
 
     var notEqual = new Method()
-        .when(['date', 'date'], function(a,b){ console.log("date !== date"); return a.valueOf() !== b.valueOf(); })
-        .default(function(a,b){ console.log("Default !=="); return a !== b; })
+        .when(['date', 'date'], function(a,b){
+             return a.valueOf() !== b.valueOf();
+         })
+        .default(function(a,b){ return a !== b; })
         .fn();
 
     // Random methods
@@ -693,7 +697,7 @@
 
                 /* Default whenLoaded callback. */
                 whenLoaded = function () {
-                    // console.log('default asset load');
+                    // default asset load (nothing)
                 };
 
                 /* Try every selector. */
@@ -841,7 +845,7 @@
                         videoSprite.src = source;
                     }else{
                         //Display a message if the file type isn't recognized.
-                        console.log("File type not recognized: " + source);
+                        console.warn("File type not recognized: " + source);
                     }
 
 
@@ -884,6 +888,8 @@
         this._image = new Image();
         this._image.addEventListener('load', selfLoad, false);
         this._image.src = src;
+        this._flipH = false;
+        this._flipV = false;
         this._canvas = null;
         this._ctx = null;
     }
@@ -894,16 +900,26 @@
         image.width = width;
         image.height = height;
         image._image = null;
+        image._flipH = false;
+        image._flipV = false;
         image._canvas = dom.html('canvas', {width: width, height: height});
         return image;
     };
 
     WBImage.prototype.draw = function(ctx){
+        if (this._flipH || this._flipV){
+            var sy = this._flipH ? -1 : 1;
+            var sx = this._flipV ? -1 : 1;
+            ctx.save();
+            ctx.scale(sx, sy);
+        }
         if (this._canvas){
-            // debugger;
             ctx.drawImage(this._canvas, -this.width/2, -this.height/2, this.width, this.height);
         }else{
             ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        }
+        if (this._flipH || this._flipV){
+            ctx.restore();
         }
     };
 
@@ -958,6 +974,19 @@
         this.height = this.origHeight * scaleFactor;
     };
 
+    WBImage.prototype.flipH = function(){
+        this._flipH = !this._flipH;
+    };
+
+    WBImage.prototype.flipV = function(){
+        this._flipV = !this._flipV;
+    };
+
+    WBImage.prototype.flipBoth = function(){
+        this._flipH = !this._flipH;
+        this._flipV = !this._flipV;
+    };
+
     WBImage.prototype.toString = function(){
         return this.name + "; " + this.width + "px wide by " + this.height + "px high";
     };
@@ -981,7 +1010,6 @@
 
     Sprite.prototype.accelerate = function(speed){
         this.velocity = add(this.velocity, multiply(this.facing, speed));
-        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
     }
 
     Sprite.prototype.setVelocity = function(vec){

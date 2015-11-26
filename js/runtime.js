@@ -1,9 +1,11 @@
 (function(global){
     'use strict';
 
-    // Dependencies: ctx, canvas, Event, runtime, sound, soundEffect,
+    // Dependencies: ctx, canvas, Event, runtime
     // canvas/stage stuff
     var _canvas, _ctx;
+    var song = "o4 l4 V12 ";
+    var current_octave = 4;
     function canvas(){
         if (!_canvas){
             if (dom.find){
@@ -81,6 +83,12 @@
         clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
+        for (var prop in assets.sounds){
+            if (!assets.sounds.hasOwnProperty(prop)){
+                continue;
+            }
+            assets.sounds[prop].pause();
+        }
     }
 
     // utility for iterating over child blocks
@@ -611,6 +619,9 @@
                 return Math.acos(util.deg2rad(a));
             },
             atan: function mathAtanExpr(a){
+                if(a instanceof util.Vector )
+                    return Math.atan2(a.y, a.x);
+
                 return Math.atan(util.deg2rad(a));
             },
             pow: function mathPowerExpr(a,b){
@@ -746,22 +757,12 @@
                     this.radius = rad;
                 });
             },
-            rectangle: function rectangle(pt, width, height, orientation){
+            rectangle: function rectangle(pt, width, height){
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
-                    var x = 0;
-                    var y = 0;
-                    if(orientation == "center"){
-                        x = pt.x - width/2;
-                        y = pt.y - height/2;
-                        this.centered = true;
-                    }
-                    else{
-                        x = pt.x;
-                        y = pt.y;
-                        this.centered = false;
-                    }
+                    var x = pt.x;
+                    var y = pt.y;
 
                     if (!util.isDrawingPath()){
                         ctx.beginPath();
@@ -789,6 +790,18 @@
                     }
 
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
+                });
+            },
+            triangle: function(p1, p2, p3){
+                util.setLastPoint(p1);
+
+                return new util.Shape(function(ctx){
+                    ctx.beginPath();
+
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.lineTo(p3.x, p3.y);
+                    ctx.lineTo(p1.x, p1.y);
                 });
             },
             polygon: function(){
@@ -874,17 +887,37 @@
             },
             bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
                 util.setLastPoint(toPoint);
-                var path = new util.Path(getContext().bezierCurveTo, new Array(controlPoint1.x, controlPoint1.y,
-                                                                    controlPoint2.x, controlPoint2.y, toPoint.x,
-                                                                    toPoint.y), startPoint);
+                var path = new util.Path(
+                    getContext().bezierCurveTo,
+                    new Array(controlPoint1.x,
+                        controlPoint1.y,
+                        controlPoint2.x,
+                        controlPoint2.y,
+                        toPoint.x,
+                        toPoint.y),
+                    startPoint
+                );
                 return path;
             },
             quadraticCurve: function(startPoint, toPoint, controlPoint){
                 util.setLastPoint(toPoint);
-                var path = new util.Path(getContext().quadraticCurveTo, new Array(controlPoint.x,
-                                                                       controlPoint.y,toPoint.x, toPoint.y),
-                                                                       startPoint);
+                var path = new util.Path(
+                    getContext().quadraticCurveTo,
+                    new Array(
+                        controlPoint.x,
+                        controlPoint.y,
+                        toPoint.x,
+                        toPoint.y),
+                    startPoint
+                );
                 return path;
+            },
+            withClip: function withClipCtx(shape){
+                getContext().save();
+                shape.draw(getContext());
+                getContext().clip();
+                this.gatherSteps().forEach(runBlock);
+                getContext().restore();
             },
             path: function(){
                 var args = [].slice.call(arguments);
@@ -892,6 +925,40 @@
             },
             lastPoint: function(){
                 return util.lastPoint();
+            },
+            bezierPoint: function(position, startPoint, toPoint, controlPoint1, controlPoint2){
+                var adjustedPosition = 1-position;
+
+                var x =  Math.pow(adjustedPosition,3)*startPoint.x +
+                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.x +
+                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.x +
+                 Math.pow(position,3)*toPoint.x;
+
+                var y =  Math.pow(adjustedPosition,3)*startPoint.y +
+                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.y +
+                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.y +
+                 Math.pow(position,3)*toPoint.y;
+
+                return new util.Vector(x, y);
+            },
+            bezierTangent: function(position, startPoint, toPoint, controlPoint1, controlPoint2) {
+                var adjustedPosition = 1-position;
+
+                var x = 3*toPoint.x*Math.pow(position,2) -
+                 3*controlPoint2.x*Math.pow(position,2) +
+                 6*controlPoint2.x*adjustedPosition*position -
+                 6*controlPoint1.x*adjustedPosition*position +
+                 3*controlPoint1.x*Math.pow(adjustedPosition,2) -
+                 3*startPoint.x*Math.pow(adjustedPosition,2);
+
+                var y = 3*toPoint.y*Math.pow(position,2) -
+                 3*controlPoint2.y*Math.pow(position,2) +
+                 6*controlPoint2.y*adjustedPosition*position -
+                 6*controlPoint1.y*adjustedPosition*position +
+                 3*controlPoint1.y*Math.pow(adjustedPosition,2) -
+                 3*startPoint.y*Math.pow(adjustedPosition,2);
+
+                 return new util.Vector(x, y);
             }
         },
         size: {
@@ -916,51 +983,167 @@
         },
 
         sound: {
-
-            get: function(url){
-                return assets.sounds[url]; // already cached by sounds library
+            get: function(wave, a, r){
+                var osc = T(wave);
+                var env = T("perc", {a:a, r:r});
+                var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
+                return oscenv;
             },
-            play: function(sound){
-                sound.play();
+            getAudio: function(file){
+                var audio = T("audio", {load:file});
+                return audio;
             },
-            setLoop: function(sound, flag){
-                sound.loop = flag;
+            playNote: function(note, octave, beats){
+                switch(note){
+                    case "A":
+                        note = "a";
+                        break;
+                    case "A#/Bb":
+                        note = "a#";
+                        break;
+                    case "B":
+                        note = "b";
+                        break;
+                    case "C":
+                        note = "c";
+                        break;
+                    case "C#/Db":
+                        note = "c#";
+                        break;
+                    case "D":
+                        note = "d";
+                        break;
+                    case "D#/Eb":
+                        note = "d#";
+                        break;
+                    case "E":
+                        note = "e";
+                        break;
+                    case "F":
+                        note = "f";
+                        break;
+                    case "F#/Gb":
+                        note = "f#";
+                        break;
+                    case "G":
+                        note = "g";
+                        break;
+                    case "G#/Ab":
+                        note = "g#";
+                        break;
+                    case "Rest":
+                        note = "r";
+                        break;
+                }
+                if (octave > current_octave) {
+                    var octave_diff = octave - current_octave;
+                    for (var i = 0; i < octave_diff; i++) {
+                        song += "<";
+                    }
+                }
+                else if (octave < current_octave) {
+                    var octave_diff = current_octave - octave;
+                    for (var i = 0; i < octave_diff; i++) {
+                        song += ">";
+                    }
+                }
+                current_octave = octave;
+                var length;
+                switch(beats){
+                    case "1/32":
+                        length = "32";
+                        break;
+                    case "1/16":
+                        length = "16";
+                        break;
+                    case "1/8":
+                        length = "8";
+                        break;
+                    case "1/4":
+                        length = "4";
+                        break;
+                    case "1/2":
+                        length = "2";
+                        break;
+                    case "1":
+                        length = "1";
+                        break;
+                }
+                var newNote = note + length;
+                song += newNote;
             },
-            setVolume: function(sound, volume){
-                sound.volume = volume;
+            playAudio: function(audio){
+                audio.play();
+            },
+            playInstrument: function(sound){
+                console.log(song);
+                T("mml", {mml:song}, sound).on("ended", function() {
+                    sound.pause();
+                    this.stop();
+                }).start();
+                song = "o4 l4 V12 ";
+            },
+            mml: function(sound, mml){
+                var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
+                T("mml", {mml:mml}, gen).on("ended", function() {
+                    gen.pause();
+                    this.stop();
+                }).start();
+            },
+            tempo: function(tempo){
+                song += ("t" + tempo + " ");
             },
             pause: function(sound){
-                sound.pause();
+                if (assets.sounds[sound.name]){
+                    assets.sounds[sound.name].pause();
+                }
             },
-            playFrom: function(sound, time){
-                sound.playFrom(time);
+            keys: function(wave, vol){
+                var synth = T("OscGen", {wave:wave, mul:vol}).play();
+
+                var keydict = T("ndict.key");
+                var midicps = T("midicps");
+                T("keyboard").on("keydown", function(e) {
+                  var midi = keydict.at(e.keyCode);
+                  if (midi) {
+                    var freq = midicps.at(midi);
+                    synth.noteOnWithFreq(freq, 100);
+                  }
+                }).on("keyup", function(e) {
+                  var midi = keydict.at(e.keyCode);
+                  if (midi) {
+                    synth.noteOff(midi, 100);
+                  }
+                }).start();
+
+                alert("Play notes on the keyboard");
             },
-            pan: function(sound, balance){
-                sound.pan = balance;
-            },
-            echo_DelayFeedbackFilter: function(sound, delay, feedback, filter){
-                sound.setEcho(delay, feedback, filter);
-            },
-            stopEcho: function(sound){
-                sound.echo = false;
-            },
-            reverb_DurationDecayReverse: function(sound, duration, decay, reverse){
-                sound.setReverb(duration, decay, reverse);
-            },
-            stopReverb: function(sound){
-                sound.reverb = false;
-            },
-            effect: function(frequency, attack, decay, wait, echoDelay, echoFeedback, echoFilter, waveform, volume, balance, pitchBend, reverseBend, random, dissonance){
-                return {
-                    play: function(){
-                        soundEffect(
-                            frequency, attack, decay, waveform,
-                            volume, balance, wait,
-                            pitchBend, reverseBend, random, dissonance,
-                            [echoDelay, echoFeedback, echoFilter]
-                        );
-                    }
-                };
+            effect: function(effect){
+                switch(effect) {
+                    case "laser":
+                        var table = [1760, [110, "200ms"]];
+
+                        var freq = T("env", {table:table}).on("bang", function() {
+                            VCO.mul = 0.2;
+                        }).on("ended", function() {
+                            VCO.mul = 0;
+                        });
+                        var VCO = T("saw", {freq:freq, mul:0}).play();
+                        freq.bang();
+                        break;
+                    case "alarm":
+                        var table = [440, [880, 500], [660, 250]];
+                        var env   = T("env", {table:table}).bang();
+                        var synth = T("saw", {freq:env, mul:0.25});
+
+                        var interval = T("interval", {interval:1000}, function(count) {
+                          if (count === 3) {
+                            interval.stop();
+                          }
+                          env.bang();
+                        }).set({buddies:synth}).start();
+                        break;
+                }
             }
         },
 
@@ -1250,7 +1433,25 @@
                 var date = new Date(prevDate.valueOf());
                 date.setFullYear(date.getFullYear() + years);
                 return date;
-            }
+            },
+            dayOfWeek: function(date){
+                return date.getDay();
+            },
+            getDay: function(date){
+                return date.getDate();
+            },
+            getMonth: function(date){
+                return date.getMonth();
+            },
+            getMonthName: function(date){
+                return ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November',
+                        'December'][date.getMonth()];
+            },
+            getYear: function(date){
+                return date.getFullYear();
+            },
+
         }
     };
 

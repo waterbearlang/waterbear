@@ -1,0 +1,369 @@
+<wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="k3c9753" class=""><header><wb-value type="text" allow="literal" value="points" class=""><input type="text" style="width: 44.2725px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class="" style=""><header><wb-value class="">polygon with points</wb-value><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="" selected="true">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="-20" class="">random int from<input type="number" style="width: 32.6118px;"></wb-value><wb-value type="number" value="20">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#0000FF" class="">fill style<input type="color" style="width: 54.918px;" class="hide"><wb-expression type="color" ns="color" fn="namedColor" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="transparent" class=""><select style="width: 40.5181px;" class=""><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="sprite" ns="control" fn="getVariable" id="k6871a" class=""><header><wb-value type="text" allow="literal" value="sprite" class=""><input type="text" style="width: 41.5547px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="ka6c5c2" class="" instanceof="k3c9753"><header><wb-value type="text" allow="literal" value="points" class="">points</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="moveTo" class=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kcb67a9" class="" instanceof="k6871a"><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">move to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="stage" fn="centerPoint" class=""><header><wb-value>Center point</wb-value></header>
+					
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="sprite" fn="setVelocity" class=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kbe231a" class="" instanceof="k6871a"><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="multiply" class=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="randomUnitVector" class=""><header><wb-value>random unit vector</wb-value></header>
+                    
+                </wb-expression></wb-value><wb-value type="number" value="3" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+					<!-- FIXME: Temporary workaround until type propagation works for math * -->
+					
+                    
+				</wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="">clear to<input type="color" style="width: 61.5029px;"></wb-value></header>
+                    
+                </wb-step><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-row>
+                        <wb-value>each frame</wb-value>
+                    </wb-row><wb-row>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="frame" id="kb0975b"><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="elapsed" id="k5aadf3"><header><wb-value value="elapsed">elapsed</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-disclosure></wb-disclosure></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="color" fn="stroke" class="" style=""><header><wb-value type="color" value="00FF00" class="">stroke style<input type="color" style="width: 61.5029px;" class="hide"><wb-expression type="color" ns="color" fn="hsl" class="selected-block" style=""><header><wb-value type="number" min="0" max="360" value="0" class="">hue<input type="number" min="0" max="360" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="mod" filtered="true" class=""><header><wb-value type="number" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="kef9207" class=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number" value="360" class="">modulus<input type="number" style="width: 34.7656px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" max="100" value="055" class="selected-value" selected="true">saturation<input type="number" min="0" max="100" style="width: 34.54px;"></wb-value><wb-value type="number" min="0" max="100" value="055" class="">lightness<input type="number" min="0" max="100" style="width: 34.54px;"></wb-value></header>
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="rotate" class="" style=""><header><wb-value type="sprite" class="">rotate<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k433447" class="" instanceof="k6871a" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="number" class="" value="1">by<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="sprite" fn="move" class=""><header><wb-value type="sprite" class="">move<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="ka3e14c" class="" instanceof="k6871a" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="bounceAtEdge" class=""><header><wb-value type="sprite" class="">bounce at edge<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k13119d" class="" instanceof="k6871a" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="sprite" fn="draw" class=""><header><wb-value type="sprite" class="">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k46441" class="" instanceof="k6871a" style=""><header><wb-value type="text" allow="literal" value="sprite" class="">sprite</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context>

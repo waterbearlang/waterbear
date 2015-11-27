@@ -1023,6 +1023,63 @@
                 var newNote = note + length;
                 song += newNote;
             },
+            playChord: function(){
+                var args = [].slice.call(arguments)
+                var oscenv = args[0];
+                var octave = args[1];
+                var freqs = []
+                for (var i = 2; i < args.length; i++) {
+                    var freq;
+                    switch(args[i]){
+                        case "A":
+                            freq = 55.000;
+                            break;
+                        case "A#/Bb":
+                            freq = 58.270;
+                            break;
+                        case "B":
+                            freq = 61.735;
+                            break;
+                        case "C":
+                            freq = 65.406;
+                            break;
+                        case "C#/Db":
+                            freq = 69.296;
+                            break;
+                        case "D":
+                            freq = 73.416;
+                            break;
+                        case "D#/Eb":
+                            freq = 77.782;
+                            break;
+                        case "E":
+                            freq = 82.407;
+                            break;
+                        case "F":
+                            freq = 87.307;
+                            break;
+                        case "F#/Gb":
+                            freq = 92.499;
+                            break;
+                        case "G":
+                            freq = 97.999;
+                            break;
+                        case "G#/Ab":
+                            freq = 103.826;
+                            break;
+                    }
+                    parseInt(octave);
+                    freq = freq * Math.pow(2, octave-1);
+                    freqs.push(freq);
+                }
+                T("interval", {interval:"L4", timeout:"L4"}, function() {
+                    for (var i = 0; i < freqs.length; i++) {
+                        oscenv.noteOnWithFreq(freqs[i], 64);
+                    }
+                }).on("ended", function() {
+                    this.stop();
+                }).set({buddies:oscenv}).start();
+            },
             playAudio: function(audio){
                 audio.play();
             },

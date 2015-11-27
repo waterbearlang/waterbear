@@ -240,6 +240,16 @@
                     <wb-value type="list" allow="literal" options="1,2,3,4,5,6,7,8" value="4">octave</wb-value>
                     <wb-value type="list" allow="literal" options="1/32,1/16,1/8,1/4,1/2,1" value="1/4">beats</wb-value>
                 </wb-step>
+                <wb-step type="sound" ns="sound" fn="playChord">
+                    <wb-value>play chord</wb-value>
+                    <wb-value type="sound">instrument</wb-value>
+                    <wb-value type="list" allow="literal" options="1,2,3,4,5,6,7,8" value="4">octave</wb-value>
+                    <wb-row>
+                        <wb-value type="list" allow="literal" options="C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B,Rest" value="C">note</wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row>
+                </wb-step>
                 <wb-step ns="sound" fn="playAudio">
                     <wb-value type="audio">play audio</wb-value>
                 </wb-step>

@@ -852,7 +852,7 @@
                         ctx.beginPath();
                         ctx.moveTo(start.x, start.y);
                     }else{
-                        ctx.moveTo(start.x, start.y);
+                        ctx.lineTo(start.x, start.y);
                     }
                     points.forEach(function(pt){
                         ctx.lineTo(pt.x, pt.y);

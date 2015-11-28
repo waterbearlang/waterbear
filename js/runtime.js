@@ -737,42 +737,25 @@
                 getContext().lineJoin = joinStyle;
             },
             circle: function circle(pt, rad){
-                util.setLastPoint(pt);
+                var satObject = new SAT.Circle(new SAT.Vector(pt.x, pt.y), rad);
 
-                return new util.Shape(function(ctx){
-                    if (!util.isDrawingPath()){
-                        ctx.beginPath();
-                    }
-
-                    ctx.arc(pt.x, pt.y, rad, 0, Math.PI * 2, true);
-                    this.radius = rad;
-                });
+                return new util.Shape(satObject);
             },
             rectangle: function rectangle(pt, width, height){
                 util.setLastPoint(pt);
 
-                return new util.Shape(function(ctx){
-                    var x = pt.x;
-                    var y = pt.y;
+                // The starting point of the object is ignored for now until sprites come
+                // into the picture
+                var satObject = new SAT.Polygon(new SAT.Vector(), [
+                  new SAT.Vector(pt.x, pt.y),
+                  new SAT.Vector(width + pt.x, pt.y),
+                  new SAT.Vector(width + pt.x, height + pt.y),
+                  new SAT.Vector(pt.x, height + pt.y)
+                ]);;
 
-                    if (!util.isDrawingPath()){
-                        ctx.beginPath();
-                        ctx.moveTo(x, y);
-                    }
-                    else{
-                        ctx.lineTo(x, y);
-                    }
-
-                    ctx.lineTo(x + width, y);
-                    ctx.lineTo(x + width, y + height);
-                    ctx.lineTo(x, y + height);
-                    ctx.lineTo(x, y);
-
-                    this.width = width;
-                    this.height = height;
-                });
+                return new util.Shape(satObject);
             },
-            ellipse: function(pt, rad1, rad2, rot){
+            ellipse: function ellipse(pt, rad1, rad2, rot){
                 util.setLastPoint(pt);
 
                 return new util.Shape(function(ctx){
@@ -795,28 +778,19 @@
                     ctx.lineTo(p1.x, p1.y);
                 });
             },
-            polygon: function(args){
+            polygon: function polygon(args){
                 var points = [].slice.call(arguments);
                 util.setLastPoint(points[0]);
 
-                return new util.Shape(function(ctx){
-                    if (!util.isDrawingPath()){
-                        ctx.beginPath();
-                    }
+                var satObject = new SAT.Polygon(new SAT.Vector(), []);
 
-                    var points = this.pointsArray;
-                    for(var i=0; i < points.length; i++) {
-                        if (i === 0 && !util.isDrawingPath()) {
-                            ctx.moveTo(points[i].x, points[i].y);
-                        }
-                        else {
-                            ctx.lineTo(points[i].x, points[i].y);
-                        }
-                        if(i === points.length-1) {
-                            ctx.lineTo(points[0].x, points[0].y);
-                        }
-                    }
-                }, points);
+                for (var i = 0; i < args.length; i++) {
+                    points[i] = new Vector(points[i].x, points[i].y);
+                };
+
+                satObject.setPoints(points);
+
+                return new util.Shape(satObject);
             },
             lineTo: function(startPoint, toPoint){
                 util.setLastPoint(toPoint);
@@ -1342,7 +1316,7 @@
                 return vec.magnitude();
             },
             degrees: function degrees(vec){
-                return vec.degrees();
+                return Math.atan2(vec.y, vec.x) / (Math.PI / 180);
             },
             normalize: function normalize(vec){
                 return vec.normalize();

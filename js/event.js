@@ -448,6 +448,7 @@
 
     function clearRuntime(){
         Event.keyHandlers = {};
+        Event.mouseOrTouchHandlers = {};
     }
 
     /*****************************

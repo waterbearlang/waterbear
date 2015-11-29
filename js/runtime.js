@@ -802,8 +802,8 @@
 
                 var satObject = new SAT.Polygon(new SAT.Vector(), []);
 
-                for (var i = 0; i < args.length; i++) {
-                    points[i] = new Vector(points[i].x, points[i].y);
+                for (var i = 0; i < points.length; i++) {
+                    points[i] = new SAT.Vector(points[i].x, points[i].y);
                 };
 
                 satObject.setPoints(points);

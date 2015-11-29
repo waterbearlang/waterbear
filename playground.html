@@ -473,6 +473,10 @@
                 <wb-expression type="wb-image" isasset="true" ns="image" fn="get">
                     <wb-value type="text" value="images/mascot/mascot-steampunk.png">image from url</wb-value>
                 </wb-expression>
+				<wb-expression type="wb-image" ns="image" fn="create">
+					<wb-value type="number" value="50">blank image with width</wb-value>
+					<wb-value type="number" value="50">height</wb-value>
+				</wb-expression>
                 <wb-expression type="number" ns="image" fn="getWidth">
                     <wb-value type="wb-image" allow="block">image width</wb-value>
                 </wb-expression>
@@ -491,6 +495,15 @@
                     <wb-value type="wb-image" allow="block">scale</wb-value>
                     <wb-value type="number">by</wb-value>
                 </wb-step>
+				<wb-step ns="image" fn="flipHorizontal">
+					<wb-value type="wb-image" allow="block">flip horizontal</wb-value>
+				</wb-step>
+				<wb-step ns="image" fn="flipVertical">
+					<wb-value type="wb-image" allow="block">flip vertical</wb-value>
+				</wb-step>
+				<wb-step ns="image" fn="flipBoth">
+					<wb-value type="wb-image" allow="block">flip both</wb-value>
+				</wb-step>
                 <wb-step ns="image" fn="setSize">
                     <wb-value type="wb-image" allow="block">set</wb-value>
                     <wb-value type="size">size</wb-value>
@@ -499,6 +512,9 @@
                     <wb-value type="wb-image" allow="block">draw</wb-value>
                     <wb-value type="vector" allow="block">at</wb-value>
                 </wb-step>
+				<wb-context ns="image" fn="drawOnImage">
+					<wb-value type="wb-image" allow="block">draw on</wb-value>
+				</wb-context>
             </wb-accordion>
             <wb-accordion class="math">
                 <header>
@@ -911,6 +927,17 @@
                         <button class="add-item">+</button>
                     </wb-row>
                 </wb-expression>
+				<wb-expression type="shape" ns="shape" fn="regularPolygon">
+					<wb-value type="vector">regular polygon at</wb-value>
+					<wb-value type="number">sides</wb-value>
+					<wb-value type="number">corner radius</wb-value>
+				</wb-expression>
+				<wb-expression type="shape" ns="shape" fn="star">
+					<wb-value type="vector">star at</wb-value>
+					<wb-value type="number">points</wb-value>
+					<wb-value type="number">inner radius</wb-value>
+					<wb-value type="number">outer radius</wb-value>
+				</wb-expression>
                 <wb-expression ns="shape" type="shape" fn="lineTo">
                     <wb-value type="vector">line from</wb-value>
                     <wb-value type="vector">to</wb-value>

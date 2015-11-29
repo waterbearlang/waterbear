@@ -299,11 +299,9 @@
             this._draw = pathArrayOrFunctionOrSAT;
             if (pointsArray != undefined)
                 this.pointsArray = pointsArray;
-        }
-        else if (type(pathArrayOrFunctionOrSAT) === 'array'){
+        }else if (type(pathArrayOrFunctionOrSAT) === 'array'){
             this.pathArray = pathArrayOrFunctionOrSAT;
-        }
-        else if (pathArrayOrFunctionOrSAT instanceof Path) {
+        }else if (pathArrayOrFunctionOrSAT instanceof Path) {
             this.path = pathArrayOrFunctionOrSAT;
         }else if (type(pathArrayOrFunctionOrSAT) === 'polygon'){
             this.satPolygon = pathArrayOrFunctionOrSAT;
@@ -332,15 +330,13 @@
             }
 
             if (type == "connected and closed"){
-                ctx.closePath()
+                ctx.closePath();
             }
 
             drawingPath = false;
-        }
-        else if(this._draw){
+        }else if(this._draw){
             this._draw(ctx);
-        }
-        else if (this.satPolygon){
+        }else if (this.satPolygon){
 
 
             var x = this.satPolygon.points[0].x;
@@ -410,13 +406,17 @@
         .fn();
 
     var equal = new Method()
-        .when(['date', 'date'], function(a,b){ console.log("date === date"); return a.valueOf() === b.valueOf(); })
-        .default(function(a,b){ console.log("Default"); return a === b; })
+        .when(['date', 'date'], function(a,b){
+             return a.valueOf() === b.valueOf();
+         })
+        .default(function(a,b){ return a === b; })
         .fn();
 
     var notEqual = new Method()
-        .when(['date', 'date'], function(a,b){ console.log("date !== date"); return a.valueOf() !== b.valueOf(); })
-        .default(function(a,b){ console.log("Default !=="); return a !== b; })
+        .when(['date', 'date'], function(a,b){
+             return a.valueOf() !== b.valueOf();
+         })
+        .default(function(a,b){ return a !== b; })
         .fn();
 
     // Random methods
@@ -721,7 +721,7 @@
 
                 /* Default whenLoaded callback. */
                 whenLoaded = function () {
-                    // console.log('default asset load');
+                    // default asset load (nothing)
                 };
 
                 /* Try every selector. */
@@ -869,7 +869,7 @@
                         videoSprite.src = source;
                     }else{
                         //Display a message if the file type isn't recognized.
-                        console.log("File type not recognized: " + source);
+                        console.warn("File type not recognized: " + source);
                     }
 
 
@@ -912,10 +912,52 @@
         this._image = new Image();
         this._image.addEventListener('load', selfLoad, false);
         this._image.src = src;
+        this._flipH = false;
+        this._flipV = false;
+        this._canvas = null;
+        this._ctx = null;
     }
 
+    WBImage.create = function createWBImage(width, height){
+        var image = Object.create(WBImage.prototype); // skip constructor
+        image.name = '';
+        image.width = width;
+        image.height = height;
+        image._image = null;
+        image._flipH = false;
+        image._flipV = false;
+        image._canvas = dom.html('canvas', {width: width, height: height});
+        return image;
+    };
+
     WBImage.prototype.draw = function(ctx){
-        ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        if (this._flipH || this._flipV){
+            var sy = this._flipH ? -1 : 1;
+            var sx = this._flipV ? -1 : 1;
+            ctx.save();
+            ctx.scale(sx, sy);
+        }
+        if (this._canvas){
+            ctx.drawImage(this._canvas, -this.width/2, -this.height/2, this.width, this.height);
+        }else{
+            ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        }
+        if (this._flipH || this._flipV){
+            ctx.restore();
+        }
+    };
+
+    WBImage.prototype.getContext = function(){
+        if (!this._ctx){
+            if (!this._canvas){
+                this._canvas = dom.html('canvas', {width: this.width, height: this.height});
+            }
+            this._ctx = this._canvas.getContext('2d');
+            if (this._image){
+                this._ctx.drawImage(this._image, 0, 0);
+            }
+        }
+        return this._ctx;
     };
 
     WBImage.prototype.drawAtPoint = function(ctx, pt){
@@ -956,6 +998,19 @@
         this.height = this.origHeight * scaleFactor;
     };
 
+    WBImage.prototype.flipH = function(){
+        this._flipH = !this._flipH;
+    };
+
+    WBImage.prototype.flipV = function(){
+        this._flipV = !this._flipV;
+    };
+
+    WBImage.prototype.flipBoth = function(){
+        this._flipH = !this._flipH;
+        this._flipV = !this._flipV;
+    };
+
     WBImage.prototype.toString = function(){
         return this.name + "; " + this.width + "px wide by " + this.height + "px high";
     };
@@ -986,8 +1041,9 @@
     }
 
     Sprite.prototype.accelerate = function(speed){
-        var temp = new SAT.Vector(this.facing.x * speed, this.facing.y * speed);
-        this.velocity.add(temp);
+        this.velocity.add(
+            new SAT.Vector(this.facing.x * speed, this.facing.y * speed)
+        );
     }
 
     Sprite.prototype.setVelocity = function(vec){

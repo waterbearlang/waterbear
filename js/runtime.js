@@ -502,6 +502,9 @@
             get: function imageGetExpr(path){
                 return assets.images[path];
             },
+            create: function imageCreate(width, height){
+                return util.WBImage.create(width, height);
+            },
             drawAtPoint: function imageDrawAtPointStep(img, pt){
                 img.drawAtPoint(getContext(), pt);
             },
@@ -522,6 +525,21 @@
             },
             scale: function imageScaleStep(img, scaleFactor){
                 img.scale(scaleFactor);
+            },
+            flipHorizontal: function imageFlipHorizontal(img){
+                img.flipH();
+            },
+            flipVertical: function imageFlipVertical(img){
+                img.flipV();
+            },
+            flipBoth: function imageFlipBoth(img){
+                img.flipBoth();
+            },
+            drawOnImage: function drawOnImageCtx(img){
+                var oldContext = _ctx;
+                _ctx = img.getContext();
+                this.gatherSteps().forEach(runBlock);
+                _ctx = oldContext;
             }
         },
         input: {
@@ -778,7 +796,7 @@
                     ctx.lineTo(p1.x, p1.y);
                 });
             },
-            polygon: function polygon(args){
+            polygon: function(){
                 var points = [].slice.call(arguments);
                 util.setLastPoint(points[0]);
 
@@ -791,6 +809,56 @@
                 satObject.setPoints(points);
 
                 return new util.Shape(satObject);
+            },
+            regularPolygon: function regularPolygon(origin, noSides, radius){
+                var points = [];
+                util.setLastPoint(origin);
+                var dA = 360 / noSides;
+                for (var i = 0; i < noSides; i++){
+                    var angle = util.deg2rad(i * dA);
+                    points.push(util.add(origin, new util.Vector(
+                        Math.cos(angle) * radius,
+                        Math.sin(angle) * radius)));
+                }
+                return new util.Shape(function(ctx){
+                    var start = points[noSides-1];
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                        ctx.moveTo(start.x, start.y);
+                    }else{
+                        ctx.lineTo(start.x, start.y);
+                    }
+                    points.forEach(function(pt){
+                        ctx.lineTo(pt.x, pt.y);
+                    });
+                });
+            },
+            star: function star(origin, noPoints, innerRadius, outerRadius){
+                var points = [];
+                util.setLastPoint(origin);
+                var dA = 360 / (noPoints * 2);
+                for (var i = 0; i < noPoints; i++){
+                    var angle = util.deg2rad(i * 2 * dA);
+                    points.push(util.add(origin, new util.Vector(
+                        Math.cos(angle) * outerRadius,
+                        Math.sin(angle) * outerRadius)));
+                    angle += dA;
+                    points.push(util.add(origin, new util.Vector(
+                        Math.cos(angle) * innerRadius,
+                        Math.sin(angle) * innerRadius)));
+                }
+                return new util.Shape(function(ctx){
+                    var start = points[points.length - 1];
+                    if (!util.isDrawingPath()){
+                        ctx.beginPath();
+                        ctx.moveTo(start.x, start.y);
+                    }else{
+                        ctx.lineTo(start.x, start.y);
+                    }
+                    points.forEach(function(pt){
+                        ctx.lineTo(pt.x, pt.y);
+                    });
+                });
             },
             lineTo: function(startPoint, toPoint){
                 util.setLastPoint(toPoint);

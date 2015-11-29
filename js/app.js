@@ -222,6 +222,8 @@ Event.on(window, 'dragging:mouseup', null, Event.endDrag);
 Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
+Event.on(window, 'touchend', null, Event.handleMouseOrTouchUp);
+Event.on(window, 'mouseup', null, Event.handleMouseOrTouchUp);
 
 Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);

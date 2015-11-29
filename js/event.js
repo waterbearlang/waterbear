@@ -450,6 +450,28 @@
         Event.keyHandlers = {};
     }
 
+    /*****************************
+    *
+    *   Mouse and Touch events
+    *
+    ******************************/
+
+    function handleMouseOrTouchUp(evt) {
+        if(Event.mouseOrTouchHandlers['up']) {
+            Event.mouseOrTouchHandlers['up'].forEach(function(handler){
+                handler(evt);
+            });
+        }
+    }
+
+    function mouseOrTouchUp(handler) {
+        if (! Event.mouseOrTouchHandlers['up'] ){
+            Event.mouseOrTouchHandlers['up'] = [];
+        }
+        Event.mouseOrTouchHandlers['up'].push(handler);
+    }
+
+
     window.Event = {
         on: on,
         onKeyDown: onKeyDown, // special version of on to listen for specific keys
@@ -478,7 +500,10 @@
         handleKeyUp: handleKeyUp,
         handleKeyDown: handleKeyDown,
         registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents,
-        keyForEvent: keyForEvent
+        keyForEvent: keyForEvent,
+        mouseOrTouchHandlers: {},
+        handleMouseOrTouchUp: handleMouseOrTouchUp,
+        mouseOrTouchUp: mouseOrTouchUp
     };
 
 })();

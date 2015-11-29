@@ -564,6 +564,12 @@
                     self.gatherSteps().forEach(runBlock);
                 });
             },
+            whenMouseReleased: function inputWhenMouseReleasedCtx(key){
+                var self = this;
+                Event.mouseOrTouchUp(function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            }
         },
 
         math: {

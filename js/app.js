@@ -202,7 +202,8 @@ function handleExampleButton(evt){
                 handleExample('Dance', 'dance'),
                 handleExample('Simple Bounce', 'bounce'),
                 handleExample('Simple Move', 'simple_move'),
-                handleExample('Simple Pong', 'simple_pong')
+                handleExample('Simple Pong', 'simple_pong'),
+                handleExample("Twinkling Song", 'twinkling_song')
             ]
         }
     );

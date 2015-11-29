@@ -1026,7 +1026,6 @@
             playChord: function(){
                 var args = [].slice.call(arguments)
                 var oscenv = args[0];
-                // var octave = args[1];
                 var freqs = []
                 for (var i = 1; i < args.length; i++) {
                     var freq;

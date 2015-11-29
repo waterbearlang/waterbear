@@ -564,9 +564,15 @@
                     self.gatherSteps().forEach(runBlock);
                 });
             },
-            whenMouseReleased: function inputWhenMouseReleasedCtx(key){
+            whenMousePressed: function(){
                 var self = this;
-                Event.mouseOrTouchUp(function(){
+                Event.mouseOrTouchEvent('down', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            },
+            whenMouseReleased: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('up', function(){
                     self.gatherSteps().forEach(runBlock);
                 });
             }

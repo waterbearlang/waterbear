@@ -456,19 +456,27 @@
     *
     ******************************/
 
-    function handleMouseOrTouchUp(evt) {
-        if(Event.mouseOrTouchHandlers['up']) {
-            Event.mouseOrTouchHandlers['up'].forEach(function(handler){
+    function handleMouseOrTouchEvent(type, evt) {
+        if(Event.mouseOrTouchHandlers[type]) {
+            Event.mouseOrTouchHandlers[type].forEach(function(handler){
                 handler(evt);
             });
         }
     }
 
-    function mouseOrTouchUp(handler) {
-        if (! Event.mouseOrTouchHandlers['up'] ){
-            Event.mouseOrTouchHandlers['up'] = [];
+    function handleMouseOrTouchUp(evt) {
+        handleMouseOrTouchEvent('up', evt);
+    }
+
+    function handleMouseOrTouchDown(evt) {
+        handleMouseOrTouchEvent('down', evt);
+    }
+
+    function mouseOrTouchEvent(type, handler) {
+        if (! Event.mouseOrTouchHandlers[type] ){
+            Event.mouseOrTouchHandlers[type] = [];
         }
-        Event.mouseOrTouchHandlers['up'].push(handler);
+        Event.mouseOrTouchHandlers[type].push(handler);
     }
 
 
@@ -503,7 +511,8 @@
         keyForEvent: keyForEvent,
         mouseOrTouchHandlers: {},
         handleMouseOrTouchUp: handleMouseOrTouchUp,
-        mouseOrTouchUp: mouseOrTouchUp
+        mouseOrTouchEvent: mouseOrTouchEvent,
+        handleMouseOrTouchDown: handleMouseOrTouchDown,
     };
 
 })();

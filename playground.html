@@ -228,21 +228,22 @@
                 </header>
                 <p>Play and manipulate existing sound files or synthesize new sounds.</p>
                 <wb-expression type="sound" ns="sound" fn="get">
-                    <wb-value type="list" allow="literal" options="sin, saw, tri, pulse, fami" value="sin">instrument</wb-value>
+                    <wb-value>synth</wb-value>
+                    <wb-value type="list" allow="literal" options="sin, saw, tri, pulse, fami" value="sin">wave</wb-value>
                     <wb-value type="number" value="10">attack</wb-value>
                     <wb-value type="number" value="300">release</wb-value>
                 </wb-expression>
                 <wb-expression type="audio" ns="sound" fn="getAudio">
                     <wb-value type="text" value="/sounds/pianoA.wav">audio</wb-value>
                 </wb-expression>
-                <wb-step ns="sound" fn="playNote">
+                <wb-step ns="sound" fn="addNote">
                     <wb-value type="list" allow="literal" options="C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B,Rest" value="C">note</wb-value>
                     <wb-value type="list" allow="literal" options="1,2,3,4,5,6,7,8" value="4">octave</wb-value>
                     <wb-value type="list" allow="literal" options="1/32,1/16,1/8,1/4,1/2,1" value="1/4">beats</wb-value>
                 </wb-step>
                 <wb-step type="sound" ns="sound" fn="playChord">
                     <wb-value>play chord</wb-value>
-                    <wb-value type="sound">instrument</wb-value>
+                    <wb-value type="sound">synth</wb-value>
                     <wb-value type="list" allow="literal" options="1,2,3,4,5,6,7,8" value="4">octave</wb-value>
                     <wb-row>
                         <wb-value type="list" allow="literal" options="C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B,Rest" value="C">note</wb-value>
@@ -253,25 +254,24 @@
                 <wb-step ns="sound" fn="playAudio">
                     <wb-value type="audio">play audio</wb-value>
                 </wb-step>
-                <wb-step ns="sound" fn="playInstrument">
-                    <wb-value type="sound">play instrument</wb-value>
+                <wb-step ns="sound" fn="playNotes">
+                    <wb-value type="sound">play notes</wb-value>
                 </wb-step>
-                <wb-step ns="sound" fn="mml">
-                    <wb-value type="sound">instrument</wb-value>
+                <wb-step ns="sound" fn="playMML">
+                    <wb-value type="sound">synth</wb-value>
                     <wb-value type="text">mml</wb-value>
                 </wb-step>
-                <wb-step ns="sound" fn="tempo">
+                <wb-step ns="sound" fn="tempoChange">
                     <wb-value type="number" value="120">set tempo</wb-value>
                 </wb-step>
-                <wb-step ns="sound" fn="pause">
+                <wb-step ns="sound" fn="pauseAudio">
                     <wb-value type="audio">pause</wb-value>
                 </wb-step>
                 <wb-step ns="sound" fn="keys">
                     <wb-value>keys</wb-value>
-                    <wb-value type="list" allow="literal" options="sin, saw, tri, pulse, fami" value="sin">wave</wb-value>
-                    <wb-value type="number" value="0.25">vol</wb-value>
+                    <wb-value type="sound">synth</wb-value>
                 </wb-step>
-                <wb-step ns="sound" fn="effect">
+                <wb-step ns="sound" fn="soundEffect">
                     <wb-value type="list" allow="literal" options="laser, alarm" value="laser">sound effect</wb-value>
                 </wb-step>
             </wb-accordion>

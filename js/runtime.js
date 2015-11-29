@@ -1026,9 +1026,9 @@
             playChord: function(){
                 var args = [].slice.call(arguments)
                 var oscenv = args[0];
-                var octave = args[1];
+                // var octave = args[1];
                 var freqs = []
-                for (var i = 2; i < args.length; i++) {
+                for (var i = 1; i < args.length; i++) {
                     var freq;
                     switch(args[i]){
                         case "A":
@@ -1068,6 +1068,7 @@
                             freq = 103.826;
                             break;
                     }
+                    var octave = args[++i];
                     parseInt(octave);
                     freq = freq * Math.pow(2, octave-1);
                     freqs.push(freq);

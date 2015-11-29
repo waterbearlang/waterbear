@@ -204,34 +204,34 @@ QUnit.test('add',function(assert){
     assert.ok(math.add(3,2) === 5);
     var numAdd = math.add(array,1);
     assert.ok(numAdd[0] === 3);
-    
+
     //array to array
     var arrAdd = math.add(array,array2);
     assert.ok(arrAdd[0] === 2);
     assert.ok(arrAdd[4] === 5);
-    
+
     //array to vector
     var vecArray = [new util.Vector(2,2)];
     var vector1 = new util.Vector(1,1);
     var vecAdd = math.add(vecArray,vector1);
     assert.ok(vecAdd[0].x === 3);
     assert.ok(vecAdd[0].y === 3);
-    
+
     //vector to vector
     var vector2 = new util.Vector(5,5);
     var newVec = math.add(vector1,vector2);
     assert.ok(newVec.x === 6);
     assert.ok(newVec.y === 6);
-    
+
     //vector to number
     var newNum = math.add(vector1,4);
     assert.ok(newNum.x === 5);
     assert.ok(newNum.y === 5);
-    
+
     //number to number
     var num = math.add(4,3);
     assert.ok(num === 7);
-    
+
 });
 QUnit.test('subtract',function(assert){
     var math = runtime.math;
@@ -242,7 +242,7 @@ QUnit.test('subtract',function(assert){
     var numSub = math.subtract(array,1);
     assert.ok(numSub[0] === 1);
     assert.ok(numSub[4] === 4);
-    
+
     /*array from array
     var arrSub = math.subtract(array2,array);
     assert.ok(arrSub[0] === 2);
@@ -254,18 +254,18 @@ QUnit.test('subtract',function(assert){
     var vecSub = math.subtract(vecArray,vector1);
     assert.ok(vecSub[0].x === 1);
     assert.ok(vecSub[0].y === 1);
-    
+
     //vector from vector
     var vector2 = new util.Vector(5,5);
     var newVec = math.subtract(vector2,vector1);
     assert.ok(newVec.x === 4);
     assert.ok(newVec.y === 4);
-    
+
     //vector from number
     var newNum = math.subtract(vector2,4);
     assert.ok(newNum.x === 1);
     assert.ok(newNum.y === 1);
-    
+
     //number from number
     var num = math.subtract(4,3);
     assert.ok(num === 1);
@@ -273,204 +273,204 @@ QUnit.test('subtract',function(assert){
 QUnit.test('multiply',function(assert){
     var math = runtime.math;
     var array = [2,3,4];
-    
+
     //number by number
     assert.ok(math.multiply(4,3) === 12);
-    
+
     //array by number
     var arrMult = math.multiply(array,2);
     assert.ok(arrMult[0] === 4);
     assert.ok(arrMult[2] == 8);
-    
+
     //array by vector
     var vecMult = math.multiply(array,new util.Vector(1,1));
     assert.ok(vecMult[0].x === 2);
     assert.ok(vecMult[0].y === 2);
-    
+
     //vector by number
     var vec = math.multiply(new util.Vector(1,1),5);
     assert.ok(vec.x === 5);
     assert.ok(vec.y === 5);
-    
+
     //vector by vector
     var dotProd = math.multiply(new util.Vector(1,1), new util.Vector(4,4));
     assert.ok(dotProd === 8);
-    
+
     //number by vector
     var newVec = math.multiply(4,new util.Vector(1,1));
     assert.ok(newVec.x === 4);
     assert.ok(newVec.y === 4);
-    
+
 });
 QUnit.test('divide',function(assert){
     var math = runtime.math;
-    
+
     //array by number
     var array = [2,4,6];
     var arrDiv = math.divide(array,2);
     assert.ok(arrDiv[2] === 3);
-    
+
     //vector by number
     var vec = new util.Vector(4,4);
     var vecDiv = math.divide(vec,2);
     assert.ok(vecDiv.x === 2);
     assert.ok(vecDiv.y === 2);
-    
+
     //number by number
     assert.ok(math.divide(4,2) === 2);
     //assert.ok(math.divide(4,0) === NaN);
-    
+
 });
 QUnit.test('equal',function(assert){
     var math = runtime.math;
-    
+
     //numbers
     assert.ok(math.equal(5,5));
-    
+
     //vectors
     var vec = new util.Vector(1,1);
     assert.ok(math.equal(vec,vec));
-    
+
     //arrays
     var array = [2,2,2];
     assert.ok(math.equal(array,array));
-    
+
 });
 QUnit.test('notequal',function(assert){
     var math = runtime.math;
-    
+
     //numbers
     assert.ok(math.notEqual(4,2));
-    
+
     //vectors
     assert.ok(math.notEqual(new util.Vector(1,1),new util.Vector(1,1)));
-    
+
     //arrays
     assert.ok(math.notEqual([2,2,2],[2,2,2]));
-    
+
 });
 QUnit.test('lessthan',function(assert){
     var math = runtime.math;
-    
+
     //numbers
     assert.ok(math.lt(5,8));
     assert.raises(math.lt(8,8));
-    
+
     //dates
     var date1 = new Date(1990,3,4);
     var date2 = new Date(1995,5,3);
     assert.ok(math.lt(date1,date2));
     assert.raises(math.lt(date1,date1));
-    
+
 });
 QUnit.test('lessthanequal',function(assert){
     var math = runtime.math;
-    
-    //numbers 
+
+    //numbers
     assert.ok(math.lte(5,7));
     assert.ok(math.lte(4,4));
-    
+
     //dates
     var date1 = new Date(1990,3,4);
     var date2 = new Date(1995,5,3);
     var date3 = new Date(1990,3,4);
     assert.ok(math.lte(date1,date2));
     assert.ok(math.lte(date1,date3));
-    
+
 });
 QUnit.test('greaterthan',function(assert){
     var math = runtime.math;
-    
+
     //numbers
     assert.ok(math.gt(8,5));
     assert.raises(math.gt(8,8));
-    
+
     //dates
     var date1 = new Date(1990,3,4);
     var date2 = new Date(1995,5,3);
     assert.ok(math.gt(date2,date1));
     assert.raises(math.gt(date1,date1));
-    
+
 });
 QUnit.test('greaterthanequal',function(assert){
     var math = runtime.math;
-    
-    //numbers 
+
+    //numbers
     assert.ok(math.gte(7,5));
     assert.ok(math.gte(4,4));
-    
+
     //dates
     var date1 = new Date(1990,3,4);
     var date2 = new Date(1995,5,3);
     var date3 = new Date(1990,3,4);
     assert.ok(math.gte(date2,date1));
     assert.ok(math.gte(date1,date3));
-    
+
 });
 QUnit.test('mod',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.mod(4,2) === 0);
     assert.ok(math.mod(4,3) === 1);
 });
 QUnit.test('round',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.round(4.5632) === 5);
     assert.ok(math.round(3.21232) === 3);
 });
 QUnit.test('abs',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.abs(5.32) === 5.32);
     assert.ok(math.abs(-4.5) === 4.5);
 });
 QUnit.test('sgn',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.sgn(5.32) === 1);
     assert.ok(math.sgn(-4.33) === -1);
 });
 QUnit.test('floor',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.floor(4.9999) === 4);
     assert.ok(math.floor(-3.9999) === -4);
 });
 QUnit.test('ceiling',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.ceil(4.1) === 5);
     assert.ok(math.ceil(-5.1) === -5);
 });
 QUnit.test('sqrt',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.sqrt(16) === 4);
     //assert.ok(math.sqrt(-4) === NaN);
 });
 QUnit.test('cbrt',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.cbrt(8) === 2);
     //assert.ok(math.cbrt(-8) === NaN);
 });
 QUnit.test('root',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.root(16,4) === 2);
     //assert.ok(math.root(-16,4) === NaN);
 });
 QUnit.test('log',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.log(50,10) === 1.6989700043360185);
 });
 QUnit.test('max',function(assert){
     var math = runtime.math;
     var array1 = [4,6,2,1,7];
     var array2 = [-4,-1,-10];
-    
+
     assert.ok(math.max(array1) === 7);
     assert.ok(math.max(array2) === -1);
 });
@@ -478,7 +478,7 @@ QUnit.test('min',function(assert){
     var math = runtime.math;
     var array1 = [4,1,6,4];
     var array2 = [-1,-6,-11];
-    
+
     assert.ok(math.min(array1) === 1);
     assert.ok(math.min(array2) === -11);
 });
@@ -489,57 +489,57 @@ QUnit.test('cos',function(assert){
 });
 QUnit.test('sin',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.sin(45) === 0.7071067811865475);
 });
 QUnit.test('tan',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.tan(45) === 0.9999999999999999);
 });
 QUnit.test('asin',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.asin(45) === 0.9033391107665127);
 });
 QUnit.test('acos',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.acos(45) === 0.6674572160283838);
 })
 QUnit.test('atan',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.atan(45) === 0.6657737500283538);
 });
 QUnit.test('pow',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.pow(2,3) === 8);
 });
 QUnit.test('pi',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.pi() === 3.141592653589793);
 });
 QUnit.test('e',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.e() === 2.718281828459045);
 });
 QUnit.test('tau',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.tau() === 6.283185307179586);
 });
 QUnit.test('deg2rad',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.deg2rad(45) === 0.7853981633974483);
 });
 QUnit.test('rad2deg',function(assert){
     var math = runtime.math;
-    
+
     assert.ok(math.rad2deg(0.7853981633974483) === 45);
 });
 QUnit.test('stringtonumber',function(assert){
@@ -1327,6 +1327,145 @@ function mockLocation(options) {
 
     return location;
 }
+
+QUnit.module('date');
+QUnit.test('create',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000, 01, 01);
+    var date2 = new Date("Jan 01 2000");
+
+    var date3 = date.create(2000, 01, -1);
+    var date4 = new Date("Dec 30 1999");
+
+    var date5 = date.create(2000, -1, 01);
+    var date6 = new Date("Nov 01 1999");
+
+    var date7 = date.create(0, 01, 01);
+    var date8 = new Date("Jan 01 1900");
+
+    assert.ok(date1.valueOf() === date2.valueOf());
+    assert.ok(date3.valueOf() === date4.valueOf());
+    assert.ok(date5.valueOf() === date6.valueOf());
+    assert.ok(date7.valueOf() === date8.valueOf());
+});
+
+QUnit.test('now',function(assert){
+    var date = runtime.date;
+
+    var today = date.now();
+    var day = new Date();
+    day.setHours(0,0,0,0);
+
+    assert.ok(today.valueOf() === day.valueOf());
+});
+
+QUnit.test('addDays',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var date2 = new Date("Jan 20 2000");
+    var date5 = new Date("Dec 27 1999");
+
+    var date3 = date.addDays(date1, 19);
+    var date4 = date.addDays(date1, -5);
+
+    assert.ok(date3.valueOf() === date2.valueOf());
+    assert.ok(date4.valueOf() === date5.valueOf());
+});
+
+QUnit.test('addMonths',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var date2 = new Date("May 01 2000");
+    var date5 = new Date("Nov 01 1999");
+
+    var date3 = date.addMonths(date1, 4);
+    var date4 = date.addMonths(date1, -2);
+
+    assert.ok(date3.valueOf() === date2.valueOf());
+    assert.ok(date4.valueOf() === date5.valueOf());
+});
+
+QUnit.test('addYears',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var date2 = new Date("Jan 01 2010");
+    var date5 = new Date("Jan 01 1990");
+
+    var date3 = date.addYears(date1, 10);
+    var date4 = date.addYears(date1, -10);
+
+    assert.ok(date3.valueOf() === date2.valueOf());
+    assert.ok(date4.valueOf() === date5.valueOf());
+});
+
+QUnit.test('dayOfWeek',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var day1 = date.dayOfWeek(date1);
+
+    var date2 = date.create(2000,01,03);
+    var day2 = date.dayOfWeek(date2);
+
+    assert.ok(day1 === 6);
+    assert.ok(day2 === 1);
+});
+
+QUnit.test('getDay',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var day1 = date.getDay(date1);
+
+    var date2 = date.create(2000,01,25);
+    var day2 = date.getDay(date2);
+
+    assert.ok(day1 === 1);
+    assert.ok(day2 === 25);
+});
+
+QUnit.test('getMonth',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var month1 = date.getMonth(date1);
+
+    var date2 = date.create(2000,10,25);
+    var month2 = date.getMonth(date2);
+
+    assert.ok(month1 === 1);
+    assert.ok(month2 === 10);
+});
+
+QUnit.test('getMonthName',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var month1 = date.getMonthName(date1);
+
+    var date2 = date.create(2000,10,25);
+    var month2 = date.getMonthName(date2);
+
+    assert.ok(month1 === "January");
+    assert.ok(month2 === "October");
+});
+
+QUnit.test('getYear',function(assert){
+    var date = runtime.date;
+
+    var date1 = date.create(2000,01,01);
+    var year1 = date.getYear(date1);
+
+    var date2 = date.create(2020,10,25);
+    var year2 = date.getYear(date2);
+
+    assert.ok(year1 === 2000);
+    assert.ok(year2 === 2020);
+});
 
 /* TODO: sizes */
 /* TODO: text */

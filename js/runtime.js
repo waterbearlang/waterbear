@@ -1366,7 +1366,7 @@
                 return date.getDate();
             },
             getMonth: function(date){
-                return date.getMonth();
+                return date.getMonth()+1;
             },
             getMonthName: function(date){
                 return ['January', 'February', 'March', 'April', 'May', 'June',

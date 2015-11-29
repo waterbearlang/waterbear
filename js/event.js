@@ -473,6 +473,10 @@
         handleMouseOrTouchEvent('down', evt);
     }
 
+    function handleMouseOrTouchMove(evt) {
+        handleMouseOrTouchEvent('move', evt);
+    }
+
     function mouseOrTouchEvent(type, handler) {
         if (! Event.mouseOrTouchHandlers[type] ){
             Event.mouseOrTouchHandlers[type] = [];
@@ -514,6 +518,7 @@
         handleMouseOrTouchUp: handleMouseOrTouchUp,
         mouseOrTouchEvent: mouseOrTouchEvent,
         handleMouseOrTouchDown: handleMouseOrTouchDown,
+        handleMouseOrTouchMove: handleMouseOrTouchMove
     };
 
 })();

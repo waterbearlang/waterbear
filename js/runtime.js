@@ -575,6 +575,12 @@
                 Event.mouseOrTouchEvent('up', function(){
                     self.gatherSteps().forEach(runBlock);
                 });
+            },
+            whenMouseMoves: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('move', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
             }
         },
 

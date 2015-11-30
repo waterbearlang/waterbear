@@ -78,7 +78,7 @@ wb-workspace{
 }
 
 wb-workspace > header{
-    flex: 0 0 34px;
+    display: hidden;
 }
 
 wb-workspace > output{

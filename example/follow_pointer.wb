@@ -1,0 +1,123 @@
+<wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="array" ns="control" fn="getVariable" id="ka77e6a" class=""><header><wb-value type="text" allow="literal" value="path_vectors" class=""><input type="text" style="width: 79.8038px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="array" ns="array" fn="create" class="" style=""><header><wb-row>
+                        <wb-value type="any"><input type="any" style="width: 30px;"></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>create array</wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="shape" fn="setLineWidth" class="" style=""><header><wb-value type="number" value="1" class="">line width<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                </wb-step><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="" value="#000000">clear to<input type="color" style="width: 58.5081px;"></wb-value></header>
+                    
+                </wb-step><wb-context ns="input" fn="whenPointerMoves" class="" style=""><header><wb-value>when pointer moves</wb-value><wb-disclosure></wb-disclosure></header>
+                    
+                <wb-contains class=""><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 34.4624px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="boolean" fn="not" class="" style=""><header><wb-value type="boolean" value="true" class="">not<select style="width: 34.4624px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="input" fn="pointerDown" class="" style=""><header><wb-value>Pointer Down</wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+                    
+                <wb-contains class=""><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#393ffd" class="">fill style<input type="color" style="width: 53.1087px;" class="hide"><wb-expression type="color" ns="color" fn="rgb" filtered="true" class=""><header><wb-value type="number" min="0" max="255" value="0" class="">red<input type="number" min="0" max="255" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="1">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="256" class="">to<input type="number" style="width: 33.6463px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" max="255" value="0" class="">green<input type="number" min="0" max="255" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="1">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="256">to<input type="number" style="width: 33.6463px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" max="255" value="0" class="">blue<input type="number" min="0" max="255" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="1">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="256">to<input type="number" style="width: 33.6463px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="color" fn="stroke" class="" style=""><header><wb-value type="color" value="#ff2e70" class="">stroke style<input type="color" style="width: 52.4827px;" class=""></wb-value></header>
+                    
+                </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" class="" style=""><header><wb-value type="vector" class="">rectangle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="input" fn="pointerX" filtered="true" class="" style=""><header><wb-value>Pointer x</wb-value></header>
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="input" fn="pointerY" filtered="true" class="" style=""><header><wb-value>Pointer y</wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="10">width<input type="number" min="0" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="10" class="">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="15">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="5">height<input type="number" min="0" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="selected-block" style=""><header><wb-value type="number" value="10" class="">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="20" class="selected-value" selected="true">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context></wb-contains></wb-context><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-row>
+                        <wb-value>each frame</wb-value>
+                    </wb-row><wb-row>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="frame" id="k8eda59"><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="elapsed" id="kff1443"><header><wb-value value="elapsed">elapsed</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-disclosure></wb-disclosure></header>
+                    
+                    
+                <wb-contains class=""><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 34.4624px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="input" fn="pointerDown" class=""><header><wb-value>Pointer Down</wb-value></header>
+                    
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+                    
+                <wb-contains class=""><wb-step ns="color" fn="fill" class=""><header><wb-value type="color" value="#ffec00" class="">fill style<input type="color" style="width: 52.2702px;" class="hide"><wb-expression type="color" ns="color" fn="rgb" filtered="true" class="" style=""><header><wb-value type="number" min="0" max="255" value="0" class="">red<input type="number" min="0" max="255" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="1" class="">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="256" class="">to<input type="number" style="width: 33.6463px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" max="255" value="0" class="">green<input type="number" min="0" max="255" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="1" class="">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="256" class="">to<input type="number" style="width: 33.6463px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" max="255" value="0" class="">blue<input type="number" min="0" max="255" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="1">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="256">to<input type="number" style="width: 33.6463px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="color" fn="stroke" class=""><header><wb-value type="color" value="#5041ff" class="">stroke style<input type="color" style="width: 52.6951px;"></wb-value></header>
+                    
+                </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="circle" class="" style=""><header><wb-value type="vector" class="">circle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="input" fn="pointerX" class="" style=""><header><wb-value>Pointer x</wb-value></header>
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="input" fn="pointerY" class="" style=""><header><wb-value>Pointer y</wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="5">radius<input type="number" min="0" style="width: 30px;" class="hide"><wb-expression type="number" ns="random" fn="randInt" class="" style=""><header><wb-value type="number" value="5" class="">random int from<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="10">to<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context></wb-contains></wb-context><wb-context ns="input" fn="whenKeyPressed" class="" style=""><header><wb-value type="list" allow="literal" value="space" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta" class="">when<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>0</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>key pressed</wb-value><wb-disclosure></wb-disclosure></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape">clear to<input type="color" style="width: 58.5081px;"></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context>

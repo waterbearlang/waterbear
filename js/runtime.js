@@ -99,7 +99,7 @@ function test(evt) {
 var transitionEvent = whichTransitionEvent();
 Event.on('#playgroundBox', transitionEvent, null, function(){
     handleResize();
-    if(document.getElementById('playgroundBox').style.width === '53%') {
+    if(document.getElementById('playgroundBox').style.width === '53.5%') {
     app.playgroundReady();
     }
 });

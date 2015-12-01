@@ -986,7 +986,7 @@
                 var audio = T("audio", {load:file});
                 return audio;
             },
-            playNote: function(note, octave, beats){
+            addNote: function(note, octave, beats){
                 switch(note){
                     case "A":
                         note = "a";
@@ -1068,9 +1068,8 @@
             playChord: function(){
                 var args = [].slice.call(arguments)
                 var oscenv = args[0];
-                var octave = args[1];
                 var freqs = []
-                for (var i = 2; i < args.length; i++) {
+                for (var i = 1; i < args.length; i++) {
                     var freq;
                     switch(args[i]){
                         case "A":
@@ -1110,6 +1109,7 @@
                             freq = 103.826;
                             break;
                     }
+                    var octave = args[++i];
                     parseInt(octave);
                     freq = freq * Math.pow(2, octave-1);
                     freqs.push(freq);
@@ -1125,7 +1125,7 @@
             playAudio: function(audio){
                 audio.play();
             },
-            playInstrument: function(sound){
+            playNotes: function(sound){
                 console.log(song);
                 T("mml", {mml:song}, sound).on("ended", function() {
                     sound.pause();
@@ -1133,24 +1133,22 @@
                 }).start();
                 song = "o4 l4 V12 ";
             },
-            mml: function(sound, mml){
+            playMML: function(sound, mml){
                 var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
                 T("mml", {mml:mml}, gen).on("ended", function() {
                     gen.pause();
                     this.stop();
                 }).start();
             },
-            tempo: function(tempo){
+            tempoChange: function(tempo){
                 song += ("t" + tempo + " ");
             },
-            pause: function(sound){
+            pauseAudio: function(sound){
                 if (assets.sounds[sound.name]){
                     assets.sounds[sound.name].pause();
                 }
             },
-            keys: function(wave, vol){
-                var synth = T("OscGen", {wave:wave, mul:vol}).play();
-
+            keys: function(synth, vol){
                 var keydict = T("ndict.key");
                 var midicps = T("midicps");
                 T("keyboard").on("keydown", function(e) {
@@ -1168,7 +1166,7 @@
 
                 alert("Play notes on the keyboard");
             },
-            effect: function(effect){
+            soundEffect: function(effect){
                 switch(effect) {
                     case "laser":
                         var table = [1760, [110, "200ms"]];

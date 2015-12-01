@@ -15,10 +15,304 @@ QUnit.module('control');
 
 /* sprite */
 
-// QUnit.module('sprites');
-// QUnit.test('create', function(assert){
+QUnit.module('sprites');
+QUnit.test('create', function(assert){
+    var sprite_empty = runtime.sprite.create();
+    var image = runtime.sprite.create( runtime.image.get('images/mascot/mascot-steampunk.png') );
+    var sprite_image = runtime.sprite.create( image );
+    var position = new util.Vector(2,2);
+    var rectangle = runtime.shape.rectangle(position,1,1);
+    var sprite_shape = runtime.sprite.create( rectangle );
+    var sprite = runtime.sprite.create();
+    var sprite_sprite = runtime.sprite.create( sprite );
 
-// });
+    assert.ok(sprite_empty);
+    assert.ok(sprite_image);
+    assert.ok(sprite_image.drawable === image);
+    assert.ok(sprite_shape);
+    assert.ok(sprite_shape.drawable === rectangle);
+    assert.ok(sprite_sprite);
+    assert.ok(sprite_sprite.drawable = sprite);
+});
+QUnit.test('check for collision, colliding rectangles', function(assert){
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var rectangle2 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var rectangle3 = runtime.shape.rectangle(new util.Vector(9,9),10,10);
+    var sprite1 = runtime.sprite.create( rectangle1 );
+    var sprite2 = runtime.sprite.create( rectangle2 );
+    var sprite3 = runtime.sprite.create( rectangle3 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite1.checkForCollision(sprite3));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite3));
+    assert.ok(sprite3.checkForCollision(sprite1));
+    assert.ok(sprite3.checkForCollision(sprite2));
+    assert.ok(sprite3.checkForCollision(sprite3));
+});
+QUnit.test('check for collision, just touching rectangles', function(assert){
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var rectangle2 = runtime.shape.rectangle(new util.Vector(-10,-10),10,10);
+    var rectangle3 = runtime.shape.rectangle(new util.Vector(10,10),10,10);
+    var sprite1 = runtime.sprite.create( rectangle1 );
+    var sprite2 = runtime.sprite.create( rectangle2 );
+    var sprite3 = runtime.sprite.create( rectangle3 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite1.checkForCollision(sprite3));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite3));
+    assert.ok(sprite3.checkForCollision(sprite1));
+    assert.ok(!sprite3.checkForCollision(sprite2));
+    assert.ok(sprite3.checkForCollision(sprite3));
+});
+QUnit.test('check for collision, no collision rectangles', function(assert){
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var rectangle2 = runtime.shape.rectangle(new util.Vector(-10.1,-10.1),10,10);
+    var rectangle3 = runtime.shape.rectangle(new util.Vector(0,10.1),10,10);
+    var sprite1 = runtime.sprite.create( rectangle1 );
+    var sprite2 = runtime.sprite.create( rectangle2 );
+    var sprite3 = runtime.sprite.create( rectangle3 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(!sprite1.checkForCollision(sprite2));
+    assert.ok(!sprite1.checkForCollision(sprite3));
+    assert.ok(!sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite3));
+    assert.ok(!sprite3.checkForCollision(sprite1));
+    assert.ok(!sprite3.checkForCollision(sprite2));
+    assert.ok(sprite3.checkForCollision(sprite3));
+});
+QUnit.test('check for collision, colliding rectangle and circle', function(assert){
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var circle1 = runtime.shape.circle(new util.Vector(0,0),10);
+    var sprite1 = runtime.sprite.create( rectangle1 );
+    var sprite2 = runtime.sprite.create( circle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, just touching rectangle and circle', function(assert){
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var circle1 = runtime.shape.circle(new util.Vector(20,0),10);
+    var sprite1 = runtime.sprite.create( rectangle1 );
+    var sprite2 = runtime.sprite.create( circle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, not colliding rectangle and circle', function(assert){
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(-0.1,0),10,10);
+    var circle1 = runtime.shape.circle(new util.Vector(20,0),10);
+    var sprite1 = runtime.sprite.create( rectangle1 );
+    var sprite2 = runtime.sprite.create( circle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(!sprite1.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, colliding circles', function(assert){
+    var circle1 = runtime.shape.circle(new util.Vector(0,0),10);
+    var circle2 = runtime.shape.circle(new util.Vector(0,0),5);
+    var sprite1 = runtime.sprite.create( circle1 );
+    var sprite2 = runtime.sprite.create( circle2 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, touching circles', function(assert){
+    var circle1 = runtime.shape.circle(new util.Vector(15,0),10);
+    var circle2 = runtime.shape.circle(new util.Vector(0,0),5);
+    var sprite1 = runtime.sprite.create( circle1 );
+    var sprite2 = runtime.sprite.create( circle2 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, not colliding circles', function(assert){
+    var circle1 = runtime.shape.circle(new util.Vector(15,0),10);
+    var circle2 = runtime.shape.circle(new util.Vector(0,-1),5);
+    var sprite1 = runtime.sprite.create( circle1 );
+    var sprite2 = runtime.sprite.create( circle2 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(!sprite1.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, colliding polygons', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var polygon2 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( polygon2 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, touching polygons', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(20,20),
+        new util.Vector(20,30),
+        new util.Vector(30,30),
+        new util.Vector(10,10)
+        );
+    var polygon2 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( polygon2 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, no colliding polygons', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(20,20),
+        new util.Vector(20,30),
+        new util.Vector(30,30),
+        new util.Vector(20,30)
+        );
+    var polygon2 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( polygon2 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(!sprite1.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, colliding rectangle and polygon', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(0,0),10,10);
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( rectangle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, touching rectangle and polygon', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(10,10),10,10);
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( rectangle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, no colliding rectangle and polygon', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var rectangle1 = runtime.shape.rectangle(new util.Vector(10,10.1),10,10);
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( rectangle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(!sprite1.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, colliding circle and polygon', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var circle1 = runtime.shape.circle(new util.Vector(0,0),10);
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( circle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, touching circle and polygon', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var circle1 = runtime.shape.circle(new util.Vector(20,0),10);
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( circle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(sprite1.checkForCollision(sprite2));
+    assert.ok(sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
+QUnit.test('check for collision, no colliding circle and polygon', function(assert){
+    var polygon1 = runtime.shape.polygon(
+        new util.Vector(0,0),
+        new util.Vector(10,0),
+        new util.Vector(10,10),
+        new util.Vector(0,10)
+        );
+    var circle1 = runtime.shape.circle(new util.Vector(20,20),10);
+    var sprite1 = runtime.sprite.create( polygon1 );
+    var sprite2 = runtime.sprite.create( circle1 );
+
+    assert.ok(sprite1.checkForCollision(sprite1));
+    assert.ok(!sprite1.checkForCollision(sprite2));
+    assert.ok(!sprite2.checkForCollision(sprite1));
+    assert.ok(sprite2.checkForCollision(sprite2));
+});
 
 /* TODO: sound */
 /* TODO: arrays */

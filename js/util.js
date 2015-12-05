@@ -293,21 +293,21 @@
         ctx.stroke();
     }
 
-
     //Shape
-    function Shape(pathArrayOrFunction, pointsArray){
-        if (type(pathArrayOrFunction) === 'function'){
-            this._draw = pathArrayOrFunction;
+    function Shape(pathArrayOrFunctionOrSAT, pointsArray){
+        if (type(pathArrayOrFunctionOrSAT) === 'function'){
+            this._draw = pathArrayOrFunctionOrSAT;
             if (pointsArray != undefined)
                 this.pointsArray = pointsArray;
-        }
-        else if (type(pathArrayOrFunction) === 'array'){
-            this.pathArray = pathArrayOrFunction;
-        }
-        else if (pathArrayOrFunction instanceof Path) {
-            this.path = pathArrayOrFunction;
-        }
-        else{
+        }else if (type(pathArrayOrFunctionOrSAT) === 'array'){
+            this.pathArray = pathArrayOrFunctionOrSAT;
+        }else if (pathArrayOrFunctionOrSAT instanceof Path) {
+            this.path = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'polygon'){
+            this.satPolygon = pathArrayOrFunctionOrSAT;
+        }else if (type(pathArrayOrFunctionOrSAT) === 'circle'){
+            this.satCircle = pathArrayOrFunctionOrSAT;
+        }else{
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
@@ -330,15 +330,37 @@
             }
 
             if (type == "connected and closed"){
-                ctx.closePath()
+                ctx.closePath();
             }
 
             drawingPath = false;
-        }
-        else if(this._draw){
+        }else if(this._draw){
             this._draw(ctx);
-        }
+        }else if (this.satPolygon){
 
+
+            var x = this.satPolygon.points[0].x;
+            var y = this.satPolygon.points[0].y;
+
+            if (!util.isDrawingPath()){
+                ctx.beginPath();
+                ctx.moveTo(x , y );
+            }
+            else{
+                ctx.lineTo(x, y);
+            }
+
+            for (var i = 1; i < this.satPolygon.points.length; i++) {
+                ctx.lineTo(this.satPolygon.points[i].x , this.satPolygon.points[i].y );
+            };
+
+            ctx.lineTo(this.satPolygon.points[0].x , this.satPolygon.points[0].y );
+        }
+        else if (this.satCircle){
+            ctx.beginPath();
+
+            ctx.arc(this.satCircle.pos.x, this.satCircle.pos.y, this.satCircle.r, 0, Math.PI * 2, true);
+        }
         ctx.fill();
         ctx.stroke();
     }
@@ -384,13 +406,17 @@
         .fn();
 
     var equal = new Method()
-        .when(['date', 'date'], function(a,b){ console.log("date === date"); return a.valueOf() === b.valueOf(); })
-        .default(function(a,b){ console.log("Default"); return a === b; })
+        .when(['date', 'date'], function(a,b){
+             return a.valueOf() === b.valueOf();
+         })
+        .default(function(a,b){ return a === b; })
         .fn();
 
     var notEqual = new Method()
-        .when(['date', 'date'], function(a,b){ console.log("date !== date"); return a.valueOf() !== b.valueOf(); })
-        .default(function(a,b){ console.log("Default !=="); return a !== b; })
+        .when(['date', 'date'], function(a,b){
+             return a.valueOf() !== b.valueOf();
+         })
+        .default(function(a,b){ return a !== b; })
         .fn();
 
     // Random methods
@@ -695,7 +721,7 @@
 
                 /* Default whenLoaded callback. */
                 whenLoaded = function () {
-                    // console.log('default asset load');
+                    // default asset load (nothing)
                 };
 
                 /* Try every selector. */
@@ -843,7 +869,7 @@
                         videoSprite.src = source;
                     }else{
                         //Display a message if the file type isn't recognized.
-                        console.log("File type not recognized: " + source);
+                        console.warn("File type not recognized: " + source);
                     }
 
 
@@ -886,10 +912,52 @@
         this._image = new Image();
         this._image.addEventListener('load', selfLoad, false);
         this._image.src = src;
+        this._flipH = false;
+        this._flipV = false;
+        this._canvas = null;
+        this._ctx = null;
     }
 
+    WBImage.create = function createWBImage(width, height){
+        var image = Object.create(WBImage.prototype); // skip constructor
+        image.name = '';
+        image.width = width;
+        image.height = height;
+        image._image = null;
+        image._flipH = false;
+        image._flipV = false;
+        image._canvas = dom.html('canvas', {width: width, height: height});
+        return image;
+    };
+
     WBImage.prototype.draw = function(ctx){
-        ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        if (this._flipH || this._flipV){
+            var sy = this._flipH ? -1 : 1;
+            var sx = this._flipV ? -1 : 1;
+            ctx.save();
+            ctx.scale(sx, sy);
+        }
+        if (this._canvas){
+            ctx.drawImage(this._canvas, -this.width/2, -this.height/2, this.width, this.height);
+        }else{
+            ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        }
+        if (this._flipH || this._flipV){
+            ctx.restore();
+        }
+    };
+
+    WBImage.prototype.getContext = function(){
+        if (!this._ctx){
+            if (!this._canvas){
+                this._canvas = dom.html('canvas', {width: this.width, height: this.height});
+            }
+            this._ctx = this._canvas.getContext('2d');
+            if (this._image){
+                this._ctx.drawImage(this._image, 0, 0);
+            }
+        }
+        return this._ctx;
     };
 
     WBImage.prototype.drawAtPoint = function(ctx, pt){
@@ -930,6 +998,19 @@
         this.height = this.origHeight * scaleFactor;
     };
 
+    WBImage.prototype.flipH = function(){
+        this._flipH = !this._flipH;
+    };
+
+    WBImage.prototype.flipV = function(){
+        this._flipV = !this._flipV;
+    };
+
+    WBImage.prototype.flipBoth = function(){
+        this._flipH = !this._flipH;
+        this._flipV = !this._flipV;
+    };
+
     WBImage.prototype.toString = function(){
         return this.name + "; " + this.width + "px wide by " + this.height + "px high";
     };
@@ -946,63 +1027,80 @@
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
-        this.position = new Vector(0,0);
-        this.facing = new Vector(1,0);
-        this.velocity = new Vector(0,0);
+
+        this.satObject = this.drawable.satPolygon || this.drawable.satCircle;
+
+        if(this.satObject){
+            this.position = this.satObject.pos;
+        }
+        else{
+            this.position = new SAT.Vector();
+        }
+        this.facing = new SAT.Vector(1,0);
+        this.velocity = new SAT.Vector();
     }
 
     Sprite.prototype.accelerate = function(speed){
-        this.velocity = add(this.velocity, multiply(this.facing, speed));
-        // console.log('position: %s, velocity: %s, facing: %s', strv(this.position), strv(this.velocity), strv(this.facing));
+        this.velocity.add(
+            new SAT.Vector(this.facing.x * speed, this.facing.y * speed)
+        );
     }
 
     Sprite.prototype.setVelocity = function(vec){
-        this.velocity = vec;
+        this.velocity = new SAT.Vector(vec.x, vec.y);
     }
 
     Sprite.prototype.getXvel = function(){
-        return this.velocity.getX();
+        return this.velocity.x;
     }
 
     Sprite.prototype.getYvel = function(){
-        return this.velocity.getY();
+        return this.velocity.y;
     }
 
     Sprite.prototype.getXpos = function(){
-        return this.position.getX();
+        return this.position.x;
     }
 
     Sprite.prototype.getYpos = function(){
-        return this.position.getY();
+        return this.position.x;
     }
 
     Sprite.prototype.applyForce = function(vec){
-        this.velocity = add(this.velocity, vec);
+        this.velocity.add(vec);
     }
 
     Sprite.prototype.rotate = function(r){
-        this.facing = this.facing.rotate(r);
+        this.facing.rotate(r * Math.PI / 180);
     }
 
     Sprite.prototype.rotateTo = function(r){
-        this.facing = this.facing.rotateTo(r);
+        this.facing.angle = r;
     }
 
     Sprite.prototype.move = function(){
-        this.position = add(this.position, this.velocity);
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
     }
 
     Sprite.prototype.moveTo = function(pt){
-        this.position = new Vector(pt.x, pt.y);
+        this.position.x = pt.x;
+        this.position.y = pt.y;
     }
 
     Sprite.prototype.draw = function(ctx){
-        ctx.translate(this.position.x, this.position.y);
-        ctx.rotate(this.facing.radians()); // drawable should be centered on 0,0
+        if(!this.drawable.satCircle)
+        {
+            ctx.translate(this.position.x, this.position.y);
+        }
+        ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
     }
 
+    Sprite.prototype.angle = function(){
+        return atan2(this.facing.y, this.facing.x);
+    }
     Sprite.prototype.toString = function(){
         return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
     };
@@ -1023,97 +1121,30 @@
     Sprite.prototype.checkForCollision = function checkForCollision(other){
 
         var collision = false;
-
-        if(this.drawable.width && other.drawable.width){
-            collision = checkForCollisionTwoRectangles(this, other);
-        }
-        else if(this.drawable.radius && other.drawable.radius){
-            collision = checkForCollisionTwoCircles(this, other);
-        }
-        else if(this.drawable.radius && other.drawable.width){
-            collision = checkForCollisionRectangleAndCircle(other, this);
-        }
-        else if(this.drawable.width && other.drawable.radius){
-            collision = checkForCollisionRectangleAndCircle(this, other);
-        }
-
-        return collision;
-
-    }
-
-    function checkForCollisionRectangleAndCircle(rectangle, circle){
-
-        var rectangle_x;
-        var rectangle_y;
-
-        if(rectangle.drawable.centered){
-            rectangle_x = rectangle.position.x - rectangle.drawable.width/2;
-            rectangle_y = rectangle.position.y - rectangle.drawable.height/2;
-        }
-        else{
-            rectangle_x = rectangle.position.x;
-            rectangle_y = rectangle.position.y;
-        }
-
-        var rect = new SAT.Box(new SAT.Vector(rectangle_x, rectangle_y), rectangle.drawable.width, rectangle.drawable.height);
-        var circ = new SAT.Circle(new SAT.Vector(circle.position.x, circle.position.y), circle.drawable.radius);
-
         var response = new SAT.Response();
 
-        var collision = SAT.testPolygonCircle(rect.toPolygon(), circ, response)
+        var this_drawable = this.drawable;
+        var other_drawable = other.drawable;
+
+        if(this_drawable.satPolygon && other_drawable.satPolygon){
+            collision = SAT.testPolygonPolygon(
+                this_drawable.satPolygon, other_drawable.satPolygon, response);
+        }
+        else if(this_drawable.satPolygon && other_drawable.satCircle){
+            collision = SAT.testPolygonCircle(
+                this_drawable.satPolygon, other_drawable.satCircle, response);
+        }
+        else if(this_drawable.satCircle && other_drawable.satPolygon){
+            collision = SAT.testCirclePolygon(
+                this_drawable.satCircle, other_drawable.satPolygon, response);
+        }
+        else if(this_drawable.satCircle && other_drawable.satCircle){
+            collision = SAT.testCircleCircle(
+                this_drawable.satCircle, other_drawable.satCircle, response);
+        }
 
         return collision;
 
-    }
-
-
-    function checkForCollisionTwoCircles(this_, other){
-
-        var this_circle = new SAT.Circle(new SAT.Vector(this_.position.x, this_.position.y), this_.drawable.radius);
-        var other_circle = new SAT.Circle(new SAT.Vector(other.position.x, other.position.y), other.drawable.radius);
-
-        var response = new SAT.Response();
-
-        var collision = SAT.testCircleCircle(this_circle, other_circle, response)
-
-        return collision;
-
-    }
-
-    function checkForCollisionTwoRectangles(this_, other){
-
-        var this_x;
-        var this_y;
-        var other_x;
-        var other_y;
-
-        if(this_.drawable.centered){
-            this_x = this_.position.x - this_.drawable.width/2;
-            this_y = this_.position.y - this_.drawable.height/2;
-        }
-        else{
-            this_x = this_.position.x;
-            this_y = this_.position.y;
-        }
-
-
-        if(other.drawable.centered){
-            other_x = other.position.x - other.drawable.width/2;
-            other_y = other.position.y - other.drawable.height/2;
-        }
-        else{
-            other_x = other.position.x;
-            other_y = other.position.y;
-        }
-
-        var this_rect = new SAT.Box(new SAT.Vector(this_x, this_y), this_.drawable.width, this_.drawable.height);
-        var other_rect = new SAT.Box(new SAT.Vector(other_x, other_y), other.drawable.width, other.drawable.height);
-
-        var response = new SAT.Response();
-
-        var collision = SAT.testPolygonPolygon(this_rect.toPolygon(), other_rect.toPolygon(), response)
-
-        return collision;
     }
 
     Sprite.prototype.wrapAroundRect = function(r){

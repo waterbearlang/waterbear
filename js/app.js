@@ -195,6 +195,7 @@ function handleExampleButton(evt){
         {
             overlayClose: true, // Can't close the modal by clicking on the overlay.
             buttons: [
+                handleExample('Draw on Image', 'drawimage'),
                 handleExample('Pastels', 'pastels'),
                 handleExample('Clipping Demo', 'clipping'),
                 handleExample('Space Bear', 'waterbear_in_space'),
@@ -204,6 +205,7 @@ function handleExampleButton(evt){
                 handleExample('Simple Move', 'simple_move'),
                 handleExample('Simple Pong', 'simple_pong'),
                 handleExample("Twinkling Song", 'twinkling_song')
+                handleExample('Draw from Array','array_draw')
             ]
         }
     );

@@ -1141,7 +1141,9 @@
                 }).set({buddies:oscenv}).start();
             },
             playAudio: function(audio){
-                audio.play();
+                if (audio){
+                    audio.play();
+                }
             },
             playNotes: function(sound){
                 console.log(song);
@@ -1161,12 +1163,12 @@
             tempoChange: function(tempo){
                 song += ("t" + tempo + " ");
             },
-            pauseAudio: function(sound){
-                if (assets.sounds[sound.name]){
-                    assets.sounds[sound.name].pause();
+            pauseAudio: function(audio){
+                if (audio){
+                    audio.pause();
                 }
             },
-            keys: function(synth, vol){
+            keys: function(synth){
                 var keydict = T("ndict.key");
                 var midicps = T("midicps");
                 T("keyboard").on("keydown", function(e) {
@@ -1181,7 +1183,6 @@
                     synth.noteOff(midi, 100);
                   }
                 }).start();
-
                 alert("Play notes on the keyboard");
             },
             soundEffect: function(effect){

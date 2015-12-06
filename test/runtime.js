@@ -315,6 +315,84 @@ QUnit.test('check for collision, no colliding circle and polygon', function(asse
 });
 
 /* TODO: sound */
+QUnit.module('sound');
+QUnit.test('get', function(assert){
+    var sound = runtime.sound;
+    var synth = sound.get('tri', '10', '300');
+    assert.ok(synth);
+});
+QUnit.test('addNote', function(assert){
+    var sound = runtime.sound;
+    var notes = ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B','Rest'];
+    notes.forEach(function (note, index) {
+        sound.addNote(note, '4', '1/4');
+    });
+    var octaves = ['1','2','3','4','5','6','7','8'];
+    octaves.forEach(function (octave, index) {
+        sound.addNote('C', octave, '1/16');
+    })
+    var beats = ['1/32','1/16','1/8','1/4','1/2','1'];
+    beats.forEach(function (length, index) {
+        sound.addNote('C', '3', length);
+    })
+    assert.ok(sound);
+});
+QUnit.test('playChord', function(assert){
+    var sound = runtime.sound;
+    var synth = sound.get('tri', '10', '300');
+    sound.playChord(synth, 'A', '4', 'A#/Bb', '4', 'B', '4', 'C', '4', 'C#/Db', '4', 'D', '4', 'D#/Eb', '4', 'E', '4', 'F', '4', 'F#/Gb', '4', 'G', '4', 'G#/Ab', '4');
+    assert.ok(sound);
+});
+QUnit.test('playNotes', function(assert){
+    var sound = runtime.sound;
+    var synth = sound.get('tri', '10', '300');
+    sound.playNotes(synth);
+    assert.ok(sound);
+});
+QUnit.test('playMML', function(assert){
+    var sound = runtime.sound;
+    var synth = sound.get('tri', '10', '300');
+    var mml = "abcdefg";
+    sound.playMML(synth, mml);
+    assert.ok(sound);
+});
+QUnit.test('tempoChange', function(assert){
+    var sound = runtime.sound;
+    sound.tempoChange('200');
+    assert.ok(sound);
+});
+QUnit.test('keys', function(assert){
+    var sound = runtime.sound;
+    var synth = sound.get('tri', '10', '300');
+    sound.keys(synth);
+    assert.ok(sound);
+});
+QUnit.test('soundEffect', function(assert){
+    var sound = runtime.sound;
+    sound.soundEffect('laser');
+    sound.soundEffect('alarm');
+    assert.ok(sound);
+});
+QUnit.test('getAudio', function(assert){
+    var sound = runtime.sound;
+    var audio = sound.getAudio('/sounds/pianoA.wav');
+    assert.ok(audio);
+});
+QUnit.test('playAudio', function(assert){
+    var sound = runtime.sound;
+    var audio = sound.getAudio('/sounds/pianoA.wav');
+    sound.playAudio(audio);
+    sound.playAudio();
+    assert.ok(sound);
+});
+QUnit.test('pauseAudio', function(assert){
+    var sound = runtime.sound;
+    var audio = sound.getAudio('/sounds/pianoA.wav');
+    sound.playAudio(audio);
+    sound.pauseAudio(audio);
+    sound.pauseAudio();
+    assert.ok(sound);
+});
 /* TODO: arrays */
 QUnit.module('arrays');
 QUnit.test('create', function(assert){

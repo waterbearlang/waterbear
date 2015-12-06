@@ -1035,14 +1035,14 @@
                     Input
                 </header>
                 <p>Programs can get input from the mouse, touch, key presses, and more.</p>
-                <wb-expression type="number" ns="input" fn="mouseX">
-                    <wb-value>Mouse x</wb-value>
+                <wb-expression type="number" ns="input" fn="pointerX">
+                    <wb-value>Pointer x</wb-value>
                 </wb-expression>
-                <wb-expression type="number" ns="input" fn="mouseY">
-                    <wb-value>Mouse y</wb-value>
+                <wb-expression type="number" ns="input" fn="pointerY">
+                    <wb-value>Pointer y</wb-value>
                 </wb-expression>
-                <wb-expression type="boolean" ns="input" fn="mouseDown">
-                    <wb-value>Mouse Down</wb-value>
+                <wb-expression type="boolean" ns="input" fn="pointerDown">
+                    <wb-value>Pointer Down</wb-value>
                 </wb-expression>
                 <wb-expression type="boolean" ns="input" fn="keyPressed">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta"> Key</wb-value>
@@ -1050,8 +1050,17 @@
                 </wb-expression>
                 <wb-context ns="input" fn="whenKeyPressed">
                     <wb-value type="list" allow="literal" value="a" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9,0,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta">when</wb-value>
-                    <wb-value>key pressed<wb-value>
-                    </wb-value></wb-value></wb-context>
+                    <wb-value>key pressed</wb-value>
+                </wb-context>
+                <wb-context ns="input" fn="whenPointerPressed">
+                    <wb-value>when pointer pressed</wb-value>
+                </wb-context>
+                <wb-context ns="input" fn="whenPointerReleased">
+                    <wb-value>when pointer released</wb-value>
+                </wb-context>
+                <wb-context ns="input" fn="whenPointerMoves">
+                    <wb-value>when pointer moves</wb-value>
+                </wb-context>
                     <wb-expression type="motion" ns="motion" fn="tiltDirection">
                         tilt direction
                     </wb-expression>

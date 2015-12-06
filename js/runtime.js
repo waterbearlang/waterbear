@@ -549,13 +549,13 @@
                 else
                     return false;
             },
-            mouseX: function inputPointerXExpr(){
+            pointerX: function inputPointerXExpr(){
                 return (Event.pointerX-Event.stage.left);
             },
-            mouseY: function inputPointerYExpr(){
+            pointerY: function inputPointerYExpr(){
                 return (Event.pointerY-Event.stage.top);
             },
-            mouseDown: function inputPointerDownExpr(){
+            pointerDown: function inputPointerDownExpr(){
                 return Event.pointerDown;
             },
             whenKeyPressed: function inputWhenKeyPressedCtx(key){
@@ -564,6 +564,24 @@
                     self.gatherSteps().forEach(runBlock);
                 });
             },
+            whenPointerPressed: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('down', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            },
+            whenPointerReleased: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('up', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            },
+            whenPointerMoves: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('move', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            }
         },
 
         math: {

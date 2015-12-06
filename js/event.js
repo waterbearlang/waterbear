@@ -448,7 +448,42 @@
 
     function clearRuntime(){
         Event.keyHandlers = {};
+        Event.mouseOrTouchHandlers = {};
     }
+
+    /*****************************
+    *
+    *   Mouse and Touch events
+    *
+    ******************************/
+
+    function handleMouseOrTouchEvent(type, evt) {
+        if(Event.mouseOrTouchHandlers[type]) {
+            Event.mouseOrTouchHandlers[type].forEach(function(handler){
+                handler(evt);
+            });
+        }
+    }
+
+    function handleMouseOrTouchUp(evt) {
+        handleMouseOrTouchEvent('up', evt);
+    }
+
+    function handleMouseOrTouchDown(evt) {
+        handleMouseOrTouchEvent('down', evt);
+    }
+
+    function handleMouseOrTouchMove(evt) {
+        handleMouseOrTouchEvent('move', evt);
+    }
+
+    function mouseOrTouchEvent(type, handler) {
+        if (! Event.mouseOrTouchHandlers[type] ){
+            Event.mouseOrTouchHandlers[type] = [];
+        }
+        Event.mouseOrTouchHandlers[type].push(handler);
+    }
+
 
     window.Event = {
         on: on,
@@ -478,7 +513,12 @@
         handleKeyUp: handleKeyUp,
         handleKeyDown: handleKeyDown,
         registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents,
-        keyForEvent: keyForEvent
+        keyForEvent: keyForEvent,
+        mouseOrTouchHandlers: {},
+        handleMouseOrTouchUp: handleMouseOrTouchUp,
+        mouseOrTouchEvent: mouseOrTouchEvent,
+        handleMouseOrTouchDown: handleMouseOrTouchDown,
+        handleMouseOrTouchMove: handleMouseOrTouchMove
     };
 
 })();

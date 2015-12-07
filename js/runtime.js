@@ -1146,7 +1146,6 @@
                 }
             },
             playNotes: function(sound){
-                console.log(song);
                 T("mml", {mml:song}, sound).on("ended", function() {
                     sound.pause();
                     this.stop();
@@ -1183,7 +1182,6 @@
                     synth.noteOff(midi, 100);
                   }
                 }).start();
-                alert("Play notes on the keyboard");
             },
             soundEffect: function(effect){
                 switch(effect) {

@@ -204,6 +204,7 @@ function handleExampleButton(evt){
                 handleExample('Simple Bounce', 'bounce'),
                 handleExample('Simple Move', 'simple_move'),
                 handleExample('Simple Pong', 'simple_pong'),
+                handleExample("Twinkling Song", 'twinkling_song'),
                 handleExample('Draw from Array','array_draw'),
                 handleExample('Follow pointer', 'follow_pointer')
             ]

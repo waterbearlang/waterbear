@@ -581,13 +581,13 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 else
                     return false;
             },
-            mouseX: function inputPointerXExpr(){
+            pointerX: function inputPointerXExpr(){
                 return (Event.pointerX-Event.stage.left);
             },
-            mouseY: function inputPointerYExpr(){
+            pointerY: function inputPointerYExpr(){
                 return (Event.pointerY-Event.stage.top);
             },
-            mouseDown: function inputPointerDownExpr(){
+            pointerDown: function inputPointerDownExpr(){
                 return Event.pointerDown;
             },
             whenKeyPressed: function inputWhenKeyPressedCtx(key){
@@ -596,6 +596,24 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                     self.gatherSteps().forEach(runBlock);
                 });
             },
+            whenPointerPressed: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('down', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            },
+            whenPointerReleased: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('up', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            },
+            whenPointerMoves: function(){
+                var self = this;
+                Event.mouseOrTouchEvent('move', function(){
+                    self.gatherSteps().forEach(runBlock);
+                });
+            }
         },
 
         math: {
@@ -1018,7 +1036,7 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 var audio = T("audio", {load:file});
                 return audio;
             },
-            playNote: function(note, octave, beats){
+            addNote: function(note, octave, beats){
                 switch(note){
                     case "A":
                         note = "a";
@@ -1097,35 +1115,91 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 var newNote = note + length;
                 song += newNote;
             },
-            playAudio: function(audio){
-                audio.play();
+            playChord: function(){
+                var args = [].slice.call(arguments)
+                var oscenv = args[0];
+                var freqs = []
+                for (var i = 1; i < args.length; i++) {
+                    var freq;
+                    switch(args[i]){
+                        case "A":
+                            freq = 55.000;
+                            break;
+                        case "A#/Bb":
+                            freq = 58.270;
+                            break;
+                        case "B":
+                            freq = 61.735;
+                            break;
+                        case "C":
+                            freq = 65.406;
+                            break;
+                        case "C#/Db":
+                            freq = 69.296;
+                            break;
+                        case "D":
+                            freq = 73.416;
+                            break;
+                        case "D#/Eb":
+                            freq = 77.782;
+                            break;
+                        case "E":
+                            freq = 82.407;
+                            break;
+                        case "F":
+                            freq = 87.307;
+                            break;
+                        case "F#/Gb":
+                            freq = 92.499;
+                            break;
+                        case "G":
+                            freq = 97.999;
+                            break;
+                        case "G#/Ab":
+                            freq = 103.826;
+                            break;
+                    }
+                    var octave = args[++i];
+                    parseInt(octave);
+                    freq = freq * Math.pow(2, octave-1);
+                    freqs.push(freq);
+                }
+                T("interval", {interval:"L4", timeout:"L4"}, function() {
+                    for (var i = 0; i < freqs.length; i++) {
+                        oscenv.noteOnWithFreq(freqs[i], 64);
+                    }
+                }).on("ended", function() {
+                    this.stop();
+                }).set({buddies:oscenv}).start();
             },
-            playInstrument: function(sound){
-                console.log(song);
+            playAudio: function(audio){
+                if (audio){
+                    audio.play();
+                }
+            },
+            playNotes: function(sound){
                 T("mml", {mml:song}, sound).on("ended", function() {
                     sound.pause();
                     this.stop();
                 }).start();
                 song = "o4 l4 V12 ";
             },
-            mml: function(sound, mml){
+            playMML: function(sound, mml){
                 var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
                 T("mml", {mml:mml}, gen).on("ended", function() {
                     gen.pause();
                     this.stop();
                 }).start();
             },
-            tempo: function(tempo){
+            tempoChange: function(tempo){
                 song += ("t" + tempo + " ");
             },
-            pause: function(sound){
-                if (assets.sounds[sound.name]){
-                    assets.sounds[sound.name].pause();
+            pauseAudio: function(audio){
+                if (audio){
+                    audio.pause();
                 }
             },
-            keys: function(wave, vol){
-                var synth = T("OscGen", {wave:wave, mul:vol}).play();
-
+            keys: function(synth){
                 var keydict = T("ndict.key");
                 var midicps = T("midicps");
                 T("keyboard").on("keydown", function(e) {
@@ -1140,10 +1214,8 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                     synth.noteOff(midi, 100);
                   }
                 }).start();
-
-                alert("Play notes on the keyboard");
             },
-            effect: function(effect){
+            soundEffect: function(effect){
                 switch(effect) {
                     case "laser":
                         var table = [1760, [110, "200ms"]];
@@ -1466,7 +1538,7 @@ Event.on('#playgroundBox', transitionEvent, null, function(){
                 return date.getDate();
             },
             getMonth: function(date){
-                return date.getMonth();
+                return date.getMonth()+1;
             },
             getMonthName: function(date){
                 return ['January', 'February', 'March', 'April', 'May', 'June',

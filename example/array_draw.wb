@@ -1,0 +1,109 @@
+<wb-step ns="control" fn="setVariable" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="array" ns="control" fn="getVariable" id="ka5f1ad" class=""><header><wb-value type="text" allow="literal" value="locations" class=""><input type="text" style="width: 61.8735px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="array" ns="array" fn="create" class=""><header><wb-row>
+                        <wb-value type="any" class=""><input type="any" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="200" class="">y<input type="number" style="width: 35.5015px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>create array</wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" class=""><header><wb-row>
+                        <wb-value class="">set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="any" ns="control" fn="getVariable" id="k22e3ff" class=""><header><wb-value type="text" allow="literal" value="x" class=""><input type="text" style="width: 30px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="" value="200">to<input type="any" style="width: 35.5015px;"></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="any" ns="control" fn="getVariable" id="k2b6ad9" class=""><header><wb-value type="text" allow="literal" value="y" class=""><input type="text" style="width: 30px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="" value="200">to<input type="any" style="width: 35.5015px;"></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-context ns="control" fn="loopOver" class=""><header><wb-disclosure></wb-disclosure><wb-row>
+                        <wb-value type="any" class="" value="4">loop over<input type="any" style="width: 30px;"></wb-value>
+                    </wb-row><wb-row>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="k472688"><header><wb-value type="text" allow="literal" value="indexOrKey"><input type="text" style="width: 75.1187px;"></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="k16790c"><header><wb-value type="text" allow="literal" value="value"><input type="text" style="width: 42.5107px;"></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="array" fn="append" class=""><header><wb-value type="array" class=""><input type="array" readonly="" style="width: 30px;" class="hide"><wb-expression type="array" ns="control" fn="getVariable" id="k65520c" class="" instanceof="ka5f1ad"><header><wb-value type="text" allow="literal" value="locations" class="">locations</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="any" class="">append<input type="any" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="kc77351" instanceof="k16790c" class=""><header><wb-value type="text" allow="literal" value="value">value</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="200" class="">×<input type="number" style="width: 35.5015px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="ka0d30a" class="" instanceof="k22e3ff"><header><wb-value type="text" allow="literal" value="x" class="">x</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="kad25e5" class="" instanceof="k2b6ad9"><header><wb-value type="text" allow="literal" value="y" class="">y</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step></wb-contains></wb-context><wb-step ns="control" fn="log" class=""><header><wb-value type="any" class="">log<input type="any" style="width: 30px;" class="hide"><wb-expression type="array" ns="control" fn="getVariable" id="k1d2b" class="" instanceof="ka5f1ad"><header><wb-value type="text" allow="literal" value="locations" class="">locations</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step><wb-context ns="control" fn="loopOver" class=""><header><wb-disclosure></wb-disclosure><wb-row>
+                        <wb-value type="any" class="" value="5">loop over<input type="any" style="width: 30px;"></wb-value>
+                    </wb-row><wb-row>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="k4993d6"><header><wb-value type="text" allow="literal" value="indexOrKey 1"><input type="text" style="width: 75.1187px;"></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="kd8cd0"><header><wb-value type="text" allow="literal" value="value 1"><input type="text" style="width: 42.5107px;" class=""></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="image" fn="drawAtPoint" class=""><header><wb-value type="wb-image" allow="block" class="">draw<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" isasset="true" ns="image" fn="get" filtered="true" class=""><header><wb-value type="text" value="images/mascot/mascot-steampunk.png" class="">image from url<input type="text" style="width: 221.314px;"></wb-value></header>
+                    
+                </wb-expression></wb-value><wb-value type="vector" allow="block" class="">at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="any" ns="array" fn="itemAt" class=""><header><wb-value type="array" class="">item from<input type="array" readonly="" style="width: 30px;" class="hide"><wb-expression type="array" ns="control" fn="getVariable" id="k14df84" class="" instanceof="ka5f1ad"><header><wb-value type="text" allow="literal" value="locations" class="">locations</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="number" value="0" min="0" class="">at index<input type="number" min="0" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="kd78e90" instanceof="kd8cd0" class=""><header><wb-value type="text" allow="literal" value="value 1">value 1</wb-value></header>
+                                
+                            </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step></wb-contains></wb-context>

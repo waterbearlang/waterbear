@@ -887,6 +887,12 @@ ValueProto.createdCallback = function valueCreated(){
             if (this.hasAttribute('max')){
                 input.setAttribute('max', this.getAttribute('max'));
             }
+            if (this.hasAttribute('oninput')){
+                input.setAttribute('oninput', this.getAttribute('oninput'));
+                // set the callback only on the actual input element
+                // and remove from parent to prevent double calls
+                this.removeAttribute('oninput');
+            }
             this.appendChild(input);
             input.value = value;
             break;

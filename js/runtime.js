@@ -1474,7 +1474,12 @@
         },
         date: {
             create: function (year, month, day) {
-                return new Date(year, month-1, day);
+                var today = new Date();
+                // by using fullYear, an input of 1 results in year 1
+                // and not 1901 which happens when using constructor
+                today.setFullYear(year, month - 1, day);
+                today.setHours(0, 0, 0, 0);
+                return today;
             },
             now: function () {
                 var today = new Date();
@@ -1516,7 +1521,18 @@
             getYear: function(date){
                 return date.getFullYear();
             },
+            validateYear: function(inputElement){
+                // we manually check for negative numbers because leaving a
+                // min value of 0 will have the erroneous effect of leaving
+                // a leading 0 that can't be deleted when deleting all
+                // characters from the field
+                if (inputElement.value < 0)
+                    inputElement.value = 0;
 
+                // simulate a maxlength of 4 by slicing the input
+                if (inputElement.value.length > 4)
+                    inputElement.value = inputElement.value.slice(0, -1);
+            }
         }
     };
 

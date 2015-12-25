@@ -366,7 +366,7 @@
                 <p>Dates are used to represent a date and to do basic calculations.</p>
                 <wb-expression type="date" ns="date" fn="now">today</wb-expression>
                 <wb-expression type="date" ns="date" fn="create">
-                    <wb-value type="number" min="0">yyyy</wb-value>
+                    <wb-value type="number" oninput="runtime.date.validateYear(this)">yyyy</wb-value>
                     <wb-value type="number">mm</wb-value>
                     <wb-value type="number">dd</wb-value>
                 </wb-expression>

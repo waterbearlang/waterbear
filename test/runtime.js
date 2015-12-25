@@ -1714,7 +1714,8 @@ QUnit.test('create',function(assert){
     var date6 = new Date("Nov 01 1999");
 
     var date7 = date.create(0, 01, 01);
-    var date8 = new Date("Jan 01 1900");
+    // forced new format to have year 0 instead of 1900
+    var date8 = new Date("0000-01-01");
 
     assert.ok(date1.valueOf() === date2.valueOf());
     assert.ok(date3.valueOf() === date4.valueOf());

@@ -1,0 +1,294 @@
+<wb-step ns="control" fn="setVariable" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="sprite" ns="control" fn="getVariable" id="k47a23e" class=""><header><wb-value type="text" allow="literal" value="player 1" class=""><input type="text" style="width: 51.5879px;" class=""></wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" filtered="true" class="" style=""><header><wb-value type="vector" class="">rectangle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class="" style=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="20">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" class="" value="100">height<input type="number" min="0" style="width: 33.2188px;"></wb-value></header>
+
+
+
+                </wb-expression></wb-value></header>
+
+                </wb-expression></wb-value>
+                    </wb-row></header>
+
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="sprite" ns="control" fn="getVariable" id="k49fb6b" class=""><header><wb-value type="text" allow="literal" value="player 2" class=""><input type="text" style="width: 52.936px;" class=""></wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="rectangle" filtered="true" class="" style=""><header><wb-value type="vector" class="">rectangle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class="" style=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="20">width<input type="number" min="0" style="width: 30px;"></wb-value><wb-value type="number" min="0" class="" value="100">height<input type="number" min="0" style="width: 33.2188px;"></wb-value></header>
+
+
+
+                </wb-expression></wb-value></header>
+
+                </wb-expression></wb-value>
+                    </wb-row></header>
+
+                </wb-step><wb-step ns="control" fn="setVariable" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="sprite" ns="control" fn="getVariable" id="keee160" class=""><header><wb-value type="text" allow="literal" value="pong" class=""><input type="text" style="width: 39.519px;" class=""></wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="sprite" fn="create" class="" style=""><header><wb-value type="wb-image,shape,sprite" class="">sprite with<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="circle" filtered="true" class=""><header><wb-value type="vector" class="">circle at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class="" style=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+
+                </wb-expression></wb-value><wb-value type="number" min="0" class="" value="20">radius<input type="number" min="0" style="width: 30px;"></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+                </wb-expression></wb-value>
+                    </wb-row></header>
+
+                </wb-step>
+<wb-step ns="sprite" fn="moveTo" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="ka1c5fc" class="" instanceof="k47a23e" style=""><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">move to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" filtered="true" class="" style=""><header><wb-value type="number" value="10" class="" selected="true">vector at x<input type="number" style="width: 30px;" class=""></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="centerY" filtered="true" class="" style=""><header><wb-value>Center y</wb-value></header>
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step><wb-step ns="sprite" fn="moveTo" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k8a1c66" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">move to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" filtered="true" class="" style=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="subtract" filtered="true" class="" style=""><header><wb-value type="number,vector,array,date" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="stageWidth" filtered="true" class="" style=""><header><wb-value>Stage Width</wb-value></header>
+
+                </wb-expression></wb-value><wb-value type="number,vector,array,date" value="30" class="">−<input type="number" style="width: 30px;"></wb-value></header>
+
+
+                </wb-expression></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="stage" fn="centerY" filtered="true" class="" style=""><header><wb-value>Center y</wb-value></header>
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step><wb-step ns="sprite" fn="moveTo" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k2c8930" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">move to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="stage" fn="centerPoint" filtered="true" class="" style=""><header><wb-value>Center point</wb-value></header>
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kd69f72" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="multiply" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="randomUnitVector" filtered="true" class="" style=""><header><wb-value>random unit vector</wb-value></header>
+
+                </wb-expression></wb-value><wb-value type="number" value="7" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    <!-- FIXME: Temporary workaround until type propagation works for math * -->
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-row>
+                        <wb-value>each frame</wb-value>
+                    </wb-row><wb-row>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="frame" id="kbeddc8"><header><wb-value value="frame">frame</wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="elapsed" id="k7d36b3"><header><wb-value value="elapsed">elapsed</wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-disclosure></wb-disclosure></header>
+
+
+                <wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="">clear to<input type="color" style="width: 61.5029px;"></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="move" class="" style=""><header><wb-value type="sprite" class="">move<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="ka2e84f" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="move" class="" style=""><header><wb-value type="sprite" class="">move<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k6550f5" class="" instanceof="k47a23e" style=""><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="move" class="" style=""><header><wb-value type="sprite" class="">move<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kd91091" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#0000FF" class="">fill style<input type="color" style="width: 54.918px;"></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="draw" class="" style=""><header><wb-value type="sprite" class="">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kc5b6fc" class="" instanceof="k47a23e" style=""><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="draw" class="" style=""><header><wb-value type="sprite" class="">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kdaa6b3" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#ff452b" class="">fill style<input type="color" style="width: 53.8491px;"></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="draw" class="" style=""><header><wb-value type="sprite" class="">draw<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k8db8f2" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="sprite" fn="bounceAtEdge" class="" style=""><header><wb-value type="sprite" class="">bounce at edge<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k2a2456" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="number" ns="control" fn="getVariable" id="k1d44c2" class=""><header><wb-value type="text" allow="literal" value="speed" class="" selected="true"><input type="text" style="width: 44.4766px;" class=""></wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-value type="any" class="" value="10">to<input type="any" style="width: 30px;" class=""></wb-value>
+                    </wb-row></header>
+
+                </wb-step><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k5ffc5e" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="0" class="">vector at angle<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="0" class="">magnitude<input type="number" style="width: 30px;"></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="input" fn="keyPressed" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" value="up" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta" class=""> Key<select style="width: 30px;" class=""><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>Pressed?</wb-value></header>
+
+
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+
+                <wb-contains class=""><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k3c3c2c" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="270" class="" selected="true">vector at angle<input type="number" style="width: 33.9116px;"></wb-value><wb-value type="number" value="0" class="">magnitude<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="k8b8efe" class="" instanceof="k1d44c2" style=""><header><wb-value type="text" allow="literal" value="speed" class="" selected="true">speed</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step></wb-contains></wb-context><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="input" fn="keyPressed" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" value="down" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta" class=""> Key<select style="width: 30px;" class=""><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>Pressed?</wb-value></header>
+
+
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+
+                <wb-contains class=""><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k5b39a1" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="90" class="">vector at angle<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="0" class="">magnitude<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="kebb68e" class="" instanceof="k1d44c2" style=""><header><wb-value type="text" allow="literal" value="speed" class="" selected="true">speed</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step></wb-contains></wb-context><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k8a137c" class="" instanceof="k47a23e" style=""><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="0">vector at angle<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="0">magnitude<input type="number" style="width: 30px;"></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="input" fn="keyPressed" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" value="w" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta" class=""> Key<select style="width: 30px;" class=""><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>Pressed?</wb-value></header>
+
+
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+
+                <wb-contains class=""><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kc0f765" class="" instanceof="k47a23e"><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="270" class="">vector at angle<input type="number" style="width: 33.9116px;"></wb-value><wb-value type="number" value="10" class="">magnitude<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="kf23360" class="" instanceof="k1d44c2" style=""><header><wb-value type="text" allow="literal" value="speed" class="" selected="true">speed</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step></wb-contains></wb-context><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="input" fn="keyPressed" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" value="s" options="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,*,+,-,.,/,up,down,left,right,backspace,tab,return,shift,ctrl,alt,pause,capslock,esc,space,pageup,pagedown,end,home,insert,del,numlock,scroll,meta" class=""> Key<select style="width: 30px;"><option selected="selected">a</option><option>b</option><option>c</option><option>d</option><option>e</option><option>f</option><option>g</option><option>h</option><option>i</option><option>j</option><option>k</option><option>l</option><option>m</option><option>n</option><option>o</option><option>p</option><option>q</option><option>r</option><option>s</option><option>t</option><option>u</option><option>v</option><option>w</option><option>x</option><option>y</option><option>z</option><option>*</option><option>+</option><option>-</option><option>.</option><option>/</option><option>up</option><option>down</option><option>left</option><option>right</option><option>backspace</option><option>tab</option><option>return</option><option>shift</option><option>ctrl</option><option>alt</option><option>pause</option><option>capslock</option><option>esc</option><option>space</option><option>pageup</option><option>pagedown</option><option>end</option><option>home</option><option>insert</option><option>del</option><option>numlock</option><option>scroll</option><option>meta</option></select></wb-value><wb-value>Pressed?</wb-value></header>
+
+
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+
+                <wb-contains class=""><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kca6daf" class="" instanceof="k47a23e" style=""><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="90" class="" selected="true">vector at angle<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="0" class="">magnitude<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="ke62338" class="" instanceof="k1d44c2" style=""><header><wb-value type="text" allow="literal" value="speed" class="" selected="true">speed</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step></wb-contains></wb-context><wb-context ns="control" fn="if" class="" style=""><header><wb-value type="boolean" value="true" class="">if<select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="boolean" fn="or" filtered="true" class="selected-block" style=""><header><wb-value type="boolean" value="true" class=""><select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="sprite" fn="checkForCollision" filtered="true" class="" style=""><header><wb-value type="sprite" class="">is collision<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k301eec" class="" instanceof="k47a23e" style=""><header><wb-value type="text" allow="literal" value="player 1" class="">player 1</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k7fc61" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value><wb-value type="boolean" value="true" class="selected-value">or<select style="width: 33.7021px;" class="hide"><option selected="selected">true</option><option>false</option></select><wb-expression type="boolean" ns="sprite" fn="checkForCollision" filtered="true" class="" style=""><header><wb-value type="sprite" class="">is collision<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k5b313f" class="" instanceof="k49fb6b" style=""><header><wb-value type="text" allow="literal" value="player 2" class="">player 2</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="k9ec7a0" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+
+                <wb-contains class=""><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="number" ns="control" fn="getVariable" id="ke60e8a" class=""><header><wb-value type="text" allow="literal" value="degree" class=""><input type="text" style="width: 48.4995px;" class=""></wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="number" ns="vector" fn="degrees" class="" style=""><header><wb-value type="vector" class="">degrees<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="sprite" fn="getVelocity" filtered="true" class="" style=""><header><wb-value type="sprite" class="">get velocity<input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kb40fe6" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+                </wb-expression></wb-value></header>
+
+                </wb-expression></wb-value>
+                    </wb-row></header>
+
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+                        <wb-local renameable="true">
+                            <wb-expression type="number" ns="control" fn="getVariable" id="kb7bc62" class=""><header><wb-value type="text" allow="literal" value="angle" class="" selected="true"><input type="text" style="width: 41.0713px;" class=""></wb-value></header>
+
+                            </wb-expression>
+                        </wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="subtract" class="" style=""><header><wb-value type="number,vector,array,date" value="180" class="" selected="true"><input type="number" style="width: 33.1382px;"></wb-value><wb-value type="number,vector,array,date" value="0" class="">−<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="ka4603f" class="" instanceof="ke60e8a" style=""><header><wb-value type="text" allow="literal" value="degree" class="">degree</wb-value></header>
+
+                            </wb-expression></wb-value></header>
+
+
+                </wb-expression></wb-value>
+                    </wb-row></header>
+
+                </wb-step><wb-step ns="sprite" fn="setVelocity" class="" style=""><header><wb-value type="sprite" class=""><input type="sprite" readonly="" style="width: 30px;" class="hide"><wb-expression type="sprite" ns="control" fn="getVariable" id="kf18d1a" class="" instanceof="keee160" style=""><header><wb-value type="text" allow="literal" value="pong" class="">pong</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="vector" class="">set velocity to<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" class=""><header><wb-value type="number" value="1" class="">vector at angle<input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="getVariable" id="k82b5db" class="" instanceof="kb7bc62" style=""><header><wb-value type="text" allow="literal" value="angle" class="" selected="true">angle</wb-value></header>
+
+                            </wb-expression></wb-value><wb-value type="number" value="7" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+
+
+                </wb-expression></wb-value></header>
+
+
+                </wb-step></wb-contains></wb-context></wb-contains></wb-context>

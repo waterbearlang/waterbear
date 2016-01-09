@@ -168,6 +168,9 @@
     function loadScriptsFromString(text){
         // console.info('file format version: %s', fileObject.waterbearVersion);
         // console.info('restoring to workspace %s', fileObject.workspace);
+        // upgrading custom elements happens synchronously in Chrome, but
+        // asynchronously in Firefox, at least with the register-element
+        // polyfill
         document.querySelector('wb-workspace > wb-contains').innerHTML = text;
         Event.trigger(window, 'script-load', text);
     }
@@ -237,7 +240,7 @@
     if (page === 'playground'){
         Event.on(window, 'ui:beforeunload', null, saveCurrentScripts);
         Event.on(document.body, 'ui:wb-added', null, bareUrl); // Remove gist or other argument on script change
-        Event.on(document.body, 'ui:wb-removed', null, bareUrl);
+        Event.on(document.body, 'ui:wb-removedChild', null, bareUrl);
         Event.on(document.body, 'ui:wb-changed', null, bareUrl);
     }
 

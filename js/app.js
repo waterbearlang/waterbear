@@ -35,13 +35,28 @@ function info(text){
 }
 
 function clearFilter(){
-    var existing = workspace.querySelectorAll('wb-value[selected=true]');
-    if (existing.length !== 0){
-        for(var i=0; i< existing.length; i++){
-            existing[i].deselect();
-        }
+    var sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+    for(var i=0; i< sidebarBlocks.length; i++){
+        sidebarBlocks[i].removeAttribute('filtered');
     }
     BLOCK_MENU.removeAttribute('filtered');
+}
+
+function setFilter(item){
+    var i;
+    var sidebarBlocks=[];
+
+    var selectedType = item.getAttribute('type');
+    if (selectedType){
+        var selectedTypeList = selectedType.split(',');
+        for(i=0; i<selectedTypeList.length; i++){
+            sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+        }
+        for(i=0; i< sidebarBlocks.length; i++){
+            sidebarBlocks[i].setAttribute('filtered', 'true');
+        }
+        BLOCK_MENU.setAttribute('filtered', 'true');
+    }
 }
 
 // Documentation for modal dialogs: https://github.com/kylepaulsen/NanoModal
@@ -105,11 +120,10 @@ function preload() {
 }
 
 function runScript(){
-    var globalScope = {};
     runtime.startEventLoop();
     dom.findAll('wb-workspace > wb-contains > *').forEach(function(block){
         if (block.run){
-            block.run(globalScope);
+            block.run();
         }
     });
 }
@@ -163,36 +177,39 @@ function handleFileButton(evt){
 
 Event.on(document.body, 'ui:click', '.open-files', handleFileButton);
 
+function handleExample(text, filename){
+    return {
+        text: text,
+        handler: function(modal){
+            _gaq.push(['_trackEvent', 'Example', text.split(/\s+/).join('')]);
+            stopAndClearScripts();
+            File.loadScriptsFromExample(filename);
+            modal.hide();
+        }
+    }
+}
+
 function handleExampleButton(evt){
     _gaq.push(['_trackEvent', 'Example', 'examples']);
     var fileModel = nanoModal("Load an example program.",
-        {overlayClose: true, // Can't close the modal by clicking on the overlay.
-        buttons: [{
-            text: "Space Bear",
-            handler: function(modal) {
-                _gaq.push(['_trackEvent', 'Example', 'WaterbearInSpace']);
-                stopAndClearScripts();
-                File.loadScriptsFromExample('waterbear_in_space');
-                modal.hide();
-            }
-        },{
-            text: "Noise 3D",
-            handler: function(modal){
-                _gaq.push(['_trackEvent', 'Example', 'Noise3D']);
-                stopAndClearScripts();
-                File.loadScriptsFromExample('noise3d');
-                modal.hide();
-            }
-        },{
-            text: "Dance",
-            handler: function(modal){
-                _gaq.push(['_trackEvent', 'Example', 'Dance']);
-                stopAndClearScripts();
-                File.loadScriptsFromExample('dance');
-                modal.hide();
-            }
-        }]
-    });
+        {
+            overlayClose: true, // Can't close the modal by clicking on the overlay.
+            buttons: [
+                handleExample('Draw on Image', 'drawimage'),
+                handleExample('Pastels', 'pastels'),
+                handleExample('Clipping Demo', 'clipping'),
+                handleExample('Space Bear', 'waterbear_in_space'),
+                handleExample('Noise 3D', 'noise3d'),
+                handleExample('Dance', 'dance'),
+                handleExample('Simple Bounce', 'bounce'),
+                handleExample('Simple Move', 'simple_move'),
+                handleExample('Simple Pong', 'simple_pong'),
+                handleExample("Twinkling Song", 'twinkling_song'),
+                handleExample('Draw from Array','array_draw'),
+                handleExample('Follow pointer', 'follow_pointer')
+            ]
+        }
+    );
     fileModel.show();
 }
 
@@ -207,6 +224,12 @@ Event.on(window, 'dragging:mouseup', null, Event.endDrag);
 Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
+Event.on(window, 'touchend', null, Event.handleMouseOrTouchUp);
+Event.on(window, 'mouseup', null, Event.handleMouseOrTouchUp);
+Event.on(window, 'touchstart', null, Event.handleMouseOrTouchDown);
+Event.on(window, 'mousedown', null, Event.handleMouseOrTouchDown);
+Event.on(window, 'touchmove', null, Event.handleMouseOrTouchMove);
+Event.on(window, 'mousemove', null, Event.handleMouseOrTouchMove);
 
 Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);
@@ -223,6 +246,7 @@ window.app = {
     warn: warn,
     tip: tip,
     info: info,
-    clearFilter: clearFilter
+    clearFilter: clearFilter,
+    setFilter: setFilter
 };
 })();

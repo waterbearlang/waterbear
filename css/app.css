@@ -226,7 +226,7 @@ wb-accordion.geolocation > header:after{ background-color: hsl(300, 50%, 75%); }
 wb-accordion.size > header:after{ background-color: hsl(45, 50%, 50%); }
 wb-accordion.text > header:after{ background-color: hsl(150, 50%, 50%); }
 wb-accordion.vector > header:after{ background-color: hsl(75, 50%, 50%); }
-
+wb-accordion.date > header:after{ background-color: hsl(55, 76%, 70%); }
 
 /* Prevent selecting text while dragging */
 .dragging *{

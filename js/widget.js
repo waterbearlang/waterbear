@@ -48,6 +48,9 @@ AccordionProto.toggle = function(){
 window.WBAccordion = document.registerElement('wb-accordion', {prototype: AccordionProto});
 
 function accordionClick(evt){
+    if (Event.distancePointerMoved > 5){
+        return;
+    }
     evt.preventDefault();
     evt.stopPropagation();
     dom.closest(evt.target, 'wb-accordion').toggle();
@@ -55,7 +58,7 @@ function accordionClick(evt){
 }
 
 Event.on(document.body, 'editor:click', 'wb-accordion > header', accordionClick);
-Event.on(document.body, 'editor:tap', 'wb-accordion > header', accordionClick);
+Event.on(document.body, 'editor:touchend', 'wb-accordion > header', accordionClick);
 
 /* For HBox, VBox, and Splitter:
 
@@ -164,30 +167,5 @@ Event.on(window, 'ui:dblclick', 'wb-splitter', function(evt){
     }
 });
 
-// Observe child changes
-
-var observer = new MutationObserver(function(mutations){
-    mutations.forEach(function(mutation){
-        // send childAdded or childRemove event to parent element
-        // should I filter this to only elements (otherwise text nodes will be included)?
-        var parent = mutation.target;
-        [].slice.apply(mutation.removedNodes).forEach(function(node){
-            parent.dispatchEvent(new CustomEvent('removeChild', {
-                bubbles: true,
-                detail: node
-            }));
-        });
-        [].slice.apply(mutation.addedNodes).forEach(function(node){
-            parent.dispatchEvent(new CustomEvent('addChild', {
-                bubbles: true,
-                detail: node
-            }));
-        });
-    });
-});
-
-var config = { childList: true, subtree: true };
-
-// observer.observe(document.body, config);
 
 })();

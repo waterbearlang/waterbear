@@ -14,9 +14,9 @@ Fired when a block is added to a script. When a block is moved, it is removed, t
 
 Fired when a block in a script is modified (i.e., it's socket values are changed).
 
-## wb-remove
+## wb-removedChild
 
-Fired when a block is removed from a script. Moving a block fires both a remove and an add event.
+Fired when a block is removed from a script. Moving a block fires both a removedChild and an add event.
 
 ## wb-delete
 
@@ -45,5 +45,3 @@ Fired when there is a change to one of the state variables (???)
 ## wb-ready
 
 Fired when all the async components (ide, stage, script) have reported in that they're ready.
-
-

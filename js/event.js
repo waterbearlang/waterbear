@@ -14,6 +14,17 @@
         return false;
     }
 
+    if (!CustomEvent){
+        var CustomEvent = function CustomEvent ( event, params ) {
+            params = params || { bubbles: false, cancelable: false, detail: undefined };
+            var evt = document.createEvent( 'CustomEvent' );
+            evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+            return evt;
+        }
+        CustomEvent.prototype = window.Event.prototype;
+        window.CustomEvent = CustomEvent;
+    }
+
     // Move these to utils.js
 
     // Maintain references to events so we can mass-remove them later
@@ -104,11 +115,6 @@
             if (selector){
                 if (dom.matches(evt.target, selector)){
                     handler(evt);
-                // }else if (dom.matches(evt.target, selector + ' *')){
-                //     // Fix for missing events that are contained in child elements
-                //     // Bubble up to the nearest matching parent
-                //     evt.target = dom.closest(evt.target, selector);
-                //     handler(evt);
                 }
             }else{
                 handler(evt);
@@ -230,12 +236,19 @@
     /* Add custom events for adding and removing blocks from the DOM */
     function registerElementsForAddRemoveEvents(root, eventPrefix, parentList, childList){
 
+        if (typeof MutationObserver === 'undefined'){
+            console.warn('If you see this and you are not running tests in PhantomJS you have problems');
+            return;
+        }
+
         var blockObserver = new MutationObserver(function(mutations){
             mutations.forEach(function(mutation){
                 // send childAdded or childRemove event to parent element
                 var parent = mutation.target;
-                // WARNING: Node.contains may not be supported on mobile
-                // Polyfill if needed
+                // if (!Node.contains){
+                //     console.error('Node.contains not found');
+                //     console.error('Find a polyfill');
+                // }
                 if (!root.contains(parent)){
                     return;
                 }
@@ -247,7 +260,9 @@
                         .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only child elements
                         .forEach(function(node){
                     Event.trigger(blockParent, eventPrefix + 'removedChild', node);
-                    Event.trigger(node, eventPrefix + 'removed', blockParent);
+                    // This won't bubble through the tree because the node is
+                    // not in the tree anymore
+                    //Event.trigger(node, eventPrefix + 'removed', blockParent);
                 });
                 [].slice.apply(mutation.addedNodes)
                         .filter(function(node){return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)}) // only block elements
@@ -280,6 +295,7 @@
     var dragTarget = null;
     var isDragging = false;
     var startPos = {x: 0, y: 0};
+    Event.distancePointerMoved = 0;
     var DELTA = 5; // movement required to trigger drag vs. tap
 
     function reset(){
@@ -304,6 +320,7 @@
         Event.pointerY = evt.pageY;
         dragTarget = evt.target;
         startPos = {x: evt.pageX, y: evt.pageY};
+        Event.distancePointerMoved = 0;
         forward(dragTarget, 'drag-init', evt);
     }
 
@@ -334,14 +351,14 @@
     function dragging(evt){
         Event.pointerX = evt.pageX;
         Event.pointerY = evt.pageY;
+        Event.distancePointerMoved = util.dist(evt.pageX, startPos.x, evt.pageY, startPos.y);
         if (!dragTarget) { return undefined; }
         if (!isDragging) {
             // Test if we've moved more than a delta?
             // Otherwise this could block legitimate click/tap events
-            // var distanceMoved = Math.sqrt(Math.pow(evt.pageX - startPos.x, 2) + Math.pow(evt.pageY - startPos.y));
-            // if (distanceMoved < DELTA){
-            //     return undefined;
-            // }
+            if (Event.distancePointerMoved < DELTA){
+                return undefined;
+            }
             if (startDrag(evt) === undefined) {
                 return undefined;
             }
@@ -380,9 +397,12 @@
 
     var specialKeys = {
         // taken from jQuery Hotkeys Plugin
+        // updated because browsers suck, meta returned for 4 different values
+        // see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode#Non-printable_keys_%28function_keys%29
         8: "backspace", 9: "tab", 13: "return", 16: "shift", 17: "ctrl", 18: "alt", 19: "pause",
         20: "capslock", 27: "esc", 32: "space", 33: "pageup", 34: "pagedown", 35: "end", 36: "home",
         37: "left", 38: "up", 39: "right", 40: "down", 45: "insert", 46: "del",
+        91: "meta", 92: "meta", 93: "meta", // left and right commands
         96: "0", 97: "1", 98: "2", 99: "3", 100: "4", 101: "5", 102: "6", 103: "7",
         104: "8", 105: "9", 106: "*", 107: "+", 109: "-", 110: ".", 111 : "/",
         112: "f1", 113: "f2", 114: "f3", 115: "f4", 116: "f5", 117: "f6", 118: "f7", 119: "f8",
@@ -428,7 +448,42 @@
 
     function clearRuntime(){
         Event.keyHandlers = {};
+        Event.mouseOrTouchHandlers = {};
     }
+
+    /*****************************
+    *
+    *   Mouse and Touch events
+    *
+    ******************************/
+
+    function handleMouseOrTouchEvent(type, evt) {
+        if(Event.mouseOrTouchHandlers[type]) {
+            Event.mouseOrTouchHandlers[type].forEach(function(handler){
+                handler(evt);
+            });
+        }
+    }
+
+    function handleMouseOrTouchUp(evt) {
+        handleMouseOrTouchEvent('up', evt);
+    }
+
+    function handleMouseOrTouchDown(evt) {
+        handleMouseOrTouchEvent('down', evt);
+    }
+
+    function handleMouseOrTouchMove(evt) {
+        handleMouseOrTouchEvent('move', evt);
+    }
+
+    function mouseOrTouchEvent(type, handler) {
+        if (! Event.mouseOrTouchHandlers[type] ){
+            Event.mouseOrTouchHandlers[type] = [];
+        }
+        Event.mouseOrTouchHandlers[type].push(handler);
+    }
+
 
     window.Event = {
         on: on,
@@ -458,7 +513,12 @@
         handleKeyUp: handleKeyUp,
         handleKeyDown: handleKeyDown,
         registerElementsForAddRemoveEvents: registerElementsForAddRemoveEvents,
-        keyForEvent: keyForEvent
+        keyForEvent: keyForEvent,
+        mouseOrTouchHandlers: {},
+        handleMouseOrTouchUp: handleMouseOrTouchUp,
+        mouseOrTouchEvent: mouseOrTouchEvent,
+        handleMouseOrTouchDown: handleMouseOrTouchDown,
+        handleMouseOrTouchMove: handleMouseOrTouchMove
     };
 
 })();

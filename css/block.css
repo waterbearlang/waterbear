@@ -223,6 +223,7 @@ wb-value[type*=text] > input{background-image: url(../images/icon/text.svg);}
 wb-value[type*=boolean] > input{background-image: url(../images/icon/boolean.svg);}
 wb-value[type*=sprite] > input{background-image: url(../images/icon/sprite.svg);}
 wb-value[type*=sound] > input{background-image: url(../images/icon/sound.svg);}
+wb-value[type*=audio] > input{ background-image: url(../images/icon/audio.svg);}
 wb-value[type*=array] > input{background-image: url(../images/icon/array.svg);}
 wb-value[type*=image] > input{background-image: url(../images/icon/image.svg);}
 wb-value[type*=shape] > input{background-image: url(../images/icon/shape.svg);}
@@ -233,6 +234,7 @@ wb-value[type*=rect] > input{background-image: url(../images/icon/rect.svg);}
 wb-value[type*=string] > input{background-image: url(../images/icon/string.svg);}
 wb-value[type*=geolocation] > input{ background-image: url(../images/icon/geolocation.svg);}
 wb-value[type*=size] > input{ background-image: url(../images/icon/size.svg);}
+wb-value[type*=date] > input{ background-image: url(../images/icon/calendar.svg); height:15px; }
 
 wb-value[type*=array][type*=string] > input{
     background-image: url(../images/icon/array.svg), url(../images/icon/string.svg);
@@ -247,7 +249,7 @@ wb-value[type*=text][type*=string] > input{
     background-position: 3px 3px, 20px 3px;
 }
 wb-value[type*=vector] > input{
-    background-image: url(../images/icon/point.svg), url(../images/icon/vector.svg);
+    background-image: url(../images/icon/vector.svg);
     background-position: 3px 3px, 20px 3px;
 }
 wb-value[type*=image][type*=shape][type*=sprite] > input{
@@ -258,7 +260,24 @@ wb-value[type*=number][type*=vector][type*=array] > input{
     background-image: url(../images/icon/math.svg), url(../images/icon/vector.svg), url(../images/icon/array.svg);
     background-position: 3px 3px, 20px 3px, 37px 3px;
 }
-
+wb-value[type*=number][type*=vector][type*=array][type*=date] > input{
+    background-image: url(../images/icon/math.svg), url(../images/icon/vector.svg), url(../images/icon/array.svg), url(../images/icon/calendar.svg);;
+    background-position: 3px 3px, 20px 3px, 37px 3px, 54px, 3px;
+    padding-left: 80px;
+}
+wb-value[type*=image][type*=shape][type*=color] > input{
+    background-image: url(../images/icon/image.svg), url(../images/icon/shape.svg), url(../images/icon/color.svg);
+    background-position: 3px 3px, 20px 3px, 47px 3px;
+    padding-left: 65px;
+}
+wb-value[type*=shape][type*=path] > input{
+    background-image: url(../images/icon/shape.svg), url(../images/icon/path.svg);
+    background-position: 3px 3px, 20px 3px;
+}
+wb-value[type*=number][type*=date] > input{
+    background-image: url(../images/icon/math.svg), url(../images/icon/calendar.svg);
+    background-position: 3px 3px, 20px 3px;
+}
 wb-workspace wb-value[selected=true] > input{border-color: blue}
 wb-expression:before{
     content: '';
@@ -277,6 +296,7 @@ wb-expression[type=boolean]:before{ background-image: url(../images/icon/boolean
 wb-expression[type=sprite]:before{ background-image: url(../images/icon/sprite.svg); }
 wb-expression[type=any]:before{ background-image: url(../images/icon/control.svg); }
 wb-expression[type=sound]:before{ background-image: url(../images/icon/sound.svg); }
+wb-expression[type=audio]:before{ background-image: url(../images/icon/audio.svg); }
 wb-expression[type=array]:before{ background-image: url(../images/icon/array.svg); }
 wb-expression[type=wb-image]:before{ background-image: url(../images/icon/image.svg); }
 wb-expression[type=shape]:before{ background-image: url(../images/icon/shape.svg); }
@@ -287,6 +307,7 @@ wb-expression[type=rect]:before{ background-image: url(../images/icon/rect.svg);
 wb-expression[type=string]:before{ background-image: url(../images/icon/string.svg); }
 wb-expression[type=geolocation]:before{ background-image: url(../images/icon/geolocation.svg); }
 wb-expression[type=size]:before{ background-image: url(../images/icon/size.svg);}
+wb-expression[type=date]:before{ background-image: url(../images/icon/calendar.svg); background-repeat: no-repeat; top: 2px; }
 
 /* Used for input resizing */
 .sekrit-svg{

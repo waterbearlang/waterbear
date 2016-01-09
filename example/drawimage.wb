@@ -1,0 +1,479 @@
+<wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="wb-image" ns="control" fn="getVariable" id="k6d0911" class=""><header><wb-value type="text" allow="literal" value="tile" class=""><input type="text" style="width: 30px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="image" fn="create" class=""><header><wb-value type="number" value="60" class="">blank image with width<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="160" class="">height<input type="number" style="width: 33.1328px;"></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="ka02a85" class=""><header><wb-value type="text" allow="literal" value="clip triangle" class="" selected="true"><input type="text" style="width: 69.4629px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="0" class="">vector at angle<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="60" class="">magnitude<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="90" class="">vector at angle<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="80" class="">magnitude<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>polygon with points</wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="vector" ns="control" fn="getVariable" id="k940ce0" class=""><header><wb-value type="text" allow="literal" value="offset1" class=""><input type="text" style="width: 47.1836px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="30" class="">vector at x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="45" class="">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="vector" ns="control" fn="getVariable" id="k1ab56b" class=""><header><wb-value type="text" allow="literal" value="offset2" class=""><input type="text" style="width: 48.5317px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="30" class="" selected="true">vector at x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="-10" class="">y<input type="number" style="width: 31.2637px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="vector" ns="control" fn="getVariable" id="k1e2544" class=""><header><wb-value type="text" allow="literal" value="offset3" class=""><input type="text" style="width: 48.8164px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" class="" style=""><header><wb-value type="number" value="-10" class="">vector at x<input type="number" style="width: 31.2637px;"></wb-value><wb-value type="number" value="25" class="">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-context ns="control" toplevel="true" fn="eachFrame" class="" style=""><header><wb-disclosure></wb-disclosure><wb-row>
+                        <wb-value>each frame</wb-value>
+                    </wb-row><wb-row>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="frame" id="k82dde0"><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local>
+                            <wb-expression type="number" ns="control" fn="elapsed" id="kd1a2db"><header><wb-value value="elapsed">elapsed</wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="" value="#ffffff">clear to<input type="color" style="width: 41.748px;"></wb-value></header>
+                    
+                </wb-step><wb-context ns="image" fn="drawOnImage" class="" style=""><header><wb-value type="wb-image" allow="block" class="">draw on<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="k8f830c" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value><wb-disclosure></wb-disclosure></header>
+					
+				<wb-contains class=""><wb-step ns="color" fn="fill" class="" style=""><header><wb-value type="color" value="#0000FF" class="">fill style<input type="color" style="width: 54.918px;" class="hide"><wb-expression type="color" ns="color" fn="namedColor" filtered="true" class="" style=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="transparent" class=""><select style="width: 40.5181px;" class=""><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="color" fn="stroke" class="" style=""><header><wb-value type="color" value="00FF00" class="">stroke style<input type="color" style="width: 61.5029px;"></wb-value></header>
+                    
+                </wb-step><wb-context ns="shape" type="shape" fn="withClip" class="" style=""><header><wb-disclosure></wb-disclosure><wb-value type="shape" class="">clip with<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="k50ecfe" class="" instanceof="ka02a85"><header><wb-value type="text" allow="literal" value="clip triangle" class="" selected="true">clip triangle</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+				<wb-contains class=""><wb-step ns="stage" fn="clearTo" class="" style=""><header><wb-value type="color,wb-image,shape" class="" value="#ffffff">clear to<input type="color" style="width: 41.748px;" class="hide"><wb-expression type="color" ns="color" fn="namedColor" filtered="true" class=""><header><wb-value type="list" allow="literal" options="black,white,navy,blue,aqua,teal,olive,green,lime,yellow,orange,red,fuchsia,rebeccapurple,maroon,grey,silver,transparent" value="white" class=""><select style="width: 40.5181px;"><option selected="selected">black</option><option>white</option><option>navy</option><option>blue</option><option>aqua</option><option>teal</option><option>olive</option><option>green</option><option>lime</option><option>yellow</option><option>orange</option><option>red</option><option>fuchsia</option><option>rebeccapurple</option><option>maroon</option><option>grey</option><option>silver</option><option>transparent</option></select></wb-value></header>
+                    
+                </wb-expression></wb-value></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="kd5bcc2" class=""><header><wb-value type="text" allow="literal" value="rotating 1" class="" selected="true"><input type="text" style="width: 59.0913px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="k7620bd" class="" instanceof="k940ce0" style=""><header><wb-value type="text" allow="literal" value="offset1" class="">offset1</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="k98032e" class="" instanceof="k940ce0" style=""><header><wb-value type="text" allow="literal" value="offset1" class="">offset1</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="0" class="">vector at angle<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class=""></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="k43c9c5" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="1.2" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="60" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="k403043" class="" instanceof="k940ce0" style=""><header><wb-value type="text" allow="literal" value="offset1" class="">offset1</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="-90" class="">vector at angle<input type="number" style="width: 32.9717px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="90" class=""><input type="number" style="width: 30px;"></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class="selected-block" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="kc746fd" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="1.2" class="selected-value" selected="true">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="80" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>polygon with points</wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="ke03c93" class=""><header><wb-value type="text" allow="literal" value="rotating 2" class="" selected="true"><input type="text" style="width: 60.4395px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="kdef9de" class="" instanceof="k1ab56b" style=""><header><wb-value type="text" allow="literal" value="offset2" class="">offset2</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="k55824" class="" instanceof="k1ab56b" style=""><header><wb-value type="text" allow="literal" value="offset2" class="">offset2</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="0" class="">vector at angle<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="-90" class=""><input type="number" style="width: 32.9717px;"></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="k9928c4" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="1.5" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="60" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="kc0a8cd" class="" instanceof="k1ab56b" style=""><header><wb-value type="text" allow="literal" value="offset2" class="">offset2</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="-90" class="">vector at angle<input type="number" style="width: 32.9717px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="180" class=""><input type="number" style="width: 33.1382px;"></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="ke25206" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="1.5" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="80" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>polygon with points</wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="k5a31ba" class=""><header><wb-value type="text" allow="literal" value="rotating 3" class=""><input type="text" style="width: 60.7241px;"></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="polygon" class=""><header><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="kc147bb" class="" instanceof="k1e2544" style=""><header><wb-value type="text" allow="literal" value="offset3" class="">offset3</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="k983703" class="" instanceof="k1e2544" style=""><header><wb-value type="text" allow="literal" value="offset3" class="">offset3</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="0" class="">vector at angle<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="180" class=""><input type="number" style="width: 33.1382px;"></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="ka6ce5c" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value=".8" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="60" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="zeroVector" filtered="true" class=""><header><wb-value>zero vector &lt;0,0&gt;</wb-value></header>
+					
+				</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="math" fn="add" filtered="true" class="" style=""><header><wb-value type="vector" class=""><input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="control" fn="getVariable" id="k2a646f" class="" instanceof="k1e2544" style=""><header><wb-value type="text" allow="literal" value="offset3" class="">offset3</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" class="">+<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="createPolar" filtered="true" class="" style=""><header><wb-value type="number" value="-90" class="">vector at angle<input type="number" style="width: 32.9717px;" class="hide"><wb-expression ns="math" type="number" fn="add" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="90" class=""><input type="number" style="width: 30px;"></wb-value><wb-value type="number,vector,array" value="0" class="">+<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class="" style=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="control" fn="frame" id="kbcdc2a" class="" style=""><header><wb-value value="frame">frame</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value=".8" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="80" class="">magnitude<input type="number" style="width: 30px;" class=""></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value></header>
+					
+					
+				</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>polygon with points</wb-value></header>
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="control" fn="setVariable" specialform="" class=""><header><wb-row>
+                        <wb-value>set</wb-value>
+						<wb-local renameable="true">
+							<wb-expression type="shape" ns="control" fn="getVariable" id="k274385" class=""><header><wb-value type="text" allow="literal" value="path" class="" selected="true"><input type="text" style="width: 36.4844px;" class=""></wb-value></header>
+								
+							</wb-expression>
+						</wb-local>
+                        <wb-value type="any" class="">to<input type="any" style="width: 30px;" class="hide"><wb-expression type="shape" ns="shape" fn="path" class="" style=""><header><wb-row>
+                        <wb-value type="shape" class=""><input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="k759abe" class="" instanceof="kd5bcc2"><header><wb-value type="text" allow="literal" value="rotating 1" class="" selected="true">rotating 1</wb-value></header>
+								
+							</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="shape" class=""><input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="k7a87d4" class="" instanceof="ke03c93"><header><wb-value type="text" allow="literal" value="rotating 2" class="" selected="true">rotating 2</wb-value></header>
+								
+							</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-row>
+                        <wb-value type="shape" class=""><input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="k5b0354" class="" instanceof="k5a31ba"><header><wb-value type="text" allow="literal" value="rotating 3" class="">rotating 3</wb-value></header>
+								
+							</wb-expression></wb-value>
+                        <button class="remove-item">-</button>
+                        <button class="add-item">+</button>
+                    </wb-row><wb-value>path</wb-value><wb-value type="list" allow="literal" options="connected,connected and closed, disconnected" value="disconnected" class="">type<select style="width: 65.7515px;" class=""><option selected="selected">connected</option><option>connected and closed</option><option> disconnected</option></select></wb-value></header>
+                    
+                    
+                    
+                </wb-expression></wb-value>
+                    </wb-row></header>
+                    
+                </wb-step><wb-step ns="shape" fn="draw" class="" style=""><header><wb-value type="shape" class="">draw the shape<input type="shape" readonly="" style="width: 30px;" class="hide"><wb-expression type="shape" ns="control" fn="getVariable" id="k49fb8" class="" instanceof="k274385" style=""><header><wb-value type="text" allow="literal" value="path" class="" selected="true">path</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+                    
+                </wb-step></wb-contains></wb-context><wb-step ns="image" fn="flipBoth" class="" style=""><header><wb-value type="wb-image" allow="block" class="">flip both<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="kd247b4" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+				</wb-step><wb-step ns="image" fn="drawAtPoint" class="" style=""><header><wb-value type="wb-image" allow="block" class="">draw<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="k10e211" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" allow="block" class="">at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" filtered="true" class=""><header><wb-value type="number" value="30" class="">vector at x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="0" class="">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="image" fn="flipVertical" class="" style=""><header><wb-value type="wb-image" allow="block" class="">flip vertical<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="kc8a024" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+				</wb-step><wb-step ns="image" fn="drawAtPoint" class="" style=""><header><wb-value type="wb-image" allow="block" class="">draw<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="k6d2795" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" allow="block" class="">at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" filtered="true" class=""><header><wb-value type="number" value="30" class="">vector at x<input type="number" style="width: 30px;"></wb-value><wb-value type="number" value="80" class="">y<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step><wb-step ns="image" fn="flipHorizontal" class="" style=""><header><wb-value type="wb-image" allow="block" class="">flip horizontal<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="kcb1282" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value></header>
+					
+				</wb-step></wb-contains></wb-context><wb-context ns="control" fn="loopOver" class="" style=""><header><wb-row>
+                        <wb-value type="any" class="" value="20">loop over<input type="any" style="width: 30px;"></wb-value>
+                    </wb-row><wb-row>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="kfcd40a"><header><wb-value type="text" allow="literal" value="indexOrKey"><input type="text" style="width: 70.376px;" class=""></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local renameable="true" class="">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="ka416f5" class=""><header><wb-value type="text" allow="literal" value="x" class=""><input type="text" style="width: 30px;" class=""></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-disclosure></wb-disclosure></header>
+                    
+                    
+                <wb-contains class=""><wb-context ns="control" fn="loopOver" class="" style=""><header><wb-row>
+                        <wb-value type="any" class="" value="10">loop over<input type="any" style="width: 30px;"></wb-value>
+                    </wb-row><wb-row>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="k685ff9"><header><wb-value type="text" allow="literal" value="indexOrKey 1"><input type="text" style="width: 70.376px;" class=""></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                        <wb-local renameable="true">
+                            <wb-expression type="any" ns="control" fn="getVariable" id="kd72e72" class=""><header><wb-value type="text" allow="literal" value="y" class=""><input type="text" style="width: 30px;" class=""></wb-value></header>
+                                
+                            </wb-expression>
+                        </wb-local>
+                    </wb-row><wb-disclosure></wb-disclosure></header>
+                    
+                    
+                <wb-contains class=""><wb-step ns="image" fn="drawAtPoint" class="" style=""><header><wb-value type="wb-image" allow="block" class="">draw<input type="wb-image" readonly="" style="width: 30px;" class="hide"><wb-expression type="wb-image" ns="control" fn="getVariable" id="k4a354e" class="" instanceof="k6d0911"><header><wb-value type="text" allow="literal" value="tile" class="">tile</wb-value></header>
+								
+							</wb-expression></wb-value><wb-value type="vector" allow="block" class="">at<input type="vector" readonly="" style="width: 30px;" class="hide"><wb-expression type="vector" ns="vector" fn="create" filtered="true" class=""><header><wb-value type="number" value="0" class="">vector at x<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="k267a20" class="" instanceof="ka416f5"><header><wb-value type="text" allow="literal" value="x" class="">x</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="60" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number" value="-1" class="">y<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="subtract" filtered="true" class=""><header><wb-value type="number,vector,array,date" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="k613ed3" class="" instanceof="kd72e72"><header><wb-value type="text" allow="literal" value="y" class="">y</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number,vector" value="160" class="" selected="true">×<input type="number" style="width: 33.1328px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number,vector,array,date" value="0" class="">−<input type="number" style="width: 30px;" class="hide"><wb-expression ns="math" type="number" fn="multiply" filtered="true" class=""><header><wb-value type="number,vector,array" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="number" ns="math" fn="mod" filtered="true" class=""><header><wb-value type="number" value="0" class=""><input type="number" style="width: 30px;" class="hide"><wb-expression type="any" ns="control" fn="getVariable" id="kfa069" class="" instanceof="ka416f5"><header><wb-value type="text" allow="literal" value="x" class="">x</wb-value></header>
+                                
+                            </wb-expression></wb-value><wb-value type="number" value="2" class="">modulus<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value><wb-value type="number,vector" value="80" class="">×<input type="number" style="width: 30px;"></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-expression></wb-value></header>
+                    
+                    
+                </wb-step></wb-contains></wb-context></wb-contains></wb-context></wb-contains></wb-context>

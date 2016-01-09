@@ -23,7 +23,6 @@
     var elem = dom.html;
     var workspace = dom.find(document.body, 'wb-workspace');
     var scriptspace = dom.find(document.body, 'wb-workspace > wb-contains');
-    var selectedItem = null;
     var BLOCK_MENU = document.querySelector('sidebar');
 
 /************************
@@ -953,6 +952,7 @@ window.WBValue = document.registerElement('wb-value', {prototype: ValueProto});
 
 //toggle an input's selection
 ValueProto.toggleSelect = function(){
+    var selectedItem = dom.find(workspace, 'wb-value.selected');
     if (this != selectedItem) {
         if(selectedItem) {
             selectedItem.deselect();
@@ -971,19 +971,17 @@ ValueProto.select = function(){
         input[0].select();
         input[0].focus();
     }
-
-    selectedItem = this;
 };
 
 // deselect an input field
 ValueProto.deselect = function(){
     this.removeAttribute('selected');
-    selectedItem = null;
 };
 
 //deselect an input field and unfilter the sidebar
 function toggleFilter(evt){
     var value = dom.closest(evt.target, 'wb-value');
+    var selectedItem = dom.find(workspace, 'wb-value.selected');
 
     if (BLOCK_MENU.getAttribute('filtered') === 'true'){
         // if click outside of wb-contains then deselect the selectedItem
@@ -1053,8 +1051,6 @@ Event.on(document.body, 'ui:click', 'wb-value > input', function(evt){
         dom.closest(evt.target, 'wb-value').toggleSelect();
     }
 });
-
-
 
 
 /* DRAGGING */

@@ -41,6 +41,7 @@
     function cloneEvent(evt){
         var newEvent = {};
         for (var key in evt){
+            if (key.substring(0,6) === 'webkit'){ continue; }
             if (key === 'returnValue'){ continue; }
             if (key === 'keyLocation'){ continue; }
             if (typeof evt[key] === 'function'){ continue; }

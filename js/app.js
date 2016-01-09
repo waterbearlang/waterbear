@@ -224,12 +224,12 @@ Event.on(window, 'dragging:mouseup', null, Event.endDrag);
 Event.on(window, 'dragging:keyup', null, Event.cancelDrag);
 Event.on(window, 'input:keydown', null, Event.handleKeyDown);
 Event.on(window, 'input:keyup', null, Event.handleKeyUp);
-Event.on(window, 'touchend', null, Event.handleMouseOrTouchUp);
-Event.on(window, 'mouseup', null, Event.handleMouseOrTouchUp);
-Event.on(window, 'touchstart', null, Event.handleMouseOrTouchDown);
-Event.on(window, 'mousedown', null, Event.handleMouseOrTouchDown);
-Event.on(window, 'touchmove', null, Event.handleMouseOrTouchMove);
-Event.on(window, 'mousemove', null, Event.handleMouseOrTouchMove);
+Event.on(window, 'runtime:touchend', null, Event.handleMouseOrTouchUp);
+Event.on(window, 'runtime:mouseup', null, Event.handleMouseOrTouchUp);
+Event.on(window, 'runtime:touchstart', null, Event.handleMouseOrTouchDown);
+Event.on(window, 'runtime:mousedown', null, Event.handleMouseOrTouchDown);
+Event.on(window, 'runtime:touchmove', null, Event.handleMouseOrTouchMove);
+Event.on(window, 'runtime:mousemove', null, Event.handleMouseOrTouchMove);
 
 Event.on(document.body, 'ui:click', '.undo', Undo.handleUndoButton);
 Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);

@@ -1,30 +1,39 @@
 /* Custom Elements that are not necessarily Waterbear specific */
 
-wb-search, wb-accordion{
+wb-search,
+wb-accordion {
     display: block;
 }
 
+
 /* HBOX, VBOX layout widgets */
 
-wb-hbox, wb-vbox{
+wb-hbox,
+wb-vbox {
     display: flex;
     flex: 1 1;
     position: relative;
     overflow: hidden;
 }
-wb-hbox{
+
+wb-hbox {
     flex-direction: row;
     height: 100%;
 }
-wb-vbox{
+
+wb-vbox {
     position: relative;
     flex-direction: column;
     max-height: 100%
 }
-wb-leftbox, wb-rightbox{
+
+wb-leftbox,
+wb-rightbox {
     flex-direction: column;
 }
-wb-workbox, wb-displaybox{
+
+wb-workbox,
+wb-displaybox {
     display: flex;
     flex: 1 1;
     position: relative;
@@ -32,63 +41,67 @@ wb-workbox, wb-displaybox{
     flex-direction: row;
     height: 100%;
 }
-wb-displaybox{
+
+wb-displaybox {
     border-color: #000000;
     border-width: medium;
     border-style: solid;
 }
-wb-displaybox:not([selected='true']){
+
+wb-displaybox:not([selected='true']) {
     display: none;
 }
-wb-hbox > *{
+
+wb-hbox > * {
     flex: 1 1 auto;
 }
 
-wb-vbox > *{
+wb-vbox > * {
     width: 100%;
     flex: 1 1 auto;
 }
 
-
-wb-splitter{
+wb-splitter {
     display: block;
     z-index: 100;
     flex: 0 0 8px;
 }
 
-wb-hbox > wb-splitter, wb-workbox > wb-splitter{
+wb-hbox > wb-splitter,
+wb-workbox > wb-splitter {
     background-image: linear-gradient(90deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
     background-size: 8px 8px;
     cursor: ew-resize;
 }
 
-wb-vbox > wb-splitter{
+wb-vbox > wb-splitter {
     background-image: linear-gradient(0deg, transparent 4px, rgba(218, 218, 218, 0.5) 4px, transparent 5px);
     background-image-size: 8px 8px;
     cursor: ns-resize;
 }
 
+
 /* Workspace */
 
-wb-workspace{
+wb-workspace {
     display: flex;
     flex-direction: column;
     flex: 2 1;
 }
 
-wb-workspace > header{
+wb-workspace > header {
     flex: 0 0 34px;
 }
 
-wb-workspace > output{
+wb-workspace > output {
     flex: 0 0 34px;
 }
 
-wb-workspace > wb-locals{
+wb-workspace > wb-locals {
     flex: 1 1;
 }
 
-wb-workspace > wb-contains{
+wb-workspace > wb-contains {
     flex: 3 1;
     overflow: auto;
 }
@@ -103,16 +116,13 @@ wb-workspace > wb-contains{
 }
 
 .debugger-paused wb-workspace > wb-contains {
-    background: repeating-linear-gradient(45deg,
-        rgba(34,34,34,.1),
-        rgba(34,34,34,.1) 25%,
-        transparent 25%,
-        transparent 50%) 0 0/32px 32px repeat fixed transparent;
-
+    background: repeating-linear-gradient(45deg, rgba(34, 34, 34, .1), rgba(34, 34, 34, .1) 25%, transparent 25%, transparent 50%) 0 0/32px 32px repeat fixed transparent;
     animation: slidey-stripes 1.5s linear infinite;
 }
 
+
 /* Playground */
+
 
 /*wb-playground{
     display: flex;
@@ -120,53 +130,63 @@ wb-workspace > wb-contains{
     flex: 1 1;
 }*/
 
+
 /*wb-playground > header{
     flex: 0 0 34px;
 }*/
 
-wb-playground > canvas{
+wb-playground > canvas {
     width: 100%;
     height: 100%;
 }
 
+
 /* Search */
 
-wb-search{
+wb-search {
     height: 34px;
 }
 
+
 /* ACCORDION */
 
-wb-accordion{
+wb-accordion {
     overflow: visible;
     padding-left: 6px;
 }
 
-wb-accordion[open=true]{
+wb-accordion[open=true] {
     padding-bottom: 6px;
 }
 
-wb-accordion > :not(header){
+wb-accordion >:not(header) {
     display: none;
 }
 
-wb-accordion[open=true] > :not(header){
+wb-accordion[open=true] >:not(header) {
     display: inline-block;
     margin-bottom: 6px;
 }
 
+
 /* Sidebar Filtering */
 
-sidebar[filtered=true] wb-accordion > :not(header){
-    display: inline-block; /*display everything*/
+sidebar[filtered=true] wb-accordion >:not(header) {
+    display: inline-block;
+    /*display everything*/
 }
 
-sidebar[filtered=true] wb-step, sidebar[filtered=true] p, sidebar[filtered=true] wb-context, sidebar[filtered=true] wb-expression:not([filtered=true]), sidebar[filtered=true] wb-accordion > header{
-    display: none!important; /* hide everything but the filtered expressions */
+sidebar[filtered=true] wb-step,
+sidebar[filtered=true] p,
+sidebar[filtered=true] wb-context,
+sidebar[filtered=true] wb-expression:not([filtered=true]),
+sidebar[filtered=true] wb-accordion > header {
+    display: none!important;
+    /* hide everything but the filtered expressions */
     margin-bottom: 6px;
 }
 
-sidebar[filtered=true] button.availableBlocks{
+sidebar[filtered=true] button.availableBlocks {
     display: block;
     position: relative;
     margin-left: -6px;
@@ -182,14 +202,15 @@ sidebar[filtered=true] button.availableBlocks{
     width: 100%;
 }
 
-sidebar[filtered=true] button.availableBlocks:after{
+sidebar[filtered=true] button.availableBlocks:after {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
     width: 15px;
     height: 100%;
-    background-color: #000000; /* over-ride colours in app.css */
+    background-color: #000000;
+    /* over-ride colours in app.css */
 }
 
 wb-accordion > header {
@@ -206,17 +227,15 @@ wb-accordion > header {
     pointer-events: auto;
 }
 
-
-
-wb-accordion[open=true] > header{
+wb-accordion[open=true] > header {
     margin-bottom: 6px;
 }
 
-wb-accordion > header *{
+wb-accordion > header * {
     pointer-events: none;
 }
 
-.cat-icon{
+.cat-icon {
     width: 30px;
     height: 30px;
     display: inline;
@@ -226,18 +245,19 @@ wb-accordion > header *{
     fill: #666;
 }
 
-.cat-icon.big-icon{
-    height:26px;
-    left:6px;
+.cat-icon.big-icon {
+    height: 26px;
+    left: 6px;
 }
 
-wb-accordion > header:after{
+wb-accordion > header:after {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
     width: 15px;
     height: 100%;
-    background-color: #CCC; /* over-ride colours in app.css */
+    background-color: #CCC;
+    /* over-ride colours in app.css */
     pointer-events: none;
 }

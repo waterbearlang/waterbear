@@ -61,6 +61,14 @@
      });
  }
 
+ /***************************************
+  *
+  * Handle selecting blocks and sockets
+  *
+  * This should be moved to select.js
+  *
+  ***************************************/
+
  function selectByValue(valueBlock){
      // Todo:
      // * make sure this is a valid block to select
@@ -82,41 +90,105 @@
      }
  }
 
- function selectByBlock(block){
+ function selectByBlock(block, retainSelection, added){
      // Todo:
      // * make sure this is a valid block to select
      // * move selection to next block as needed
-     var oldBlock = dom.find(workspace, '.selected-block');
-     if (oldBlock){
-         if (oldBlock === block){
+     var oldBlocks = dom.findAll(workspace, '.selected-block');
+     if (oldBlocks.length && !retainSelection){
+         if (oldBlocks.length === 1 && oldBlocks[0] === block){
              /* nothing to do */
              return;
          }
-         oldBlock.classList.remove('selected-block');
-         if (!block){
-             return;
-         }
+         selectByValue(null);
+         oldBlocks.forEach(function(e){
+             e.classList.remove('selected-block');
+         })
+     }
+     if (block && block.parentElement.localName === 'wb-local'){
+        block = dom.closest(block.parentElement, 'wb-context, wb-step, wb-expression');
      }
      if (block) {
-         block.classList.add('selected-block');
+        if (block.localName === 'wb-context' && added){
+            dom.find(block, 'wb-contains').classList.add('selected-block');
+        }else{
+            block.classList.add('selected-block');
+        }
      }
  }
 
  // Manage block selections
 
+ function isValueSelectable(value){
+    // Don't select literals, we don't want you adding blocks there
+    if (value.getAttribute('allow') === 'literal'){
+        console.log('literal: nope %o', value);
+        return false;
+    }
+    // don't select locals
+    if (value.parentElement.localName === 'wb-local'){
+        console.log('local: nope %o', value);
+        return false;
+    }
+    // don't select values which contain a block already
+    if (dom.find(value, 'wb-expression')){
+        console.log('filled: nope %o', value);
+        return false;
+    }
+    // don't select values which don't have a socket (i.e., an <input>)
+    if (! dom.find(value, 'input')){
+        console.log('no socket: nope %o', value);
+        return false;
+    }
+    console.log('looks good: %o', value);
+    return true;
+ }
+
+ function firstSocket(block){
+    var sockets = dom.findAll(block, 'wb-value');
+    var socket;
+    console.log('checking %s sockets', sockets.length);
+    for (var i = 0; i < sockets.length; i++){
+        socket = sockets[i];
+        // Don't return a socket from a child block
+        if (socket.closest('wb-context, wb-step, wb-expression') !== block){
+            console.log('descendant, not child: nope %o', socket);
+            continue;
+        }
+        if (! isValueSelectable(socket)){
+            continue;
+        }
+        // otherwise, return the socket
+        return socket;
+    }
+ }
+
  function manageSelections(evt){
      var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
+     if (block.localName === 'wb-contains' && block.parentElement.localName === 'wb-workspace'){
+        block = null;
+     }
+     var value = block;
+     var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
      if (!block) {
          // clicking away should deselect
          selectByValue(null);
          selectByBlock(null);
          return;
      }
+     if (block.localName !== 'wb-value'){
+        value = firstSocket(block);
+     }else if (! isValueSelectable(value)){
+        value = firstSocket(dom.closest(value, 'wb-context, wb-step, wb-expression'));
+     }
+     if (value){
+        console.log('select value %o', value);
+        selectByValue(value);
+     }
      if (block.localName === 'wb-value' || block.localName === "wb-contains"){
-         selectByValue(block);
-         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'));
+         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'), retainSelection, evt.type === 'wb-added');
      }else{
-         selectByBlock(block);
+         selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression, wb-contains'), retainSelection, evt.type === 'wb-added');
      }
  }
 
@@ -1437,6 +1509,7 @@ Event.on(workspace, 'editor:focusout',  'wb-local input', handleVariableBlur); /
 
 /* Some helpers for selections */
 Event.on(workspace, 'editor:click', '*', manageSelections);
+Event.on(workspace, 'editor:wb-added', null, manageSelections);
 
 // Event.on(workspace, 'editor:blur', 'input', handleOnBlur);
 // Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);

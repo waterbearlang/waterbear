@@ -908,7 +908,8 @@
         prototype: ValueProto
     });
 
-    //toggle an input's selection
+    // toggle an input's selection
+    // TODO: Move this to select.js
     ValueProto.toggleSelect = function() {
         var selectedItem = dom.find(workspace, 'wb-value.selected');
         if (this != selectedItem) {
@@ -920,6 +921,7 @@
     };
 
     //select an input field
+    // TODO: Move this to select.js
     ValueProto.select = function() {
         this.setAttribute('selected', 'true');
 
@@ -932,13 +934,21 @@
     };
 
     // deselect an input field
+    // TODO: Move this to select.js
     ValueProto.deselect = function() {
         this.removeAttribute('selected');
     };
 
     //deselect an input field and unfilter the sidebar
+    // TODO: Move this to select.js
     function toggleFilter(evt) {
+        if (dom.closest(evt.target, 'wb-local')){
+            return;
+        }
+        var origTarget = evt.target;
+        var triggerFilter = origTarget.localName === 'input';
         var value = dom.closest(evt.target, 'wb-value');
+        console.log('toggle filter %o', value);
         var selectedItem = dom.find(workspace, 'wb-value.selected');
 
         if (BLOCK_MENU.getAttribute('filtered') === 'true') {
@@ -949,10 +959,10 @@
             app.clearFilter();
 
             // filter on value which is the next value for selectedItem
-            if (value && value.matches('wb-value')) {
+            if (value && value.matches('wb-value') && triggerFilter) {
                 app.setFilter(value);
             }
-        } else if (value) {
+        } else if (value && triggerFilter) {
             app.setFilter(value);
         }
 
@@ -1163,19 +1173,26 @@
         }
     }
 
+    function isInsertionInScope(block, target){
+        var localId = block.getAttribute('instanceof');
+        if (localId) {
+            var local = document.getElementById(localId);
+            var localContext = dom.closest(local, 'wb-contains');
+            if (!localContext.contains(dropTarget) && localContext !== dropTarget) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     function dropTargetIsContainer(potentialDropTarget) {
         dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
         // FIXME: Don't drop onto locals
         if (dropTarget && dragTarget) {
-            var localId = dragTarget.getAttribute('instanceof');
-            if (localId) {
-                var local = document.getElementById(localId);
-                var localContext = dom.closest(local, 'wb-contains');
-                if (!localContext.contains(dropTarget) && localContext !== dropTarget) {
-                    dropTarget.classList.add('no-drop');
-                    dropTarget = null;
-                    app.warn('instances can only be dropped within the scope of their local');
-                }
+            if (!isInsertionInScope(dragTarget, dropTarget)){
+                dropTarget.classList.add('no-drop');
+                dropTarget = null;
+                app.warn('instances can only be dropped within the scope of their local');
             }
         }
         if (dropTarget) {
@@ -1263,7 +1280,7 @@
         } else if (dom.matches(dragTarget, 'wb-expression')) {
             if (dom.matches(dropTarget, 'wb-value')) {
                 dropTarget.appendChild(dragTarget);
-                dropTarget.deselect();
+                dropTarget.deselect(); // FIXME: This belongs in select.js
                 BLOCK_MENU.removeAttribute('filtered');
                 addValueEvent = {
                     type: 'add-block',
@@ -1440,5 +1457,9 @@
     // Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
 
     Event.on(workspace, 'editor:click', '*', toggleFilter);
+
+    window.Block = {
+        isInsertionInScope: isInsertionInScope
+    };
 
 })();

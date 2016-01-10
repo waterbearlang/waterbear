@@ -54,9 +54,14 @@
 
         var selectedType = item.getAttribute('type');
         if (selectedType) {
-            var selectedTypeList = selectedType.split(',');
-            for (i = 0; i < selectedTypeList.length; i++) {
-                sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+            if (selectedType === 'any'){
+                sidebarBlocks = BLOCK_MENU.querySelectorAll('wb-expression');
+            }else{
+                var selectedTypeList = selectedType.split(',');
+                selectedTypeList.push('any');
+                for (i = 0; i < selectedTypeList.length; i++) {
+                    sidebarBlocks = sidebarBlocks.concat(Array.prototype.slice.call(BLOCK_MENU.querySelectorAll('wb-expression[type *= ' + selectedTypeList[i] + ']')));
+                }
             }
             for (i = 0; i < sidebarBlocks.length; i++) {
                 sidebarBlocks[i].setAttribute('filtered', 'true');

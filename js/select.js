@@ -120,9 +120,6 @@
 
     function manageSelections(evt) {
         var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
-        if (block && block.localName === 'wb-contains' && block.parentElement.localName === 'wb-workspace') {
-            block = null;
-        }
         var value = block;
         var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
         if (!block) {
@@ -130,7 +127,7 @@
             unselectAllBlocks(null);
             return;
         }
-        if (block.localName === 'wb-value' || block.localName === "wb-contains") {
+        if (block.localName === 'wb-value') {
             selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'), retainSelection, evt.type === 'wb-added');
         } else {
             selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression, wb-contains'), retainSelection, evt.type === 'wb-added');
@@ -151,7 +148,64 @@
     *
     **************************************/
 
-    function insertBlockAtSelection(){
+    function inAllowedTypes(block, target){
+        var allowedTypes = target.getAttribute('type').split(',');
+        if (!allowedTypes.length){
+            app.warn('No allowed types found, cannot insert block (this should never happen, probably a problem with Waterbear)');
+            return false;
+        }
+        if (allowedTypes[0] == 'any'){
+            return true;
+        }
+        var type = block.getAttribute('type');
+        if (type === 'any'){
+            return true;
+        }
+        if (allowedTypes.indexOf(type) > -1){
+            return true;
+        }
+        app.warn('Expression block is the wrong type to insert in the selected socket');
+        return false;
+    }
+
+    function insertBlockAtSelection(evt){
+        var block = dom.clone(dom.closest(evt.target, 'wb-context, wb-step, wb-expression'));
+        if (block.localName === 'wb-expression'){
+            var selectedValue = dom.find(workspace, '.selected-value');
+            if (selectedValue){
+                if (!inAllowedTypes(block, selectedValue)){
+                    app.warn('This local block would be out of scope at the selected socket');
+                    return;
+                }
+                if (Block.isInsertionInScope(block, selectedValue)){
+                    selectedValue.appendChild(block);
+                }
+            }
+        }else{
+            // handle wb-context and wb-step
+            var selectedBlock = dom.find(workspace, '.selected-block');
+            if (selectedBlock){
+                switch(selectedBlock.localName){
+                    case 'wb-context': // fall-through
+                    case 'wb-step':
+                        selectedBlock.parentElement.insertBefore(block, selectedBlock.nextElementSibling);
+                        break;
+                    case 'wb-contains':
+                        selectedBlock.insertBefore(block, selectedBlock.firstElementChild);
+                        break;
+                    case 'wb-expression':
+                        // do nothing
+                        app.warn('Cannot insert a block around an Expression block');
+                        break;
+                    default:
+                        // do nothing
+                        app.warn('No valid insertion point found');
+                        break;
+                }
+            }else{
+                app.warn('Select an insertion point to add the block to before clicking');
+            }
+        }
     }
 
     /**************************************

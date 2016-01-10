@@ -452,6 +452,31 @@ wb-expression[type=date]:before {
 }
 
 
+/********************************
+*
+* Don't allow interaction in menu
+*
+*********************************/
+
+sidebar wb-context *,
+sidebar wb-step *,
+sidebar wb-expression *,
+wb-local wb-context *,
+wb-local wb-step *,
+wb-local wb-expression *{
+    pointer-events: none;
+}
+wb-local wb-context input,
+wb-local wb-step input,
+wb-local wb-expression input{
+    pointer-events: auto;
+}
+
+sidebar wb-disclosure,
+wb-local wb-disclosure{
+    display: none;
+}
+
 /* Used for input resizing */
 
 .sekrit-svg {

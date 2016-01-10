@@ -332,7 +332,7 @@
         y: 0
     };
     Event.distancePointerMoved = 0;
-    var DELTA = 5; // movement required to trigger drag vs. tap
+    var DELTA = 10; // movement required to trigger drag vs. tap
 
     function reset() {
         // called when we end a drag for any reason

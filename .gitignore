@@ -6,3 +6,5 @@ waterbear.bbprojectd
 node_modules
 out/
 coverage/
+*~
+carry/

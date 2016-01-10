@@ -120,6 +120,9 @@
 
     function manageSelections(evt) {
         var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
+        if (block.parentElement.localName === 'wb-local'){
+            return;
+        }
         var value = block;
         var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
         if (!block) {

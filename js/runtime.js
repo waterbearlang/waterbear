@@ -1,4 +1,4 @@
-(function(global){
+(function(global) {
     'use strict';
 
     // Dependencies: ctx, canvas, Event, runtime
@@ -6,12 +6,13 @@
     var _canvas, _ctx;
     var song = "o4 l4 V12 ";
     var current_octave = 4;
-    function canvas(){
-        if (!_canvas){
-            if (dom.find){
+
+    function canvas() {
+        if (!_canvas) {
+            if (dom.find) {
                 _canvas = dom.find('canvas');
             }
-            if (!_canvas){
+            if (!_canvas) {
                 // We're not running in Waterbear
                 // Just put a canvas in so tests pass
                 _canvas = document.createElement('canvas');
@@ -22,9 +23,9 @@
         return _canvas;
     }
 
-    function getContext(){
+    function getContext() {
         // returns CanvasContext
-        if (!_ctx){
+        if (!_ctx) {
             _ctx = canvas().getContext('2d');
             // Save the default state.
             _ctx.strokeStyle = 'transparent';
@@ -32,6 +33,7 @@
         }
         return _ctx;
     }
+
     function resetCanvas() {
         // No context to reset!
         if (!_ctx) {
@@ -46,15 +48,15 @@
         ctx.strokeStyle = 'transparent';
         ctx.save();
 
-        util.setLastPoint(new util.Vector(0,0));
+        util.setLastPoint(new util.Vector(0, 0));
     }
 
-    Event.on(window, 'ui:load', null, function(){
+    Event.on(window, 'ui:load', null, function() {
         handleResize();
     }, false);
 
-    function handleResize(){
-        if(dom.find('wb-playground > canvas')){ //only resize if the canvas is in the playground
+    function handleResize() {
+        if (dom.find('wb-playground > canvas')) { //only resize if the canvas is in the playground
             var can = canvas();
             can.removeAttribute('height');
             var rect = can.parentElement.getBoundingClientRect();
@@ -72,8 +74,8 @@
         }
     }
 
-    function canvasRect(){
-        return new util.Rect(0,0,Event.stage.width,Event.stage.height);
+    function canvasRect() {
+        return new util.Rect(0, 0, Event.stage.width, Event.stage.height);
     }
 
     function clearRuntime() {
@@ -83,8 +85,8 @@
         clearPerFrameHandlers();
         /* Clear all runtime event handlers. */
         Event.off(null, 'runtime:*');
-        for (var prop in assets.sounds){
-            if (!assets.sounds.hasOwnProperty(prop)){
+        for (var prop in assets.sounds) {
+            if (!assets.sounds.hasOwnProperty(prop)) {
                 continue;
             }
             assets.sounds[prop].pause();
@@ -92,7 +94,7 @@
     }
 
     // utility for iterating over child blocks
-    function runBlock(block){
+    function runBlock(block) {
         block.run(self);
     }
 
@@ -102,7 +104,7 @@
 
     function clearPerFrameHandlers() {
         perFrameHandlers = [];
-        if (animationFrameHandler){
+        if (animationFrameHandler) {
             cancelAnimationFrame(animationFrameHandler);
             animationFrameHandler = null;
         }
@@ -112,7 +114,7 @@
     Event.on(window, 'ui:resize', null, handleResize);
     Event.on(document.body, 'ui:wb-resize', null, handleResize);
 
-    function startEventLoop(){
+    function startEventLoop() {
         clearPerFrameHandlers();
         lastTime = new Date().valueOf();
         runtime.control._startTime = lastTime;
@@ -125,19 +127,19 @@
         /* TODO: Dunno lol there be more in here? */
     }
 
-    function frameHandler(timestamp){
+    function frameHandler(timestamp) {
         // where to put these? Event already has some global state.
-        if (lastTime === timestamp){
+        if (lastTime === timestamp) {
             throw new Exception('There can be only one!');
         }
         runtime.control._elapsed = timestamp - runtime.control._startTime;
         runtime.control._sinceLastTick = timestamp - lastTime;
         runtime.control._frame++;
         lastTime = timestamp;
-        perFrameHandlers.forEach(function(handler){
+        perFrameHandlers.forEach(function(handler) {
             handler();
         });
-        if (perFrameHandlers.length){
+        if (perFrameHandlers.length) {
             animationFrameHandler = requestAnimationFrame(frameHandler);
         }
     }
@@ -191,130 +193,130 @@
         local: {
             // temporary fix for locals
             // is this still used anywhere?
-            value: function(){
+            value: function() {
                 return this.value;
             }
         },
 
         array: {
-            create: function arrayCreateExpr(){
+            create: function arrayCreateExpr() {
                 return [].slice.call(arguments);
             },
-            copy: function arrayCopyExpr(a){
+            copy: function arrayCopyExpr(a) {
                 return a.slice();
             },
-            itemAt: function arrayItemFromExpr(a,i){
+            itemAt: function arrayItemFromExpr(a, i) {
                 return a[i];
             },
-            join: function arrayJoinExpr(a1,a2){
+            join: function arrayJoinExpr(a1, a2) {
                 return a1.concat(a2);
             },
-            makeString: function arrayMakeStringExpr(a,s){
+            makeString: function arrayMakeStringExpr(a, s) {
                 return a.join(s);
             },
-            append: function arrayAppendStep(a,item){
+            append: function arrayAppendStep(a, item) {
                 a.push(item);
             },
-            prepend: function arrayPrependStep(a,item){
+            prepend: function arrayPrependStep(a, item) {
                 a.unshift(item);
             },
-            length: function arrayLengthExpr(a){
+            length: function arrayLengthExpr(a) {
                 return a.length;
             },
-            removeItem: function arrayRemoveItemStep(a,i){
-                a.splice(i,1);
+            removeItem: function arrayRemoveItemStep(a, i) {
+                a.splice(i, 1);
             },
-            pop: function arrayPopExpr(a){
+            pop: function arrayPopExpr(a) {
                 return a.pop();
             },
-            shift: function arrayShiftExpr(a){
+            shift: function arrayShiftExpr(a) {
                 return a.shift();
             },
-            reverse: function arrayReverseExpr(a){
+            reverse: function arrayReverseExpr(a) {
                 return a.reverse();
             }
         },
 
         'boolean': {
-            'true': function booleanTrue(){
+            'true': function booleanTrue() {
                 return true;
             },
-            'false': function booleanFalse(){
+            'false': function booleanFalse() {
                 return false;
             },
-            and: function booleanAndExpr(a,b){
+            and: function booleanAndExpr(a, b) {
                 return a && b;
             },
-            or: function booleanOrExpr(a,b){
+            or: function booleanOrExpr(a, b) {
                 return a || b;
             },
-            xor: function booleanXorExpr(a,b){
+            xor: function booleanXorExpr(a, b) {
                 return !a !== !b;
             },
-            not: function booleanNotExpr(a){
+            not: function booleanNotExpr(a) {
                 return !a;
             }
         },
         color: {
-            namedColor: function colorNamedExpr(name){
+            namedColor: function colorNamedExpr(name) {
                 // FIXME: We may need to return hex or other color value
                 return name;
             },
-            rgb: function colorRGBExpr(r,g,b){
+            rgb: function colorRGBExpr(r, g, b) {
                 return 'rgb(' + r + ',' + g + ',' + b + ')';
             },
-            rgba: function colorRGBAExpr(r,g,b,a){
-                return 'rgba(' + r + ',' + g + ',' + b + ',' + a/100 + ')';
+            rgba: function colorRGBAExpr(r, g, b, a) {
+                return 'rgba(' + r + ',' + g + ',' + b + ',' + a / 100 + ')';
             },
-            grey: function colorGreyExpr(g){
+            grey: function colorGreyExpr(g) {
                 return 'rgb(' + g + ',' + g + ',' + g + ')';
             },
-            hsl: function colorHSLExpr(h,s,l){
+            hsl: function colorHSLExpr(h, s, l) {
                 return 'hsl(' + h + ',' + s + '%,' + l + '%)';
             },
-            hsla: function colorHSLAExpr(h,s,l,a){
-                return 'hsl(' + h + ',' + s + '%,' + l + '%,' + a/100 + ')';
+            hsla: function colorHSLAExpr(h, s, l, a) {
+                return 'hsl(' + h + ',' + s + '%,' + l + '%,' + a / 100 + ')';
             },
-            random: function colorRandomExpr(){
-                return "#"+(~~(Math.random()*(1<<30))).toString(16).toUpperCase().slice(0,6);
+            random: function colorRandomExpr() {
+                return "#" + (~~(Math.random() * (1 << 30))).toString(16).toUpperCase().slice(0, 6);
             },
-            fill: function colorFillStep(color){
+            fill: function colorFillStep(color) {
                 getContext().fillStyle = color;
             },
-            stroke: function colorStrokeStep(color){
+            stroke: function colorStrokeStep(color) {
                 getContext().strokeStyle = color;
             },
-            shadow: function colorShadowStep(color, blur){
+            shadow: function colorShadowStep(color, blur) {
                 getContext().shadowColor = color;
                 getContext().shadowBlur = blur;
             }
         },
 
         control: {
-            eachFrame: function controlEachFrameCtx(){
+            eachFrame: function controlEachFrameCtx() {
                 var self = this;
-                perFrameHandlers.push(function runFrame(){
+                perFrameHandlers.push(function runFrame() {
                     var steps = self.gatherSteps();
                     steps.forEach(runBlock);
                 });
             },
-            frame: function controlFrameExpr(){
+            frame: function controlFrameExpr() {
                 return runtime.control._frame;
             },
-            elapsed: function controlElapsedExpr(){
+            elapsed: function controlElapsedExpr() {
                 return runtime.control._elapsed;
             },
-            setVariable: function controlSetVariableStep(){
+            setVariable: function controlSetVariableStep() {
                 this.getLocals()[0]._currentValue = this.gatherValues()[0];
             },
-            getVariable: function controlGetVariableExpr(name){
+            getVariable: function controlGetVariableExpr(name) {
                 var local = this.localOrSelf();
-                if (typeof(local._currentValue) !== undefined){
+                if (typeof(local._currentValue) !== undefined) {
                     return local._currentValue;
                 }
                 return local.run();
             },
-            updateVariable: function controlUpdateVariableStep(){
+            updateVariable: function controlUpdateVariableStep() {
                 // Do I need to find the setVariable block and set the value there?
                 var row = this.gatherArguments()[0];
                 var instance = row.firstElementChild.lastElementChild;
@@ -322,7 +324,7 @@
                 local._currentValue = row.lastElementChild.getValue()[0];
             },
             // FIXME: This doesn't seem to have a block
-            incrementVariable: function controlIncrementVariableExpr(variable, value){
+            incrementVariable: function controlIncrementVariableExpr(variable, value) {
                 this[name] += value;
             },
             loopOver: function controlLoopOverCtx() {
@@ -333,8 +335,9 @@
                 var index = locals[0];
                 var value = locals[1];
                 var type = util.type(list);
-                var i =0,len,keys;
-                switch(type){
+                var i = 0,
+                    len, keys;
+                switch (type) {
                     case 'array': // fall through
                     case 'string':
                         len = list.length;
@@ -352,9 +355,9 @@
 
                 /* For every element in the container place
                  * the index and value into the scope. */
-                for (i = 0; i < len; i++){
+                for (i = 0; i < len; i++) {
                     list = listElem.getValue()[0];
-                    switch(type){
+                    switch (type) {
                         // FIXME: Get names of index & value from block
                         case 'array': // fall through
                         case 'string':
@@ -372,7 +375,7 @@
                         case 'boolean':
                             index.setValue(i);
                             value.setValue(list);
-                            if (!list){
+                            if (!list) {
                                 // handle the case where the value changes after starting the loop
                                 return;
                             }
@@ -381,15 +384,15 @@
                     this.gatherSteps().forEach(runBlock);
                 }
             },
-            broadcast: function controlBroadcastStep(messageName, data){
+            broadcast: function controlBroadcastStep(messageName, data) {
                 // Handle with and without data
                 Event.trigger(document.body, messageName, data);
             },
-            receive: function controlReceiveCtx(messageName){
+            receive: function controlReceiveCtx(messageName) {
                 // Handle with and without data
                 // Has a local for the data
                 var self = this;
-                Event.on(document.body, 'runtime:' + args[0], null, function(evt){
+                Event.on(document.body, 'runtime:' + args[0], null, function(evt) {
                     // FIXME: how do I get the local from here?
                     // As an arg would be easiest
                     var local = self.locals()[0];
@@ -397,34 +400,34 @@
                     self.gatherSteps().forEach(runBlock);
                 });
             },
-            'if': function controlIfCtx(predicate){
-                if (predicate){
+            'if': function controlIfCtx(predicate) {
+                if (predicate) {
                     this.gatherSteps().forEach(runBlock);
                 }
             },
-            ifElse: function controlIfElseCtx(predicate){
-                if (predicate){
+            ifElse: function controlIfElseCtx(predicate) {
+                if (predicate) {
                     this.gatherSteps().forEach(runBlock);
-                }else{
+                } else {
                     this.gatherContains()[1].forEach(runBlock);
                 }
             },
-            ternary: function controlTernaryExpr(cond, iftrue, otherwise){
+            ternary: function controlTernaryExpr(cond, iftrue, otherwise) {
                 var args = this.gatherArguments();
                 var cond = args[0].getValue();
                 return cond ? args[1].getValue() : args[2].getValue();
             },
-            ask: function controlAskStep(message, name){
+            ask: function controlAskStep(message, name) {
                 var answer = prompt(message);
                 this.getLocals()[0]._currentValue = answer;
             },
-            comment: function controlCommentCtx(){
+            comment: function controlCommentCtx() {
                 // do nothing, it's a comment
             },
-            log: function controlLogStep(item){
+            log: function controlLogStep(item) {
                 console.log(item);
             },
-            alert: function controlAlertStep(x){
+            alert: function controlAlertStep(x) {
                 alert(x);
             },
         },
@@ -442,7 +445,7 @@
             /* Asynchronous update event. Context. */
             whenLocationUpdated: function geoWhenLocationUpdatedCtx() {
                 var self = this;
-                Event.on(window, 'runtime:locationchanged', null, function (event) {
+                Event.on(window, 'runtime:locationchanged', null, function(event) {
                     // TODO: probably factor out augmenting scope and running
                     // the block stuff to somewhere else.
                     // FIXME: save event values for access
@@ -462,13 +465,13 @@
 
                 var φ1 = util.deg2rad(lat1);
                 var φ2 = util.deg2rad(lat2);
-                var Δφ = util.deg2rad(lat2-lat1);
-                var Δλ = util.deg2rad(lon2-lon1);
+                var Δφ = util.deg2rad(lat2 - lat1);
+                var Δλ = util.deg2rad(lon2 - lon1);
 
-                var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-                        Math.cos(φ1) * Math.cos(φ2) *
-                        Math.sin(Δλ/2) * Math.sin(Δλ/2);
-                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                var a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+                var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
                 return R * c;
             },
@@ -499,43 +502,43 @@
         },
 
         image: {
-            get: function imageGetExpr(path){
+            get: function imageGetExpr(path) {
                 return assets.images[path];
             },
-            create: function imageCreate(width, height){
+            create: function imageCreate(width, height) {
                 return util.WBImage.create(width, height);
             },
-            drawAtPoint: function imageDrawAtPointStep(img, pt){
+            drawAtPoint: function imageDrawAtPointStep(img, pt) {
                 img.drawAtPoint(getContext(), pt);
             },
-            getWidth: function imageGetWidthExpr(img){
+            getWidth: function imageGetWidthExpr(img) {
                 return img.getWidth();
             },
-            getHeight: function imageGetHeightExpr(img){
+            getHeight: function imageGetHeightExpr(img) {
                 return img.getHeight();
             },
-            setWidth: function imageSetWidthStep(img, w){
+            setWidth: function imageSetWidthStep(img, w) {
                 img.setWidth(w);
             },
-            setHeight: function imageSetHeightStep(img, h){
+            setHeight: function imageSetHeightStep(img, h) {
                 img.setHeight(h);
             },
-            setSize: function imageSetSizeStep(img, sz){
+            setSize: function imageSetSizeStep(img, sz) {
                 img.setSize(sz);
             },
-            scale: function imageScaleStep(img, scaleFactor){
+            scale: function imageScaleStep(img, scaleFactor) {
                 img.scale(scaleFactor);
             },
-            flipHorizontal: function imageFlipHorizontal(img){
+            flipHorizontal: function imageFlipHorizontal(img) {
                 img.flipH();
             },
-            flipVertical: function imageFlipVertical(img){
+            flipVertical: function imageFlipVertical(img) {
                 img.flipV();
             },
-            flipBoth: function imageFlipBoth(img){
+            flipBoth: function imageFlipBoth(img) {
                 img.flipBoth();
             },
-            drawOnImage: function drawOnImageCtx(img){
+            drawOnImage: function drawOnImageCtx(img) {
                 var oldContext = _ctx;
                 _ctx = img.getContext();
                 this.gatherSteps().forEach(runBlock);
@@ -543,42 +546,42 @@
             }
         },
         input: {
-            keyPressed: function inputKeyPressedExpr(key){
-                if(Event.keys[key])
+            keyPressed: function inputKeyPressedExpr(key) {
+                if (Event.keys[key])
                     return true;
                 else
                     return false;
             },
-            pointerX: function inputPointerXExpr(){
-                return (Event.pointerX-Event.stage.left);
+            pointerX: function inputPointerXExpr() {
+                return (Event.pointerX - Event.stage.left);
             },
-            pointerY: function inputPointerYExpr(){
-                return (Event.pointerY-Event.stage.top);
+            pointerY: function inputPointerYExpr() {
+                return (Event.pointerY - Event.stage.top);
             },
-            pointerDown: function inputPointerDownExpr(){
+            pointerDown: function inputPointerDownExpr() {
                 return Event.pointerDown;
             },
-            whenKeyPressed: function inputWhenKeyPressedCtx(key){
+            whenKeyPressed: function inputWhenKeyPressedCtx(key) {
                 var self = this;
-                Event.onKeyDown(key, function(){
+                Event.onKeyDown(key, function() {
                     self.gatherSteps().forEach(runBlock);
                 });
             },
-            whenPointerPressed: function(){
+            whenPointerPressed: function() {
                 var self = this;
-                Event.mouseOrTouchEvent('down', function(){
+                Event.mouseOrTouchEvent('down', function() {
                     self.gatherSteps().forEach(runBlock);
                 });
             },
-            whenPointerReleased: function(){
+            whenPointerReleased: function() {
                 var self = this;
-                Event.mouseOrTouchEvent('up', function(){
+                Event.mouseOrTouchEvent('up', function() {
                     self.gatherSteps().forEach(runBlock);
                 });
             },
-            whenPointerMoves: function(){
+            whenPointerMoves: function() {
                 var self = this;
-                Event.mouseOrTouchEvent('move', function(){
+                Event.mouseOrTouchEvent('move', function() {
                     self.gatherSteps().forEach(runBlock);
                 });
             }
@@ -591,76 +594,76 @@
             divide: util.divide,
             equal: util.equal,
             notEqual: util.notEqual,
-            lt: function mathLessThanExpr(a,b){
+            lt: function mathLessThanExpr(a, b) {
                 return a < b;
             },
-            lte: function mathLessThanEqualToExpr(a,b){
+            lte: function mathLessThanEqualToExpr(a, b) {
                 return a <= b;
             },
-            gt: function mathGreaterThanExpr(a,b){
+            gt: function mathGreaterThanExpr(a, b) {
                 return a > b;
             },
-            gte: function mathGreaterThanEqualToExpr(a,b){
+            gte: function mathGreaterThanEqualToExpr(a, b) {
                 return a >= b;
             },
-            mod: function mathModulusExpr(a,b){
+            mod: function mathModulusExpr(a, b) {
                 return a % b;
             },
             round: Math.round,
             abs: Math.abs,
             sgn: Math.sign || function(a) {
-            	if(a == 0) return 0;
-            	return a / Math.abs(a);
+                if (a == 0) return 0;
+                return a / Math.abs(a);
             },
             floor: Math.floor,
             ceil: Math.ceil,
             sqrt: Math.sqrt,
             cbrt: Math.cbrt || function(a) {
-            	return Math.pow(a,1/3);
+                return Math.pow(a, 1 / 3);
             },
-            root: function mathRootExpr(a,b) {
-            	return Math.pow(a, 1/b);
+            root: function mathRootExpr(a, b) {
+                return Math.pow(a, 1 / b);
             },
-            log: function mathLogExpr(val,base) {
-            	return Math.log(val) / Math.log(base);
+            log: function mathLogExpr(val, base) {
+                return Math.log(val) / Math.log(base);
             },
-            max: function mathMaxExpr(a){
-            	return Math.max.apply(Math,a);
+            max: function mathMaxExpr(a) {
+                return Math.max.apply(Math, a);
             },
-            min: function mathMinExpr(a){
-            	return Math.min.apply(Math,a);
+            min: function mathMinExpr(a) {
+                return Math.min.apply(Math, a);
             },
-            cos: function mathCosExpr(a){
+            cos: function mathCosExpr(a) {
                 return Math.cos(util.deg2rad(a));
             },
-            sin: function mathSinExpr(a){
+            sin: function mathSinExpr(a) {
                 return Math.sin(util.deg2rad(a));
             },
-            tan: function mathTanExpr(a){
+            tan: function mathTanExpr(a) {
                 return Math.tan(util.deg2rad(a));
             },
-            asin: function mathAsinExpr(a){
+            asin: function mathAsinExpr(a) {
                 return Math.asin(util.deg2rad(a));
             },
-            acos: function mathAcosExpr(a){
+            acos: function mathAcosExpr(a) {
                 return Math.acos(util.deg2rad(a));
             },
-            atan: function mathAtanExpr(a){
-                if(a instanceof util.Vector )
+            atan: function mathAtanExpr(a) {
+                if (a instanceof util.Vector)
                     return Math.atan2(a.y, a.x);
 
                 return Math.atan(util.deg2rad(a));
             },
-            pow: function mathPowerExpr(a,b){
+            pow: function mathPowerExpr(a, b) {
                 return Math.pow(a, b);
             },
-            pi: function mathPiExpr(){
+            pi: function mathPiExpr() {
                 return Math.PI;
             },
-            e: function mathEExpr(){
+            e: function mathEExpr() {
                 return Math.E;
             },
-            tau: function mathTauExpr(){
+            tau: function mathTauExpr() {
                 return Math.PI * 2;
             },
             deg2rad: util.deg2rad,
@@ -673,14 +676,14 @@
             // FIXME: We don't seem to have a block for this
             whenDeviceTurned: function whenDeviceTurnedCtx(direction) {
                 var self = this;
-                Event.on(window, 'runtime:motionchanged', null, function (event) {
+                Event.on(window, 'runtime:motionchanged', null, function(event) {
                     if (direction === util.motion.direction) {
                         self.gatherSteps().forEach(runBlock);
                     }
                 });
             },
             /* Synchronous "get current location" */
-            tiltDirection: function tiltDirectionExpr(){
+            tiltDirection: function tiltDirectionExpr() {
                 return util.motion.direction;
             }
         },
@@ -716,96 +719,96 @@
         },
 
         rect: {
-            fromCoordinates: function (x, y, width, height) {
+            fromCoordinates: function(x, y, width, height) {
                 return new util.Rect(x, y, width, height);
             },
-            fromVectors: function (point, size) {
+            fromVectors: function(point, size) {
                 return util.Rect.fromVectors(point, size);
             },
-            fromArray: function (a) {
+            fromArray: function(a) {
                 if (a.length < 4) {
                     throw new Error('Array must have at least four elements.');
                 }
                 return new util.Rect(a[0], a[1], a[2], a[3]);
             },
-            getPosition: function (rect) {
+            getPosition: function(rect) {
                 return rect.getPosition();
             },
-            getSize: function (rect) {
+            getSize: function(rect) {
                 return rect.getSize();
             },
-            asArray: function (rect) {
+            asArray: function(rect) {
                 return [rect.x, rect.y, rect.size.width, rect.size.height];
             },
-            getX: function (rect) {
+            getX: function(rect) {
                 return rect.x;
             },
-            getY: function (rect) {
+            getY: function(rect) {
                 return rect.y;
             },
-            getWidth: function (rect) {
+            getWidth: function(rect) {
                 return rect.size.width;
             },
-            getHeight: function (rect) {
+            getHeight: function(rect) {
                 return rect.size.height;
             }
         },
 
         shape: {
-            draw: function(shapeArg){
+            draw: function(shapeArg) {
                 shapeArg.draw(getContext());
             },
-            fill: function(shapeArg){
+            fill: function(shapeArg) {
                 shapeArg.draw(getContext());
                 getContext().fill();
             },
-            stroke: function(shapeArg){
+            stroke: function(shapeArg) {
                 shapeArg.draw(getContext());
                 getContext().stroke();
             },
-            setLineWidth: function(width){
+            setLineWidth: function(width) {
                 getContext().lineWidth = width;
             },
-            setLineCap: function(capStyle){
+            setLineCap: function(capStyle) {
                 getContext().lineCap = capStyle;
             },
-            setLineJoin: function(joinStyle){
+            setLineJoin: function(joinStyle) {
                 getContext().lineJoin = joinStyle;
             },
-            circle: function circle(pt, rad){
+            circle: function circle(pt, rad) {
                 var satObject = new SAT.Circle(new SAT.Vector(pt.x, pt.y), rad);
 
                 return new util.Shape(satObject);
             },
-            rectangle: function rectangle(pt, width, height){
+            rectangle: function rectangle(pt, width, height) {
                 util.setLastPoint(pt);
 
                 // The starting point of the object is ignored for now until sprites come
                 // into the picture
                 var satObject = new SAT.Polygon(new SAT.Vector(), [
-                  new SAT.Vector(pt.x, pt.y),
-                  new SAT.Vector(width + pt.x, pt.y),
-                  new SAT.Vector(width + pt.x, height + pt.y),
-                  new SAT.Vector(pt.x, height + pt.y)
+                    new SAT.Vector(pt.x, pt.y),
+                    new SAT.Vector(width + pt.x, pt.y),
+                    new SAT.Vector(width + pt.x, height + pt.y),
+                    new SAT.Vector(pt.x, height + pt.y)
                 ]);;
 
                 return new util.Shape(satObject);
             },
-            ellipse: function ellipse(pt, rad1, rad2, rot){
+            ellipse: function ellipse(pt, rad1, rad2, rot) {
                 util.setLastPoint(pt);
 
-                return new util.Shape(function(ctx){
-                    if (!util.isDrawingPath()){
+                return new util.Shape(function(ctx) {
+                    if (!util.isDrawingPath()) {
                         ctx.beginPath();
                     }
 
                     ctx.ellipse(pt.x, pt.y, rad1, rad2, rot, 0, Math.PI * 2);
                 });
             },
-            triangle: function(p1, p2, p3){
+            triangle: function(p1, p2, p3) {
                 util.setLastPoint(p1);
 
-                return new util.Shape(function(ctx){
+                return new util.Shape(function(ctx) {
                     ctx.beginPath();
 
                     ctx.moveTo(p1.x, p1.y);
@@ -814,7 +817,7 @@
                     ctx.lineTo(p1.x, p1.y);
                 });
             },
-            polygon: function(){
+            polygon: function() {
                 var points = [].slice.call(arguments);
                 util.setLastPoint(points[0]);
 
@@ -828,34 +831,34 @@
 
                 return new util.Shape(satObject);
             },
-            regularPolygon: function regularPolygon(origin, noSides, radius){
+            regularPolygon: function regularPolygon(origin, noSides, radius) {
                 var points = [];
                 util.setLastPoint(origin);
                 var dA = 360 / noSides;
-                for (var i = 0; i < noSides; i++){
+                for (var i = 0; i < noSides; i++) {
                     var angle = util.deg2rad(i * dA);
                     points.push(util.add(origin, new util.Vector(
                         Math.cos(angle) * radius,
                         Math.sin(angle) * radius)));
                 }
-                return new util.Shape(function(ctx){
-                    var start = points[noSides-1];
-                    if (!util.isDrawingPath()){
+                return new util.Shape(function(ctx) {
+                    var start = points[noSides - 1];
+                    if (!util.isDrawingPath()) {
                         ctx.beginPath();
                         ctx.moveTo(start.x, start.y);
-                    }else{
+                    } else {
                         ctx.lineTo(start.x, start.y);
                     }
-                    points.forEach(function(pt){
+                    points.forEach(function(pt) {
                         ctx.lineTo(pt.x, pt.y);
                     });
                 });
             },
-            star: function star(origin, noPoints, innerRadius, outerRadius){
+            star: function star(origin, noPoints, innerRadius, outerRadius) {
                 var points = [];
                 util.setLastPoint(origin);
                 var dA = 360 / (noPoints * 2);
-                for (var i = 0; i < noPoints; i++){
+                for (var i = 0; i < noPoints; i++) {
                     var angle = util.deg2rad(i * 2 * dA);
                     points.push(util.add(origin, new util.Vector(
                         Math.cos(angle) * outerRadius,
@@ -865,38 +868,38 @@
                         Math.cos(angle) * innerRadius,
                         Math.sin(angle) * innerRadius)));
                 }
-                return new util.Shape(function(ctx){
+                return new util.Shape(function(ctx) {
                     var start = points[points.length - 1];
-                    if (!util.isDrawingPath()){
+                    if (!util.isDrawingPath()) {
                         ctx.beginPath();
                         ctx.moveTo(start.x, start.y);
-                    }else{
+                    } else {
                         ctx.lineTo(start.x, start.y);
                     }
-                    points.forEach(function(pt){
+                    points.forEach(function(pt) {
                         ctx.lineTo(pt.x, pt.y);
                     });
                 });
             },
-            lineTo: function(startPoint, toPoint){
+            lineTo: function(startPoint, toPoint) {
                 util.setLastPoint(toPoint);
                 return new util.Path(getContext().lineTo, new Array(toPoint.x, toPoint.y), startPoint);
             },
-            arc: function(radius, centerPoint, startAngle, endAngle, direction){
+            arc: function(radius, centerPoint, startAngle, endAngle, direction) {
                 startAngle = util.deg2rad(startAngle);
                 endAngle = util.deg2rad(endAngle);
 
                 util.setLastPoint(new util.Vector(centerPoint.x + Math.cos(endAngle) * radius, centerPoint.y + Math.sin(endAngle) * radius));
 
-                return new util.Shape(function(ctx){
-                    if (!util.isDrawingPath()){
+                return new util.Shape(function(ctx) {
+                    if (!util.isDrawingPath()) {
                         ctx.beginPath();
                     }
 
                     ctx.arc(centerPoint.x, centerPoint.y, radius, startAngle, endAngle, false);
                 });
             },
-            bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2){
+            bezierCurve: function(startPoint, toPoint, controlPoint1, controlPoint2) {
                 util.setLastPoint(toPoint);
                 var path = new util.Path(
                     getContext().bezierCurveTo,
@@ -910,7 +913,7 @@
                 );
                 return path;
             },
-            quadraticCurve: function(startPoint, toPoint, controlPoint){
+            quadraticCurve: function(startPoint, toPoint, controlPoint) {
                 util.setLastPoint(toPoint);
                 var path = new util.Path(
                     getContext().quadraticCurveTo,
@@ -923,89 +926,98 @@
                 );
                 return path;
             },
-            withClip: function withClipCtx(shape){
+            withClip: function withClipCtx(shape) {
                 getContext().save();
                 shape.draw(getContext());
                 getContext().clip();
                 this.gatherSteps().forEach(runBlock);
                 getContext().restore();
             },
-            path: function(){
+            path: function() {
                 var args = [].slice.call(arguments);
                 return new util.Shape(args);
             },
-            lastPoint: function(){
+            lastPoint: function() {
                 return util.lastPoint();
             },
-            bezierPoint: function(position, startPoint, toPoint, controlPoint1, controlPoint2){
-                var adjustedPosition = 1-position;
+            bezierPoint: function(position, startPoint, toPoint, controlPoint1, controlPoint2) {
+                var adjustedPosition = 1 - position;
 
-                var x =  Math.pow(adjustedPosition,3)*startPoint.x +
-                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.x +
-                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.x +
-                 Math.pow(position,3)*toPoint.x;
+                var x = Math.pow(adjustedPosition, 3) * startPoint.x +
+                    3 * (Math.pow(adjustedPosition, 2)) * position * controlPoint1.x +
+                    3 * adjustedPosition * Math.pow(position, 2) * controlPoint2.x +
+                    Math.pow(position, 3) * toPoint.x;
 
-                var y =  Math.pow(adjustedPosition,3)*startPoint.y +
-                 3*(Math.pow(adjustedPosition,2))*position*controlPoint1.y +
-                 3*adjustedPosition*Math.pow(position,2)*controlPoint2.y +
-                 Math.pow(position,3)*toPoint.y;
+                var y = Math.pow(adjustedPosition, 3) * startPoint.y +
+                    3 * (Math.pow(adjustedPosition, 2)) * position * controlPoint1.y +
+                    3 * adjustedPosition * Math.pow(position, 2) * controlPoint2.y +
+                    Math.pow(position, 3) * toPoint.y;
 
                 return new util.Vector(x, y);
             },
             bezierTangent: function(position, startPoint, toPoint, controlPoint1, controlPoint2) {
-                var adjustedPosition = 1-position;
+                var adjustedPosition = 1 - position;
 
-                var x = 3*toPoint.x*Math.pow(position,2) -
-                 3*controlPoint2.x*Math.pow(position,2) +
-                 6*controlPoint2.x*adjustedPosition*position -
-                 6*controlPoint1.x*adjustedPosition*position +
-                 3*controlPoint1.x*Math.pow(adjustedPosition,2) -
-                 3*startPoint.x*Math.pow(adjustedPosition,2);
+                var x = 3 * toPoint.x * Math.pow(position, 2) -
+                    3 * controlPoint2.x * Math.pow(position, 2) +
+                    6 * controlPoint2.x * adjustedPosition * position -
+                    6 * controlPoint1.x * adjustedPosition * position +
+                    3 * controlPoint1.x * Math.pow(adjustedPosition, 2) -
+                    3 * startPoint.x * Math.pow(adjustedPosition, 2);
 
-                var y = 3*toPoint.y*Math.pow(position,2) -
-                 3*controlPoint2.y*Math.pow(position,2) +
-                 6*controlPoint2.y*adjustedPosition*position -
-                 6*controlPoint1.y*adjustedPosition*position +
-                 3*controlPoint1.y*Math.pow(adjustedPosition,2) -
-                 3*startPoint.y*Math.pow(adjustedPosition,2);
+                var y = 3 * toPoint.y * Math.pow(position, 2) -
+                    3 * controlPoint2.y * Math.pow(position, 2) +
+                    6 * controlPoint2.y * adjustedPosition * position -
+                    6 * controlPoint1.y * adjustedPosition * position +
+                    3 * controlPoint1.y * Math.pow(adjustedPosition, 2) -
+                    3 * startPoint.y * Math.pow(adjustedPosition, 2);
 
-                 return new util.Vector(x, y);
+                return new util.Vector(x, y);
             }
         },
         size: {
-            fromCoordinates: function (width, widthUnits, height, heightUnits) {
+            fromCoordinates: function(width, widthUnits, height, heightUnits) {
                 return new util.Size(width, widthUnits, height, heightUnits);
             },
-            fromArray: function (a, widthUnits, heightUnits) {
+            fromArray: function(a, widthUnits, heightUnits) {
                 if (a.length < 2) {
                     throw new Error('Array must have at least two elements.');
                 }
                 return new util.Size(a[0], widthUnits, a[1], heightUnits);
             },
-            toArray: function (size) {
+            toArray: function(size) {
                 return [size.width, size.height];
             },
-            getWidth: function (size) {
+            getWidth: function(size) {
                 return size.width;
             },
-            getHeight: function (size) {
+            getHeight: function(size) {
                 return size.height;
             }
         },
 
         sound: {
-            get: function(wave, a, r){
+            get: function(wave, a, r) {
                 var osc = T(wave);
-                var env = T("perc", {a:a, r:r});
-                var oscenv = T("OscGen", {osc:osc, env:env, mul:0.15}).play();
+                var env = T("perc", {
+                    a: a,
+                    r: r
+                });
+                var oscenv = T("OscGen", {
+                    osc: osc,
+                    env: env,
+                    mul: 0.15
+                }).play();
                 return oscenv;
             },
-            getAudio: function(file){
-                var audio = T("audio", {load:file});
+            getAudio: function(file) {
+                var audio = T("audio", {
+                    load: file
+                });
                 return audio;
             },
-            addNote: function(note, octave, beats){
-                switch(note){
+            addNote: function(note, octave, beats) {
+                switch (note) {
                     case "A":
                         note = "a";
                         break;
@@ -1051,8 +1063,7 @@
                     for (var i = 0; i < octave_diff; i++) {
                         song += "<";
                     }
-                }
-                else if (octave < current_octave) {
+                } else if (octave < current_octave) {
                     var octave_diff = current_octave - octave;
                     for (var i = 0; i < octave_diff; i++) {
                         song += ">";
@@ -1060,7 +1071,7 @@
                 }
                 current_octave = octave;
                 var length;
-                switch(beats){
+                switch (beats) {
                     case "1/32":
                         length = "32";
                         break;
@@ -1083,13 +1094,13 @@
                 var newNote = note + length;
                 song += newNote;
             },
-            playChord: function(){
+            playChord: function() {
                 var args = [].slice.call(arguments)
                 var oscenv = args[0];
                 var freqs = []
                 for (var i = 1; i < args.length; i++) {
                     var freq;
-                    switch(args[i]){
+                    switch (args[i]) {
                         case "A":
                             freq = 55.000;
                             break;
@@ -1129,153 +1140,184 @@
                     }
                     var octave = args[++i];
                     parseInt(octave);
-                    freq = freq * Math.pow(2, octave-1);
+                    freq = freq * Math.pow(2, octave - 1);
                     freqs.push(freq);
                 }
-                T("interval", {interval:"L4", timeout:"L4"}, function() {
+                T("interval", {
+                    interval: "L4",
+                    timeout: "L4"
+                }, function() {
                     for (var i = 0; i < freqs.length; i++) {
                         oscenv.noteOnWithFreq(freqs[i], 64);
                     }
                 }).on("ended", function() {
                     this.stop();
-                }).set({buddies:oscenv}).start();
+                }).set({
+                    buddies: oscenv
+                }).start();
             },
-            playAudio: function(audio){
-                if (audio){
+            playAudio: function(audio) {
+                if (audio) {
                     audio.play();
                 }
             },
-            playNotes: function(sound){
-                T("mml", {mml:song}, sound).on("ended", function() {
+            playNotes: function(sound) {
+                T("mml", {
+                    mml: song
+                }, sound).on("ended", function() {
                     sound.pause();
                     this.stop();
                 }).start();
                 song = "o4 l4 V12 ";
             },
-            playMML: function(sound, mml){
-                var gen = T("OscGen", {wave:sound, env:{type:"perc"}, mul:0.25}).play();
-                T("mml", {mml:mml}, gen).on("ended", function() {
+            playMML: function(sound, mml) {
+                var gen = T("OscGen", {
+                    wave: sound,
+                    env: {
+                        type: "perc"
+                    },
+                    mul: 0.25
+                }).play();
+                T("mml", {
+                    mml: mml
+                }, gen).on("ended", function() {
                     gen.pause();
                     this.stop();
                 }).start();
             },
-            tempoChange: function(tempo){
+            tempoChange: function(tempo) {
                 song += ("t" + tempo + " ");
             },
-            pauseAudio: function(audio){
-                if (audio){
+            pauseAudio: function(audio) {
+                if (audio) {
                     audio.pause();
                 }
             },
-            keys: function(synth){
+            keys: function(synth) {
                 var keydict = T("ndict.key");
                 var midicps = T("midicps");
                 T("keyboard").on("keydown", function(e) {
-                  var midi = keydict.at(e.keyCode);
-                  if (midi) {
-                    var freq = midicps.at(midi);
-                    synth.noteOnWithFreq(freq, 100);
-                  }
+                    var midi = keydict.at(e.keyCode);
+                    if (midi) {
+                        var freq = midicps.at(midi);
+                        synth.noteOnWithFreq(freq, 100);
+                    }
                 }).on("keyup", function(e) {
-                  var midi = keydict.at(e.keyCode);
-                  if (midi) {
-                    synth.noteOff(midi, 100);
-                  }
+                    var midi = keydict.at(e.keyCode);
+                    if (midi) {
+                        synth.noteOff(midi, 100);
+                    }
                 }).start();
             },
-            soundEffect: function(effect){
-                switch(effect) {
+            soundEffect: function(effect) {
+                switch (effect) {
                     case "laser":
                         var table = [1760, [110, "200ms"]];
 
-                        var freq = T("env", {table:table}).on("bang", function() {
+                        var freq = T("env", {
+                            table: table
+                        }).on("bang", function() {
                             VCO.mul = 0.2;
                         }).on("ended", function() {
                             VCO.mul = 0;
                         });
-                        var VCO = T("saw", {freq:freq, mul:0}).play();
+                        var VCO = T("saw", {
+                            freq: freq,
+                            mul: 0
+                        }).play();
                         freq.bang();
                         break;
                     case "alarm":
-                        var table = [440, [880, 500], [660, 250]];
-                        var env   = T("env", {table:table}).bang();
-                        var synth = T("saw", {freq:env, mul:0.25});
+                        var table = [440, [880, 500],
+                            [660, 250]
+                        ];
+                        var env = T("env", {
+                            table: table
+                        }).bang();
+                        var synth = T("saw", {
+                            freq: env,
+                            mul: 0.25
+                        });
 
-                        var interval = T("interval", {interval:1000}, function(count) {
-                          if (count === 3) {
-                            interval.stop();
-                          }
-                          env.bang();
-                        }).set({buddies:synth}).start();
+                        var interval = T("interval", {
+                            interval: 1000
+                        }, function(count) {
+                            if (count === 3) {
+                                interval.stop();
+                            }
+                            env.bang();
+                        }).set({
+                            buddies: synth
+                        }).start();
                         break;
                 }
             }
         },
 
         sprite: {
-            create: function create(imgShapeOrSprite){
+            create: function create(imgShapeOrSprite) {
                 return new util.Sprite(imgShapeOrSprite);
             },
-            accelerate: function accelerate(spt, speed){
+            accelerate: function accelerate(spt, speed) {
                 spt.accelerate(speed);
             },
-            setVelocity: function setVelocity(spt, vec){
+            setVelocity: function setVelocity(spt, vec) {
                 // console.log('set velocity of ' + spt + ' to ' + vec);
                 spt.setVelocity(vec);
             },
-            getVelocity: function spriteGetVelocityExpr(spt){
+            getVelocity: function spriteGetVelocityExpr(spt) {
                 return spt.velocity;
             },
-            getSpeed: function spriteGetSpeedExpr(spt){
+            getSpeed: function spriteGetSpeedExpr(spt) {
                 return spt.velocity.magnitude();
             },
-            getXvel: function getXvel(spt){
+            getXvel: function getXvel(spt) {
                 return spt.getXvel();
             },
-            getYvel: function getYvel(spt){
+            getYvel: function getYvel(spt) {
                 return spt.getYvel();
             },
-            getXpos: function getXpos(spt){
+            getXpos: function getXpos(spt) {
                 return spt.getXpos();
             },
-            getYpos: function getYpos(spt){
+            getYpos: function getYpos(spt) {
                 return spt.getYpos();
             },
-            rotate: function rotate(spt, angle){
+            rotate: function rotate(spt, angle) {
                 spt.rotate(angle);
             },
-            rotateTo: function rotateTo(spt, angle){
+            rotateTo: function rotateTo(spt, angle) {
                 spt.rotateTo(angle);
             },
-            move: function move(spt){
+            move: function move(spt) {
                 spt.move();
             },
-            moveTo: function moveTo(spt, pt){
+            moveTo: function moveTo(spt, pt) {
                 // console.log('move ' + spt + ' to ' + pt);
                 spt.moveTo(pt);
             },
-            draw: function draw(spt){
+            draw: function draw(spt) {
                 spt.draw(getContext());
             },
-            applyForce: function applyForce(spt, vec){
+            applyForce: function applyForce(spt, vec) {
                 spt.applyForce(vec);
             },
-            bounceAtEdge: function bounceAtEdge(spt){
+            bounceAtEdge: function bounceAtEdge(spt) {
                 spt.bounceWithinRect(canvasRect());
             },
-            wrapAtEdge: function wrapAtEdge(spt){
+            wrapAtEdge: function wrapAtEdge(spt) {
                 spt.wrapAroundRect(canvasRect());
             },
-            stopAtEdge: function stopAtEdge(spt){
+            stopAtEdge: function stopAtEdge(spt) {
                 spt.stayWithinRect(canvasRect());
             },
-            checkForCollision: function checkForCollision(spt1, spt2){
+            checkForCollision: function checkForCollision(spt1, spt2) {
                 return spt1.checkForCollision(spt2);
             }
         },
         stage: {
             clearTo: new util.Method()
-                .when(['string'], function(clr){ // unfortunately colors are still strings
+                .when(['string'], function(clr) { // unfortunately colors are still strings
                     var r = canvasRect();
                     var c = getContext();
                     c.save();
@@ -1283,237 +1325,237 @@
                     c.fillRect(r.x, r.y, r.width, r.height);
                     c.restore();
                 })
-                .when(['wbimage'], function(img){
+                .when(['wbimage'], function(img) {
                     var c = getContext();
                     c.save();
                     img.drawInRect(c, canvasRect());
                     c.restore();
                 })
-                .when(['shape'], function(shape){
+                .when(['shape'], function(shape) {
                     var c = getContext();
                     c.save();
                     shape.draw(c);
                     c.restore();
                 })
-            .fn(),
-            stageWidth: function(){
+                .fn(),
+            stageWidth: function() {
                 return Event.stage.width;
             },
-            stageHeight: function(){
+            stageHeight: function() {
                 return Event.stage.height;
             },
-            centerX: function(){
+            centerX: function() {
                 return (Event.stage.width / 2);
             },
-            centerY: function(){
+            centerY: function() {
                 return (Event.stage.height / 2);
             },
-            centerPoint: function(){
+            centerPoint: function() {
                 return new util.Vector(Event.stage.width / 2, Event.stage.height / 2);
             },
-            randomX: function(){
+            randomX: function() {
                 return Math.random() * Event.stage.width;
             },
-            randomY: function(){
+            randomY: function() {
                 return Math.random() * Event.stage.height;
             },
         },
         string: {
 
-            toString: function(x){
+            toString: function(x) {
                 return x.toString();
             },
-            split: function(x,y){
+            split: function(x, y) {
                 return x.split(y);
             },
-            concatenate: function(x,y){
+            concatenate: function(x, y) {
                 return x.concat(y);
             },
-            repeat: function(x,n){
+            repeat: function(x, n) {
                 var str = "";
-                for(var i=0; i<n; i++){
+                for (var i = 0; i < n; i++) {
                     str = str.concat(x);
                 }
                 return str;
             },
-            getChar: function(n,x){
-                if(n<0)
+            getChar: function(n, x) {
+                if (n < 0)
                     n = x.length + n;
 
                 return x.charAt(n);
             },
-            getCharFromEnd: function(n,x){
-                if(n<=0)
-                    n = n*(-1)-1;
+            getCharFromEnd: function(n, x) {
+                if (n <= 0)
+                    n = n * (-1) - 1;
                 else
-                    n = x.length-n;
+                    n = x.length - n;
                 return x.charAt(n);
             },
-            substring: function(x,a,b){
-                if(a<0)
+            substring: function(x, a, b) {
+                if (a < 0)
                     return "";
                 else
-                    return x.substring(a,a+b);
+                    return x.substring(a, a + b);
             },
-            substring2: function(x,a,b){
-                if(a<0 || a>x.length)
+            substring2: function(x, a, b) {
+                if (a < 0 || a > x.length)
                     return "";
                 else
-                    return x.substring(a,b);
+                    return x.substring(a, b);
             },
-            isSubstring: function(x,y){
-                if(y.indexOf(x)===-1){
+            isSubstring: function(x, y) {
+                if (y.indexOf(x) === -1) {
                     return false;
-                }
-                else{
+                } else {
                     return true;
                 }
             },
-            substringPosition: function(x,y){
+            substringPosition: function(x, y) {
                 return y.indexOf(x);
             },
-            replaceSubstring: function(x,y,z){
+            replaceSubstring: function(x, y, z) {
                 return x.replace(new RegExp(y, 'g'), z);
             },
-            trimWhitespace: function(x){
+            trimWhitespace: function(x) {
                 return x.trim();
             },
-            uppercase: function(x){
+            uppercase: function(x) {
                 return x.toUpperCase();
             },
-            lowercase: function(x){
+            lowercase: function(x) {
                 return x.toLowerCase();
             },
-            matches: function(x,y){
-                return x===y;
+            matches: function(x, y) {
+                return x === y;
             },
-            doesntMatch: function(x,y){
-                return !(x===y);
+            doesntMatch: function(x, y) {
+                return !(x === y);
             },
-            startsWith: function(x,y){
+            startsWith: function(x, y) {
                 return (x.lastIndexOf(y, 0) === 0);
             },
-            endsWith: function(x,y){
+            endsWith: function(x, y) {
                 return x.indexOf(y, x.length - y.length) !== -1;
             },
-            setFont: function (size, fontStyle){
+            setFont: function(size, fontStyle) {
                 var sizeString = size[0] + size[1];
                 getContext().font = sizeString + " " + fontStyle;
 
             },
-            textAlign: function (alignment){
+            textAlign: function(alignment) {
                 getContext().textAlign = alignment;
             },
-            textBaseline: function (baseline){
+            textBaseline: function(baseline) {
                 getContext().textBaseline = baseline;
             },
-            fillText: function (text, x, y){
+            fillText: function(text, x, y) {
                 getContext().fillText(text, x, y);
             },
-            fillTextWidth: function (text, x, y, width){
+            fillTextWidth: function(text, x, y, width) {
                 getContext().fillText(text, x, y, width);
             },
-            strokeText: function (text, x, y){
+            strokeText: function(text, x, y) {
                 getContext().strokeText(text, x, y);
             },
-            strokeTextWidth: function (text, x, y, width){
+            strokeTextWidth: function(text, x, y, width) {
                 getContext().strokeText(text, x, y, width);
             },
-            width: function (text){
+            width: function(text) {
                 var textMetric = getContext().measureText(text);
                 return textMetric.width;
             }
         },
         vector: {
-            create: function create(x,y){
-                return new util.Vector(x,y);
+            create: function create(x, y) {
+                return new util.Vector(x, y);
             },
-            createPolar: function createPolar(deg, mag){
+            createPolar: function createPolar(deg, mag) {
                 return util.Vector.fromPolar(deg, mag);
             },
-            fromArray: function fromArray(arr){
+            fromArray: function fromArray(arr) {
                 return new util.Vector(arr[0], arr[1]);
             },
-            toArray: function toArray(vec){
+            toArray: function toArray(vec) {
                 return [vec.x, vec.y];
             },
-            randomPoint: function randomPoint(){
+            randomPoint: function randomPoint() {
                 return new util.Vector(util.randInt(Event.stage.width), util.randInt(Event.stage.height));
             },
-            unitVector: function unitVector(){
-                return new util.Vector(1,1);
+            unitVector: function unitVector() {
+                return new util.Vector(1, 1);
             },
-            zeroVector: function zeroVector(){
-                return new util.Vector(0,0);
+            zeroVector: function zeroVector() {
+                return new util.Vector(0, 0);
             },
-            rotateTo: function rotateTo(vec, deg){
+            rotateTo: function rotateTo(vec, deg) {
                 return vec.rotateTo(deg);
             },
-            rotate: function rotate(vec, deg){
+            rotate: function rotate(vec, deg) {
                 return vec.rotate(deg);
             },
-            magnitude: function magnitude(vec){
+            magnitude: function magnitude(vec) {
                 return vec.magnitude();
             },
-            degrees: function degrees(vec){
+            degrees: function degrees(vec) {
                 return Math.atan2(vec.y, vec.x) / (Math.PI / 180);
             },
-            normalize: function normalize(vec){
+            normalize: function normalize(vec) {
                 return vec.normalize();
             },
-            x: function x(vec){
+            x: function x(vec) {
                 return vec.x;
             },
-            y: function y(vec){
+            y: function y(vec) {
                 return vec.y;
             },
-            randomUnitVector: function randomUnitVector(){
+            randomUnitVector: function randomUnitVector() {
                 var vec = util.Vector.fromPolar(Math.random() * 360, 1);
                 return vec;
             }
         },
         date: {
-            create: function (year, month, day) {
-                return new Date(year, month-1, day);
+            create: function(year, month, day) {
+                return new Date(year, month - 1, day);
             },
-            now: function () {
+            now: function() {
                 var today = new Date();
                 // Seems like "now" should have time as well, but
                 // maybe "today" shouldn't?
                 today.setHours(0, 0, 0, 0)
                 return today;
             },
-            addDays: function (prevDate, days) {
+            addDays: function(prevDate, days) {
                 // we don't want to mutate an argument in place
                 var date = new Date(prevDate.valueOf()); // clone argument
                 date.setDate(prevDate.getDate() + days);
                 return date;
             },
-            addMonths: function (prevDate, months) {
+            addMonths: function(prevDate, months) {
                 var date = new Date(prevDate.valueOf());
                 date.setMonth(date.getMonth() + months);
                 return date;
             },
-            addYears: function (prevDate, years) {
+            addYears: function(prevDate, years) {
                 var date = new Date(prevDate.valueOf());
                 date.setFullYear(date.getFullYear() + years);
                 return date;
             },
-            dayOfWeek: function(date){
+            dayOfWeek: function(date) {
                 return date.getDay();
             },
-            getDay: function(date){
+            getDay: function(date) {
                 return date.getDate();
             },
-            getMonth: function(date){
-                return date.getMonth()+1;
+            getMonth: function(date) {
+                return date.getMonth() + 1;
             },
-            getMonthName: function(date){
+            getMonthName: function(date) {
                 return ['January', 'February', 'March', 'April', 'May', 'June',
-                        'July', 'August', 'September', 'October', 'November',
-                        'December'][date.getMonth()];
+                    'July', 'August', 'September', 'October', 'November',
+                    'December'
+                ][date.getMonth()];
             },
-            getYear: function(date){
+            getYear: function(date) {
                 return date.getFullYear();
             },
 

@@ -1,58 +1,61 @@
-
-
 // Utility functions
 
-(function(){
+(function() {
     'use strict';
 
-    var cos = Math.cos, sin = Math.sin, atan2 = Math.atan2, sqrt = Math.sqrt, floor = Math.floor, PI = Math.PI;
+    var cos = Math.cos,
+        sin = Math.sin,
+        atan2 = Math.atan2,
+        sqrt = Math.sqrt,
+        floor = Math.floor,
+        PI = Math.PI;
     var DEGREE = PI / 180;
-    var _lastPoint = new Vector(0,0);
+    var _lastPoint = new Vector(0, 0);
     var drawingPath = false;
 
     // Polyfill for Function.prototype.bind (PhantomJS doesn't support it for
     // some bizarre reason).
     if (!Function.prototype.bind) {
-        Function.prototype.bind = function (obj) {
+        Function.prototype.bind = function(obj) {
             var fn = this;
-            return function () {
+            return function() {
                 return fn.apply(obj, arguments);
             };
         };
     }
 
-    function isDrawingPath(){
+    function isDrawingPath() {
         return drawingPath;
     }
 
-    function lastPoint(){
+    function lastPoint() {
         return _lastPoint;
     }
 
-    function setLastPoint(point){
+    function setLastPoint(point) {
         _lastPoint = point;
     }
 
     // properly delete from a list
-    function deleteItem(list, item){
+    function deleteItem(list, item) {
         var idx = list.indexOf(item);
-        if (idx > -1){
+        if (idx > -1) {
             list.splice(idx, 1);
         }
         return item;
     }
 
     // check if a string is a number (works on numbers too)
-    function isNumber(check){
+    function isNumber(check) {
         check = check + "";
         return check.trim().length > 0 ? !isNaN(check) : false;
     }
 
     // extend an object. to (shallow) copy an object, pass {} for target
-    function extend(target, source){
+    function extend(target, source) {
         if (source === null || typeof source !== 'object') return source;
         for (var attr in source) {
-            if (source.hasOwnProperty(attr)){
+            if (source.hasOwnProperty(attr)) {
                 target[attr] = source[attr];
             }
         }
@@ -61,21 +64,25 @@
 
     // Remove namespaces and/or polyfill requestAnimationFrame
     window.requestAnimationFrame = window.requestAnimationFrame ||
-                                   window.mozRequestAnimationFrame ||
-                                   window.msRequestAnimationFrame ||
-                                   window.webkitRequestAnimationFrame ||
-                                   function(fn){ setTimeout(fn, 20); };
+        window.mozRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        function(fn) {
+            setTimeout(fn, 20);
+        };
 
-   window.cancelAnimationFrame = window.cancelAnimationFrame ||
-                                 window.mozCancelAnimationFrame ||
-                                 window.msCancelAnimationFrame ||
-                                 window.webkitCancelAnimationFrame ||
-                                 function(timer){ clearTimeout(timer); };
+    window.cancelAnimationFrame = window.cancelAnimationFrame ||
+        window.mozCancelAnimationFrame ||
+        window.msCancelAnimationFrame ||
+        window.webkitCancelAnimationFrame ||
+        function(timer) {
+            clearTimeout(timer);
+        };
 
     // add defaultValue if key does't exist in an object yet and return it
     // otherwise return current valud of key
-    function setDefault(obj, key, defaultValue){
-        if (obj[key] === undefined){
+    function setDefault(obj, key, defaultValue) {
+        if (obj[key] === undefined) {
             obj[key] = defaultValue;
         }
         return obj[key];
@@ -83,9 +90,9 @@
 
     // An improved replacement for typeof
     // Based on http://youmightnotneedjquery.com/#type
-    function type(obj){
+    function type(obj) {
         var t = Object.prototype.toString.call(obj).replace(/^\[object (.+)\]$/, "$1").toLowerCase();
-        if (t === 'object' && obj.constructor && obj.constructor.name){
+        if (t === 'object' && obj.constructor && obj.constructor.name) {
             return obj.constructor.name.toLowerCase();
         }
         return t;
@@ -94,18 +101,18 @@
     // Super-simple implementation of multimethods (aka generics, aka multiple dispatch)
     // Inspired by http://krisjordan.com/multimethod-js
     // and https://leanpub.com/javascript-spessore/read#leanpub-auto-multiple-dispatch
-    function Method(){}
+    function Method() {}
     // Use this to add a function to use when the types match (fluent)
-    Method.prototype.when = function when(types, fn){
+    Method.prototype.when = function when(types, fn) {
         this[types.join('_')] = fn;
         return this;
     };
     // Utility replacement for default to try the arguments in reverse in case that's defined
     // Only use this if the argument order is not important
-    Method.prototype.tryInverse = function(){
-        this._default = function(){
+    Method.prototype.tryInverse = function() {
+        this._default = function() {
             var signature = [].slice.call(arguments).reverse().map(type).join('_');
-            if (this[signature]){
+            if (this[signature]) {
                 return this[signature].call(arguments).map(type).join('_');
             }
             throw new Exception('no match found for ' + signature.split('_').join(' '));
@@ -113,27 +120,25 @@
         return this;
     };
     // Use this to add a single function to call when no types match (fluent)
-    Method.prototype.default = function(fn){
+    Method.prototype.default = function(fn) {
         this._default = fn;
         return this;
     };
     // This is the actual method that gets called, but use .fn() to wrap it nicely
-    Method.prototype.send = function send(){
+    Method.prototype.send = function send() {
         var signature = [].slice.call(arguments).map(type).join('_');
-        if (this[signature]){
+        if (this[signature]) {
             return this[signature].apply(this, arguments);
         }
-        if (this._default){
+        if (this._default) {
             return this._default.apply(this, arguments);
         }
-        throw new Error('no match found for ' + signature.split('_').join(' ') + ': ' +
-            [].slice.call(arguments).map(function(arg){
-                return 'type(' + arg + ') = ' + type(arg);
-            }).join(',')
-        );
+        throw new Error('no match found for ' + signature.split('_').join(' ') + ': ' + [].slice.call(arguments).map(function(arg) {
+            return 'type(' + arg + ') = ' + type(arg);
+        }).join(','));
     };
     // Wrap .send() so we don't have to call mymultimethod.send()
-    Method.prototype.fn = function fn(){
+    Method.prototype.fn = function fn() {
         return this.send.bind(this);
     };
 
@@ -141,25 +146,26 @@
     // defer math to the math multimethods
 
     // convert degrees to radians
-    function deg2rad(deg){
+    function deg2rad(deg) {
         return deg * DEGREE;
     }
-    function rad2deg(rad){
+
+    function rad2deg(rad) {
         return rad / DEGREE;
     }
 
     // replace JavaScript % operator because of sign conversion
-    function mod(a,b){
-        return a - floor(a/b) * b
+    function mod(a, b) {
+        return a - floor(a / b) * b
     }
 
     // angle between two vectors in radians
-    function angle(v1, v2){
+    function angle(v1, v2) {
         var diff = v1.radians() - v2.radians();
         return atan2(sin(diff), cos(diff));
     }
 
-    function dist(x1, y1, x2, y2){
+    function dist(x1, y1, x2, y2) {
         // absolute distance between two points
         var dx = x1 - x2;
         var dy = y1 - y2;
@@ -167,70 +173,70 @@
     }
 
     // Create a vector from an angle in degrees and a magnitude (length)
-    function Vector(x,y){
+    function Vector(x, y) {
         this.x = x;
         this.y = y;
     }
 
-    Vector.fromPolar = function(degrees, mag){
+    Vector.fromPolar = function(degrees, mag) {
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
-    Vector.fromPoint = function(pt){
+    Vector.fromPoint = function(pt) {
         return new Vector(pt.x, pt.y);
     }
 
-    Vector.prototype.getX = function(){
+    Vector.prototype.getX = function() {
         return this.x;
     }
 
-    Vector.prototype.getY = function(){
+    Vector.prototype.getY = function() {
         return this.y;
     }
 
-    Vector.prototype.magnitude = function(){
+    Vector.prototype.magnitude = function() {
         return sqrt(this.x * this.x + this.y * this.y);
     }
 
-    Vector.prototype.radians = function(){
+    Vector.prototype.radians = function() {
         return atan2(this.y, this.x);
     }
-    Vector.prototype.degrees = function(){
+    Vector.prototype.degrees = function() {
         return rad2deg(this.radians());
     }
 
     // Make magnitude equal to 1
-    Vector.prototype.normalize = function normalize(){
+    Vector.prototype.normalize = function normalize() {
         var mag = this.magnitude();
-        if (mag === 0 || mag === 1){
+        if (mag === 0 || mag === 1) {
             return this;
         }
         return multiply(this, 1 / mag);
     }
 
-    Vector.prototype.rotateTo = function rotateTo(degrees){
+    Vector.prototype.rotateTo = function rotateTo(degrees) {
         return Vector.fromPolar(degrees, this.magnitude());
     }
 
-    Vector.prototype.rotate = function rotate(degrees){
+    Vector.prototype.rotate = function rotate(degrees) {
         var radians = this.radians() + deg2rad(degrees);
         var mag = this.magnitude();
         return new Vector(cos(radians) * mag, sin(radians) * mag);
     }
 
-    Vector.prototype.rotateRads = function rotate(rads){
+    Vector.prototype.rotateRads = function rotate(rads) {
         var newAngle = this.radians() + rads;
         var mag = this.magnitude();
         return new Vector(cos(newAngle) * mag, sin(newAngle) * mag);
     }
 
-    Vector.prototype.toString = function strv(){
+    Vector.prototype.toString = function strv() {
         return '<' + this.x + ',' + this.y + '>';
     }
 
     // Size
 
-    function Size(width, widthUnit, height, heightUnit){
+    function Size(width, widthUnit, height, heightUnit) {
         if (height < 0) {
             throw new Error('Size height must be non-negative.');
         }
@@ -243,7 +249,7 @@
         this.widthUnit = widthUnit;
     }
 
-    Size.prototype.toString = function(){
+    Size.prototype.toString = function() {
         return '[' + this.width + ',' + this.height + ']';
     };
 
@@ -257,36 +263,35 @@
         this.size = new Size(width, 'px', height, 'px');
     }
 
-    Rect.prototype.getPosition = function () {
+    Rect.prototype.getPosition = function() {
         return new Vector(this.x, this.y);
     };
 
-    Rect.prototype.getSize = function () {
+    Rect.prototype.getSize = function() {
         return new Size(this.size.width, 'px', this.size.height, 'px');
     };
 
     /* Creates from two vectors or two points. They're basically the same. */
-    Rect.fromVectors = function (position, size) {
+    Rect.fromVectors = function(position, size) {
         return new Rect(position.x, position.y, size.x, size.y);
     };
 
     //Paths
-    function Path(funcToCall, inputPoints, startPoint){
+    function Path(funcToCall, inputPoints, startPoint) {
         this.funcToCall = funcToCall;
         this.inputPoints = inputPoints;
         this.startPoint = startPoint;
     }
 
-    Path.prototype.draw = function(ctx){
+    Path.prototype.draw = function(ctx) {
         if (!drawingPath) {
             ctx.beginPath();
             ctx.moveTo(this.startPoint.x, this.startPoint.y);
         }
 
-        if(this.inputPoints !== undefined){
+        if (this.inputPoints !== undefined) {
             this.funcToCall.apply(ctx, this.inputPoints);
-        }
-        else{
+        } else {
             this.funcToCall.apply(ctx, new Array());
         }
         ctx.fill();
@@ -294,69 +299,67 @@
     }
 
     //Shape
-    function Shape(pathArrayOrFunctionOrSAT, pointsArray){
-        if (type(pathArrayOrFunctionOrSAT) === 'function'){
+    function Shape(pathArrayOrFunctionOrSAT, pointsArray) {
+        if (type(pathArrayOrFunctionOrSAT) === 'function') {
             this._draw = pathArrayOrFunctionOrSAT;
             if (pointsArray != undefined)
                 this.pointsArray = pointsArray;
-        }else if (type(pathArrayOrFunctionOrSAT) === 'array'){
+        } else if (type(pathArrayOrFunctionOrSAT) === 'array') {
             this.pathArray = pathArrayOrFunctionOrSAT;
-        }else if (pathArrayOrFunctionOrSAT instanceof Path) {
+        } else if (pathArrayOrFunctionOrSAT instanceof Path) {
             this.path = pathArrayOrFunctionOrSAT;
-        }else if (type(pathArrayOrFunctionOrSAT) === 'polygon'){
+        } else if (type(pathArrayOrFunctionOrSAT) === 'polygon') {
             this.satPolygon = pathArrayOrFunctionOrSAT;
-        }else if (type(pathArrayOrFunctionOrSAT) === 'circle'){
+        } else if (type(pathArrayOrFunctionOrSAT) === 'circle') {
             this.satCircle = pathArrayOrFunctionOrSAT;
-        }else{
+        } else {
             throw new Error('Can only add a path array or a draw function to Shape');
         }
     }
 
 
-    Shape.prototype.draw = function(ctx){
-        if (this.pathArray){
+    Shape.prototype.draw = function(ctx) {
+        if (this.pathArray) {
             var i;
-            var paths = this.pathArray.slice(0, this.pathArray.length-1);
-            var type = this.pathArray[this.pathArray.length-1];
+            var paths = this.pathArray.slice(0, this.pathArray.length - 1);
+            var type = this.pathArray[this.pathArray.length - 1];
 
             ctx.beginPath();
 
-            for(i=0; i<paths.length; i++){
+            for (i = 0; i < paths.length; i++) {
                 paths[i].draw(ctx);
 
-                if (!drawingPath && (type == "connected" || type == "connected and closed")){
+                if (!drawingPath && (type == "connected" || type == "connected and closed")) {
                     drawingPath = true;
                 }
             }
 
-            if (type == "connected and closed"){
+            if (type == "connected and closed") {
                 ctx.closePath();
             }
 
             drawingPath = false;
-        }else if(this._draw){
+        } else if (this._draw) {
             this._draw(ctx);
-        }else if (this.satPolygon){
+        } else if (this.satPolygon) {
 
 
             var x = this.satPolygon.points[0].x;
             var y = this.satPolygon.points[0].y;
 
-            if (!util.isDrawingPath()){
+            if (!util.isDrawingPath()) {
                 ctx.beginPath();
-                ctx.moveTo(x , y );
-            }
-            else{
+                ctx.moveTo(x, y);
+            } else {
                 ctx.lineTo(x, y);
             }
 
             for (var i = 1; i < this.satPolygon.points.length; i++) {
-                ctx.lineTo(this.satPolygon.points[i].x , this.satPolygon.points[i].y );
+                ctx.lineTo(this.satPolygon.points[i].x, this.satPolygon.points[i].y);
             };
 
-            ctx.lineTo(this.satPolygon.points[0].x , this.satPolygon.points[0].y );
-        }
-        else if (this.satCircle){
+            ctx.lineTo(this.satPolygon.points[0].x, this.satPolygon.points[0].y);
+        } else if (this.satCircle) {
             ctx.beginPath();
 
             ctx.arc(this.satCircle.pos.x, this.satCircle.pos.y, this.satCircle.r, 0, Math.PI * 2, true);
@@ -369,61 +372,125 @@
     // Utilities for math
 
     var add = new Method()
-        .when(['array', 'number'], function(a,b){ return a.map(function(x){ return add(x,b); }); })
-        .when(['array', 'vector'], function(a,b){ return a.map(function(x){ return add(x,b); }); })
-        .when(['array', 'array'], function(a,b){ return a.concat(b); })
-        .when(['vector', 'number'], function(a,b){ return new Vector(a.x + b, a.y + b); })
-        .when(['vector', 'vector'], function(a,b){ return new Vector(a.x + b.x, a.y + b.y); })
-        .when(['number', 'number'], function(a,b){ return a + b; })
+        .when(['array', 'number'], function(a, b) {
+            return a.map(function(x) {
+                return add(x, b);
+            });
+        })
+        .when(['array', 'vector'], function(a, b) {
+            return a.map(function(x) {
+                return add(x, b);
+            });
+        })
+        .when(['array', 'array'], function(a, b) {
+            return a.concat(b);
+        })
+        .when(['vector', 'number'], function(a, b) {
+            return new Vector(a.x + b, a.y + b);
+        })
+        .when(['vector', 'vector'], function(a, b) {
+            return new Vector(a.x + b.x, a.y + b.y);
+        })
+        .when(['number', 'number'], function(a, b) {
+            return a + b;
+        })
         .tryInverse()
         .fn();
 
     var subtract = new Method()
-        .when(['array', 'number'], function(a,b){ return a.map(function(x){ return subtract(x,b); }); })
-        .when(['array', 'vector'], function(a,b){ return a.map(function(x){ return subtract(x,b); }); })
-        .when(['array', 'array'], function(a,b){ return a.filter(function(x){ return a.indexOf(x) < 0; }); })
-        .when(['vector', 'number'], function(a,b){ return new Vector(a.x - b, a.y - b); })
-        .when(['vector', 'vector'], function(a,b){ return new Vector(a.x - b.x, a.y - b.y); })
-        .when(['number', 'number'], function(a,b){ return a - b; })
-        .when(['date', 'date'], function(a,b){ return (a-b) / (1000 * 3600 * 24); })
+        .when(['array', 'number'], function(a, b) {
+            return a.map(function(x) {
+                return subtract(x, b);
+            });
+        })
+        .when(['array', 'vector'], function(a, b) {
+            return a.map(function(x) {
+                return subtract(x, b);
+            });
+        })
+        .when(['array', 'array'], function(a, b) {
+            return a.filter(function(x) {
+                return a.indexOf(x) < 0;
+            });
+        })
+        .when(['vector', 'number'], function(a, b) {
+            return new Vector(a.x - b, a.y - b);
+        })
+        .when(['vector', 'vector'], function(a, b) {
+            return new Vector(a.x - b.x, a.y - b.y);
+        })
+        .when(['number', 'number'], function(a, b) {
+            return a - b;
+        })
+        .when(['date', 'date'], function(a, b) {
+            return (a - b) / (1000 * 3600 * 24);
+        })
         .tryInverse()
         .fn();
 
     var multiply = new Method()
-        .when(['array', 'number'], function(a,b){ return a.map(function(x){ return multiply(x,b); }); })
-        .when(['array', 'vector'], function(a,b){ return a.map(function(x){ return multiply(x,b); }); })
-        .when(['vector', 'number'], function(a,b){ return new Vector(a.x * b, a.y * b); })
-        .when(['number', 'vector'], function(a,b){ return new Vector(b.x * a, b.y * a); })
+        .when(['array', 'number'], function(a, b) {
+            return a.map(function(x) {
+                return multiply(x, b);
+            });
+        })
+        .when(['array', 'vector'], function(a, b) {
+            return a.map(function(x) {
+                return multiply(x, b);
+            });
+        })
+        .when(['vector', 'number'], function(a, b) {
+            return new Vector(a.x * b, a.y * b);
+        })
+        .when(['number', 'vector'], function(a, b) {
+            return new Vector(b.x * a, b.y * a);
+        })
         // dot product, cross product only makes sense in 3 dimensions
-        .when(['vector', 'vector'], function(a,b){ return a.x * b.x + a.y * b.y; })
-        .when(['number', 'number'], function(a,b){ return a * b; })
+        .when(['vector', 'vector'], function(a, b) {
+            return a.x * b.x + a.y * b.y;
+        })
+        .when(['number', 'number'], function(a, b) {
+            return a * b;
+        })
         .fn(); // no inverse!
 
     var divide = new Method()
-        .when(['array', 'number'], function(a,b){ return a.map(function(x){ return divide(x,b); }); })
-        .when(['vector', 'number'], function(a,b){ return new Vector(a.x / b, a.y / b); })
-        .when(['number', 'number'], function(a,b){ return a / b; })
+        .when(['array', 'number'], function(a, b) {
+            return a.map(function(x) {
+                return divide(x, b);
+            });
+        })
+        .when(['vector', 'number'], function(a, b) {
+            return new Vector(a.x / b, a.y / b);
+        })
+        .when(['number', 'number'], function(a, b) {
+            return a / b;
+        })
         .fn();
 
     var equal = new Method()
-        .when(['date', 'date'], function(a,b){
-             return a.valueOf() === b.valueOf();
-         })
-        .default(function(a,b){ return a === b; })
+        .when(['date', 'date'], function(a, b) {
+            return a.valueOf() === b.valueOf();
+        })
+        .default(function(a, b) {
+            return a === b;
+        })
         .fn();
 
     var notEqual = new Method()
-        .when(['date', 'date'], function(a,b){
-             return a.valueOf() !== b.valueOf();
-         })
-        .default(function(a,b){ return a !== b; })
+        .when(['date', 'date'], function(a, b) {
+            return a.valueOf() !== b.valueOf();
+        })
+        .default(function(a, b) {
+            return a !== b;
+        })
         .fn();
 
     // Random methods
 
-    function randInt(start, stop){
+    function randInt(start, stop) {
         // return an integer between start and stop, inclusive
-        if (stop === undefined){
+        if (stop === undefined) {
             stop = start;
             start = 0;
         }
@@ -437,71 +504,84 @@
     // Original JS port from http://asserttrue.blogspot.ca/2011/12/perlin-noise-in-javascript_31.html,
     // but heavily modified by Dethe for 1 and 2 dimensional noise
 
-    function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-    function lerp( t, a, b) { return a + t * (b - a); }
-    function grad(hash, x, y, z) {
-      var h = hash & 15;                      // CONVERT LO 4 BITS OF HASH CODE
-      var u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
-             v = h<4 ? y : h==12||h==14 ? x : z;
-      return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
+    function fade(t) {
+        return t * t * t * (t * (t * 6 - 15) + 10);
     }
-    function scale(n) { return (1 + n)/2; }
+
+    function lerp(t, a, b) {
+        return a + t * (b - a);
+    }
+
+    function grad(hash, x, y, z) {
+        var h = hash & 15; // CONVERT LO 4 BITS OF HASH CODE
+        var u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
+            v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+        return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+    }
+
+    function scale(n) {
+        return (1 + n) / 2;
+    }
 
     // permutations
-    var p = [ 151,160,137,91,90,15,
-       131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
-       190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
-       88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
-       77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
-       102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
-       135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
-       5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
-       223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
-       129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
-       251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
-       49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-       138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,
-       151,160,137,91,90,15,
-       131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
-       190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
-       88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
-       77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
-       102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
-       135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
-       5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
-       223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
-       129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
-       251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
-       49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-       138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+    var p = [151, 160, 137, 91, 90, 15,
+        131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
+        190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
+        88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
+        77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244,
+        102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196,
+        135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250, 124, 123,
+        5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42,
+        223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
+        129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228,
+        251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
+        49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
+        138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180,
+        151, 160, 137, 91, 90, 15,
+        131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142, 8, 99, 37, 240, 21, 10, 23,
+        190, 6, 148, 247, 120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203, 117, 35, 11, 32, 57, 177, 33,
+        88, 237, 149, 56, 87, 174, 20, 125, 136, 171, 168, 68, 175, 74, 165, 71, 134, 139, 48, 27, 166,
+        77, 146, 158, 231, 83, 111, 229, 122, 60, 211, 133, 230, 220, 105, 92, 41, 55, 46, 245, 40, 244,
+        102, 143, 54, 65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132, 187, 208, 89, 18, 169, 200, 196,
+        135, 130, 116, 188, 159, 86, 164, 100, 109, 198, 173, 186, 3, 64, 52, 217, 226, 250, 124, 123,
+        5, 202, 38, 147, 118, 126, 255, 82, 85, 212, 207, 206, 59, 227, 47, 16, 58, 17, 182, 189, 28, 42,
+        223, 183, 170, 213, 119, 248, 152, 2, 44, 154, 163, 70, 221, 153, 101, 155, 167, 43, 172, 9,
+        129, 22, 39, 253, 19, 98, 108, 110, 79, 113, 224, 232, 178, 185, 112, 104, 218, 246, 97, 228,
+        251, 34, 242, 193, 238, 210, 144, 12, 191, 179, 162, 241, 81, 51, 145, 235, 249, 14, 239, 107,
+        49, 192, 214, 31, 181, 199, 106, 157, 184, 84, 204, 176, 115, 121, 50, 45, 127, 4, 150, 254,
+        138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
     ];
 
     function noise(x, y, z) {
 
-          var X = Math.floor(x) & 255,                  // FIND UNIT CUBE THAT
-              Y = Math.floor(y) & 255,                  // CONTAINS POINT.
-              Z = Math.floor(z) & 255;
-          x -= Math.floor(x);                                // FIND RELATIVE X,Y,Z
-          y -= Math.floor(y);                                // OF POINT IN CUBE.
-          z -= Math.floor(z);
-          var    u = fade(x),                                // COMPUTE FADE CURVES
-                 v = fade(y),                                // FOR EACH OF X,Y,Z.
-                 w = fade(z);
-          var A = p[X  ]+Y, AA = p[A]+Z, AB = p[A+1]+Z,      // HASH COORDINATES OF
-              B = p[X+1]+Y, BA = p[B]+Z, BB = p[B+1]+Z;      // THE 8 CUBE CORNERS,
+        var X = Math.floor(x) & 255, // FIND UNIT CUBE THAT
+            Y = Math.floor(y) & 255, // CONTAINS POINT.
+            Z = Math.floor(z) & 255;
+        x -= Math.floor(x); // FIND RELATIVE X,Y,Z
+        y -= Math.floor(y); // OF POINT IN CUBE.
+        z -= Math.floor(z);
+        var u = fade(x), // COMPUTE FADE CURVES
+            v = fade(y), // FOR EACH OF X,Y,Z.
+            w = fade(z);
+        var A = p[X] + Y,
+            AA = p[A] + Z,
+            AB = p[A + 1] + Z, // HASH COORDINATES OF
+            B = p[X + 1] + Y,
+            BA = p[B] + Z,
+            BB = p[B + 1] + Z; // THE 8 CUBE CORNERS,
 
-          return scale(lerp(w, lerp(v, lerp(u, grad(p[AA  ], x  , y  , z   ),  // AND ADD
-                                         grad(p[BA  ], x-1, y  , z   )), // BLENDED
-                                 lerp(u, grad(p[AB  ], x  , y-1, z   ),  // RESULTS
-                                         grad(p[BB  ], x-1, y-1, z   ))),// FROM  8
-                         lerp(v, lerp(u, grad(p[AA+1], x  , y  , z-1 ),  // CORNERS
-                                         grad(p[BA+1], x-1, y  , z-1 )), // OF CUBE
-                                 lerp(u, grad(p[AB+1], x  , y-1, z-1 ),
-                                         grad(p[BB+1], x-1, y-1, z-1 )))));
+        return scale(lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), // AND ADD
+                    grad(p[BA], x - 1, y, z)), // BLENDED
+                lerp(u, grad(p[AB], x, y - 1, z), // RESULTS
+                    grad(p[BB], x - 1, y - 1, z))), // FROM  8
+            lerp(v, lerp(u, grad(p[AA + 1], x, y, z - 1), // CORNERS
+                    grad(p[BA + 1], x - 1, y, z - 1)), // OF CUBE
+                lerp(u, grad(p[AB + 1], x, y - 1, z - 1),
+                    grad(p[BB + 1], x - 1, y - 1, z - 1)))));
     }
 
-    function choice(list){
-      return list[Math.floor(Math.random() * list.length)];
+    function choice(list) {
+        return list[Math.floor(Math.random() * list.length)];
     }
 
 
@@ -514,7 +594,7 @@
      * Events:
      *
      */
-    var motionModule  = (function () {
+    var motionModule = (function() {
         var direction = "",
             motionModule;
 
@@ -523,12 +603,12 @@
              * Starts fetching the motion, periodically, and sets the
              * direction property of this module.
              */
-            startTrackingMotion: function () {
+            startTrackingMotion: function() {
 
                 /* Handle if motion is not supported. */
                 if (!window.DeviceOrientationEvent) {
                     app.warn('This app tracks your motion, but your browser ' +
-                             'does not have an accelerometer.');
+                        'does not have an accelerometer.');
                     return;
                 }
 
@@ -539,7 +619,7 @@
         /* Define a read-only getter for the current direction. */
         Object.defineProperties(motionModule, {
             direction: {
-                get: function () {
+                get: function() {
                     return direction;
                 }
             }
@@ -556,21 +636,21 @@
 
             direction = "";
 
-            if(left_right > limit && front_back > limit) {
+            if (left_right > limit && front_back > limit) {
                 direction = "upright";
-            } else if(left_right > limit && front_back < -limit) {
+            } else if (left_right > limit && front_back < -limit) {
                 direction = "downright";
-            } else if(left_right < -limit && front_back < -limit) {
+            } else if (left_right < -limit && front_back < -limit) {
                 direction = "downleft";
-            } else if(left_right < -limit && front_back > limit) {
+            } else if (left_right < -limit && front_back > limit) {
                 direction = "upleft";
-            } else if(front_back > limit) {
+            } else if (front_back > limit) {
                 direction = "up";
-            } else if(left_right > limit) {
+            } else if (left_right > limit) {
                 direction = "right";
-            } else if(front_back < -limit) {
+            } else if (front_back < -limit) {
                 direction = "down";
-            } else if(left_right < -limit) {
+            } else if (left_right < -limit) {
                 direction = "left";
             }
 
@@ -592,7 +672,7 @@
      *                     updates immediately without polling
      *                     currentLocation.
      */
-    var geolocationModule  = (function () {
+    var geolocationModule = (function() {
         var hasLocation = false,
             currentLocation = null,
             watchID = null,
@@ -604,7 +684,7 @@
              * currentLocation property of this module. Use
              * geolocation.isTracking to check whether geolocation is ready.
              */
-            startTrackingLocation: function () {
+            startTrackingLocation: function() {
                 if (watchID !== null)
                     return;
 
@@ -612,15 +692,14 @@
                 if (!navigator.geolocation) {
                     // TODO: I dunno lol. An error or warning of some sort?
                     app.warn('This app tracks your location, but your browser ' +
-                             'does not support geolocation.');
+                        'does not support geolocation.');
                     // There are scenarios where geolocation can be optionally
                     // used in a program.
                     return;
                 }
 
                 watchID = navigator.geolocation.watchPosition(
-                    onLocationChange, onLocationError, {
-                });
+                    onLocationChange, onLocationError, {});
 
                 /* TODO: need to call clearWatch() with the handle when there
                  * are no more geolocation blocks in the script. */
@@ -630,12 +709,12 @@
         /* Define a read-only getter for the current location. */
         Object.defineProperties(geolocationModule, {
             currentLocation: {
-                get: function () {
+                get: function() {
                     return currentLocation;
                 }
             },
             isTracking: {
-                get: function () {
+                get: function() {
                     return hasLocation;
                 }
             }
@@ -704,7 +783,7 @@
      *  listen to that will signal that it's ready.
      *
      */
-    (function () {
+    (function() {
         // We're going to use the loader to load images and video too, since it is here
 
         var assets = {
@@ -713,14 +792,14 @@
              * Loads stuff based on dependencies.
              * Passed an object of selector-callback pairs.
              */
-            load: function (dependencies) {
+            load: function(dependencies) {
                 //Properties to help track the assets being loaded.
                 var toLoad = 0;
                 var loaded = 0;
                 var whenLoaded, selector, matchedElements, matchCallback;
 
                 /* Default whenLoaded callback. */
-                whenLoaded = function () {
+                whenLoaded = function() {
                     // default asset load (nothing)
                 };
 
@@ -760,7 +839,7 @@
                 // We need at least *ONE* async callback so that ready is
                 // called; fake it here when there's notthing to load.
                 if (toLoad === 0) {
-                    setTimeout(function () {
+                    setTimeout(function() {
                         ready();
                     }, 0);
                 }
@@ -770,7 +849,9 @@
                 return {
                     // Pass the callback function that should run when all assets
                     // have loaded.
-                    whenLoaded: function(callback) { whenLoaded = callback; },
+                    whenLoaded: function(callback) {
+                        whenLoaded = callback;
+                    },
                 };
 
             },
@@ -805,8 +886,8 @@
             // Returns a callback for use with a selector in assets.load()
             // that calls setup, and then waits for the particularly named
             // event. When the event is finally fired, ready is called.
-            waitFor: function (eventName, setup) {
-                return function (ignoredElements, ready) {
+            waitFor: function(eventName, setup) {
+                return function(ignoredElements, ready) {
                     setup();
                     Event.once(window, 'runtime:' + eventName, null, ready);
                 };
@@ -817,7 +898,7 @@
             // the soundsForGames:
             // https://github.com/kittykatattack/soundForGames
             // Incidentally, this was also most of the old asset loader.
-            loadMedia: function (elements, ready) {
+            loadMedia: function(elements, ready) {
                 /* These counters are similar but COMPLETELY UNRELATED to
                  * assets.load(). When ALL media are loaded, only then will
                  * the counter be incremented by one in assets.load().
@@ -829,13 +910,13 @@
                  * For each matched wb-expression, get its first value.
                  * We assume that this is the filename of the asset to load.
                  */
-                var sources = elements.map(function(asset){
+                var sources = elements.map(function(asset) {
                     return asset.gatherValues()[0];
                 });
 
                 //Find the number of files that need to be loaded.
                 toLoad = sources.length;
-                sources.forEach(function(source){
+                sources.forEach(function(source) {
 
                     //Find the file extension of the asset.
                     var extension = source.split('.').pop().toLowerCase();
@@ -857,17 +938,16 @@
                         //Assign the sound as a property of the assets object so
                         //we can access it like this: `assets.sounds["sounds/sound.mp3"]`.
                         assets.sounds[soundSprite.name] = soundSprite;
-                    }
-                    else if (assets.imageExtensions.indexOf(extension) !== -1){
+                    } else if (assets.imageExtensions.indexOf(extension) !== -1) {
                         var imageSprite = new WBImage(source, loadHandler);
                         assets.images[source] = imageSprite;
-                    }else if (assets.videoExtensions.indexOf(extension) !== -1){
+                    } else if (assets.videoExtensions.indexOf(extension) !== -1) {
                         var videoSprite = new Video();
                         videoSprite.name = source;
                         assets.videos[source] = videoSprite;
                         videoSprite.addEventListener('canplay', loadHandler, false);
                         videoSprite.src = source;
-                    }else{
+                    } else {
                         //Display a message if the file type isn't recognized.
                         console.warn("File type not recognized: " + source);
                     }
@@ -875,7 +955,7 @@
 
                     //#### loadHandler
                     //The `loadHandler` will be called each time an asset finishes loading.
-                    function loadHandler () {
+                    function loadHandler() {
                         loaded += 1;
 
                         //Check whether everything has loaded.
@@ -887,7 +967,8 @@
                     }
 
                 });
-            }, /* loadMedia */
+            },
+            /* loadMedia */
         };
 
         window.assets = assets;
@@ -895,14 +976,15 @@
 
 
     /****************************
-    *
-    * Image, loadable, drawable
-    *
-    *****************************/
+     *
+     * Image, loadable, drawable
+     *
+     *****************************/
 
-    function WBImage(src, loadHandler){
+    function WBImage(src, loadHandler) {
         self = this;
-        function selfLoad(evt){
+
+        function selfLoad(evt) {
             self.width = self.origWidth = self._image.width;
             self.height = self.origHeight = self._image.height;
             self.origProportion = self.origWidth / self.origHeight;
@@ -918,7 +1000,7 @@
         this._ctx = null;
     }
 
-    WBImage.create = function createWBImage(width, height){
+    WBImage.create = function createWBImage(width, height) {
         var image = Object.create(WBImage.prototype); // skip constructor
         image.name = '';
         image.width = width;
@@ -926,199 +1008,203 @@
         image._image = null;
         image._flipH = false;
         image._flipV = false;
-        image._canvas = dom.html('canvas', {width: width, height: height});
+        image._canvas = dom.html('canvas', {
+            width: width,
+            height: height
+        });
         return image;
     };
 
-    WBImage.prototype.draw = function(ctx){
-        if (this._flipH || this._flipV){
+    WBImage.prototype.draw = function(ctx) {
+        if (this._flipH || this._flipV) {
             var sy = this._flipH ? -1 : 1;
             var sx = this._flipV ? -1 : 1;
             ctx.save();
             ctx.scale(sx, sy);
         }
-        if (this._canvas){
-            ctx.drawImage(this._canvas, -this.width/2, -this.height/2, this.width, this.height);
-        }else{
-            ctx.drawImage(this._image, -this.width/2, -this.height/2, this.width, this.height);
+        if (this._canvas) {
+            ctx.drawImage(this._canvas, -this.width / 2, -this.height / 2, this.width, this.height);
+        } else {
+            ctx.drawImage(this._image, -this.width / 2, -this.height / 2, this.width, this.height);
         }
-        if (this._flipH || this._flipV){
+        if (this._flipH || this._flipV) {
             ctx.restore();
         }
     };
 
-    WBImage.prototype.getContext = function(){
-        if (!this._ctx){
-            if (!this._canvas){
-                this._canvas = dom.html('canvas', {width: this.width, height: this.height});
+    WBImage.prototype.getContext = function() {
+        if (!this._ctx) {
+            if (!this._canvas) {
+                this._canvas = dom.html('canvas', {
+                    width: this.width,
+                    height: this.height
+                });
             }
             this._ctx = this._canvas.getContext('2d');
-            if (this._image){
+            if (this._image) {
                 this._ctx.drawImage(this._image, 0, 0);
             }
         }
         return this._ctx;
     };
 
-    WBImage.prototype.drawAtPoint = function(ctx, pt){
+    WBImage.prototype.drawAtPoint = function(ctx, pt) {
         ctx.translate(pt.x, pt.y);
         this.draw(ctx);
-        ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // back to identity matrix
     };
 
-    WBImage.prototype.drawInRect = function(ctx, r){
+    WBImage.prototype.drawInRect = function(ctx, r) {
         ctx.drawImage(this._image, r.x, r.y, r.width, r.height);
     };
 
-    WBImage.prototype.getHeight = function(){
+    WBImage.prototype.getHeight = function() {
         return this.height;
     };
 
-    WBImage.prototype.getWidth = function(){
+    WBImage.prototype.getWidth = function() {
         return this.width;
     };
 
-    WBImage.prototype.setWidth = function(w){
+    WBImage.prototype.setWidth = function(w) {
         this.width = w;
         this.height = this.width / this.origProportion;
     };
 
-    WBImage.prototype.setHeight = function(h){
+    WBImage.prototype.setHeight = function(h) {
         this.height = h;
         this.width = this.height * this.origProportion;
     };
 
-    WBImage.prototype.setSize = function(sz){
+    WBImage.prototype.setSize = function(sz) {
         this.width = sz.w;
         this.height = sz.h;
     };
 
-    WBImage.prototype.scale = function(scaleFactor){
+    WBImage.prototype.scale = function(scaleFactor) {
         this.width = this.origWidth * scaleFactor;
         this.height = this.origHeight * scaleFactor;
     };
 
-    WBImage.prototype.flipH = function(){
+    WBImage.prototype.flipH = function() {
         this._flipH = !this._flipH;
     };
 
-    WBImage.prototype.flipV = function(){
+    WBImage.prototype.flipV = function() {
         this._flipV = !this._flipV;
     };
 
-    WBImage.prototype.flipBoth = function(){
+    WBImage.prototype.flipBoth = function() {
         this._flipH = !this._flipH;
         this._flipV = !this._flipV;
     };
 
-    WBImage.prototype.toString = function(){
+    WBImage.prototype.toString = function() {
         return this.name + "; " + this.width + "px wide by " + this.height + "px high";
     };
 
 
     /******************************
-    *
-    * Sprite mini-library
-    *
-    *
-    *******************************/
+     *
+     * Sprite mini-library
+     *
+     *
+     *******************************/
 
-    function Sprite(drawable){
+    function Sprite(drawable) {
         // drawable can be a shape function, an image, or text
         // wrap image with a function, make sure all are centred on 0,0
         this.drawable = drawable || defaultDrawable;
 
         this.satObject = this.drawable.satPolygon || this.drawable.satCircle;
 
-        if(this.satObject){
+        if (this.satObject) {
             this.position = this.satObject.pos;
-        }
-        else{
+        } else {
             this.position = new SAT.Vector();
         }
-        this.facing = new SAT.Vector(1,0);
+        this.facing = new SAT.Vector(1, 0);
         this.velocity = new SAT.Vector();
     }
 
-    Sprite.prototype.accelerate = function(speed){
+    Sprite.prototype.accelerate = function(speed) {
         this.velocity.add(
             new SAT.Vector(this.facing.x * speed, this.facing.y * speed)
         );
     }
 
-    Sprite.prototype.setVelocity = function(vec){
+    Sprite.prototype.setVelocity = function(vec) {
         this.velocity = new SAT.Vector(vec.x, vec.y);
     }
 
-    Sprite.prototype.getXvel = function(){
+    Sprite.prototype.getXvel = function() {
         return this.velocity.x;
     }
 
-    Sprite.prototype.getYvel = function(){
+    Sprite.prototype.getYvel = function() {
         return this.velocity.y;
     }
 
-    Sprite.prototype.getXpos = function(){
+    Sprite.prototype.getXpos = function() {
         return this.position.x;
     }
 
-    Sprite.prototype.getYpos = function(){
+    Sprite.prototype.getYpos = function() {
         return this.position.x;
     }
 
-    Sprite.prototype.applyForce = function(vec){
+    Sprite.prototype.applyForce = function(vec) {
         this.velocity.add(vec);
     }
 
-    Sprite.prototype.rotate = function(r){
+    Sprite.prototype.rotate = function(r) {
         this.facing.rotate(r * Math.PI / 180);
     }
 
-    Sprite.prototype.rotateTo = function(r){
+    Sprite.prototype.rotateTo = function(r) {
         this.facing.angle = r;
     }
 
-    Sprite.prototype.move = function(){
+    Sprite.prototype.move = function() {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
     }
 
-    Sprite.prototype.moveTo = function(pt){
+    Sprite.prototype.moveTo = function(pt) {
         this.position.x = pt.x;
         this.position.y = pt.y;
     }
 
-    Sprite.prototype.draw = function(ctx){
-        if(!this.drawable.satCircle)
-        {
+    Sprite.prototype.draw = function(ctx) {
+        if (!this.drawable.satCircle) {
             ctx.translate(this.position.x, this.position.y);
         }
         ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
-        ctx.setTransform(1,0,0,1,0,0); // back to identity matrix
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // back to identity matrix
     }
 
-    Sprite.prototype.angle = function(){
+    Sprite.prototype.angle = function() {
         return atan2(this.facing.y, this.facing.x);
     }
-    Sprite.prototype.toString = function(){
+    Sprite.prototype.toString = function() {
         return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
     };
 
-    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r){
-        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+    Sprite.prototype.bounceWithinRect = function bounceWithinRect(r) {
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0) {
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
-        }else if (this.position.x < r.x && this.velocity.x < 0){
+        } else if (this.position.x < r.x && this.velocity.x < 0) {
             this.velocity = new Vector(this.velocity.x *= -1, this.velocity.y);
         }
-        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0) {
             this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
-        }else if (this.position.y < r.y && this.velocity.y < 0){
+        } else if (this.position.y < r.y && this.velocity.y < 0) {
             this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
         }
     }
 
-    Sprite.prototype.checkForCollision = function checkForCollision(other){
+    Sprite.prototype.checkForCollision = function checkForCollision(other) {
 
         var collision = false;
         var response = new SAT.Response();
@@ -1126,19 +1212,16 @@
         var this_drawable = this.drawable;
         var other_drawable = other.drawable;
 
-        if(this_drawable.satPolygon && other_drawable.satPolygon){
+        if (this_drawable.satPolygon && other_drawable.satPolygon) {
             collision = SAT.testPolygonPolygon(
                 this_drawable.satPolygon, other_drawable.satPolygon, response);
-        }
-        else if(this_drawable.satPolygon && other_drawable.satCircle){
+        } else if (this_drawable.satPolygon && other_drawable.satCircle) {
             collision = SAT.testPolygonCircle(
                 this_drawable.satPolygon, other_drawable.satCircle, response);
-        }
-        else if(this_drawable.satCircle && other_drawable.satPolygon){
+        } else if (this_drawable.satCircle && other_drawable.satPolygon) {
             collision = SAT.testCirclePolygon(
                 this_drawable.satCircle, other_drawable.satPolygon, response);
-        }
-        else if(this_drawable.satCircle && other_drawable.satCircle){
+        } else if (this_drawable.satCircle && other_drawable.satCircle) {
             collision = SAT.testCircleCircle(
                 this_drawable.satCircle, other_drawable.satCircle, response);
         }
@@ -1147,34 +1230,34 @@
 
     }
 
-    Sprite.prototype.wrapAroundRect = function(r){
-        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+    Sprite.prototype.wrapAroundRect = function(r) {
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0) {
             this.position = new Vector(this.position.x - r.width, this.position.y);
-        }else if (this.position.x < r.x && this.velocity.x < 0){
+        } else if (this.position.x < r.x && this.velocity.x < 0) {
             this.position = new Vector(this.position.x + r.x + r.width, this.position.y);
         }
-        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0) {
             this.position = new Vector(this.position.x, this.position.y - r.height);
-        }else if (this.position.y < r.y && this.velocity.y < 0){
+        } else if (this.position.y < r.y && this.velocity.y < 0) {
             this.position = new Vector(this.position.x, this.position.y + r.y + r.height);
         }
     }
 
-    Sprite.prototype.stayWithinRect = function(r){
-        if (this.position.x > (r.x + r.width) && this.velocity.x > 0){
+    Sprite.prototype.stayWithinRect = function(r) {
+        if (this.position.x > (r.x + r.width) && this.velocity.x > 0) {
             this.position = new Vector(r.x + r.width, this.position.y);
-        }else if (this.position.x < r.x && this.velocity.x < 0){
+        } else if (this.position.x < r.x && this.velocity.x < 0) {
             this.position = new Vector(r.x, this.position.y);
         }
-        if (this.position.y > (r.y + r.height) && this.velocity.y > 0){
+        if (this.position.y > (r.y + r.height) && this.velocity.y > 0) {
             this.position = new Vector(this.position.x, r.y + r.height);
-        }else if (this.position.y < r.y && this.velocity.y < 0){
+        } else if (this.position.y < r.y && this.velocity.y < 0) {
             this.position = new Vector(this.position.x, r.y);
         }
     }
 
-    function defaultDrawable(ctx){
-        var width = PI - PI/6;
+    function defaultDrawable(ctx) {
+        var width = PI - PI / 6;
         var length = 20;
         var frontX = cos(this.facing.rad) * length + this.position.x;
         var frontY = sin(this.facing.rad) * length + this.position.y;
@@ -1183,17 +1266,17 @@
         ctx.beginPath();
         ctx.moveTo(frontX, frontY);
         ctx.lineTo(cos(this.facing.rad - width) * length + this.position.x,
-                   sin(this.facing.rad - width) * length + this.position.y);
+            sin(this.facing.rad - width) * length + this.position.y);
         ctx.moveTo(frontX, frontY);
         ctx.lineTo(cos(this.facing.rad + width) * length + this.position.x,
-                   sin(this.facing.rad + width) * length + this.position.y);
+            sin(this.facing.rad + width) * length + this.position.y);
         ctx.stroke();
     }
 
-    function randomId(){
+    function randomId() {
         // Based on Paul Irish's random hex color:http://www.paulirish.com/2009/random-hex-color-code-snippets/
         // Theoretically could return non-unique values, not going to let that keep me up at night
-        return 'k'+Math.floor(Math.random()*16777215).toString(16); // 'k' because ids have to start with a letter
+        return 'k' + Math.floor(Math.random() * 16777215).toString(16); // 'k' because ids have to start with a letter
     }
 
     // exports

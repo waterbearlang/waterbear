@@ -1,48 +1,45 @@
 // Undo and redo support
 
-(function(){
+(function() {
     "use strict";
 
     /**UNDO and REDO events**/
     var undoStack = [];
     var redoStack = [];
 
-    function undoEvent(toUndo){
-        if(undoStack.length!==0){
+    function undoEvent(toUndo) {
+        if (undoStack.length !== 0) {
             var toUndo = undoStack.pop();
             redoStack.push(toUndo);
             setButtonStatus();
-            if(toUndo.type === 'delete-block'){
+            if (toUndo.type === 'delete-block') {
                 undoDelete(toUndo);
-            }
-            else if(toUndo.type === 'add-block'){
+            } else if (toUndo.type === 'add-block') {
                 undoAdd(toUndo);
-            }
-            else {
+            } else {
                 undoMove(toUndo);
             }
         }
     }
 
-    function undoAdd(toUndo){
+    function undoAdd(toUndo) {
         var addedBlock = toUndo.addedBlock;
         var addedTo = toUndo.addedTo;
         addedTo.removeChild(addedBlock);
     }
 
-    function undoDelete(toUndo){
+    function undoDelete(toUndo) {
         var deletedBlock = toUndo.deletedBlock;
         var deletedFrom = toUndo.deletedFrom;
         var nextBlock = toUndo.nextBlock;
-        if(nextBlock){
+        if (nextBlock) {
             deletedFrom.insertBefore(deletedBlock, nextBlock);
-        }
-        else{
+        } else {
             deletedFrom.appendChild(deletedBlock);
         }
     }
 
-    function undoMove(toUndo){
+    function undoMove(toUndo) {
         var addedBlock = toUndo.addedBlock;
         var addedTo = toUndo.addedTo;
         var origParent = toUndo.originalParent;
@@ -50,65 +47,60 @@
         //remove from parent expression
         addedTo.removeChild(addedBlock);
 
-        if(toUndo.type === 'add-var-block'){
+        if (toUndo.type === 'add-var-block') {
             addedBlock = toUndo.insideBlock;
         }
 
         //add back to original parent expression
-        if(origNextEl){
+        if (origNextEl) {
             origParent.insertBefore(addedBlock, origNextEl);
-        }
-        else{
+        } else {
             origParent.appendChild(addedBlock);
         }
     }
 
-    function redoEvent(){
-        if(redoStack.length !== 0){
+    function redoEvent() {
+        if (redoStack.length !== 0) {
             var toRedo = redoStack.pop();
             undoStack.push(toRedo);
             setButtonStatus();
-            if(toRedo.type === 'delete-block'){
+            if (toRedo.type === 'delete-block') {
                 redoDelete(toRedo);
-            }
-            else if(toRedo.type === 'add-block'){
+            } else if (toRedo.type === 'add-block') {
                 redoAdd(toRedo);
-            }
-            else {
+            } else {
                 redoMove(toRedo);
             }
         }
     }
 
-    function redoAdd(toRedo){
+    function redoAdd(toRedo) {
         var addedBlock = toRedo.addedBlock;
         var addedTo = toRedo.addedTo;
         var nextBlock = toRedo.nextBlock;
-        if(nextBlock){
+        if (nextBlock) {
             addedTo.insertBefore(addedBlock, nextBlock);
-        }
-        else{
+        } else {
             addedTo.appendChild(addedBlock);
         }
     }
 
-    function redoDelete(toRedo){
+    function redoDelete(toRedo) {
         var deletedBlock = toRedo.deletedBlock;
         var deletedFrom = toRedo.deletedFrom;
         deletedFrom.removeChild(deletedBlock);
     }
 
-    function redoMove(toRedo){
+    function redoMove(toRedo) {
         var addedBlock = toRedo.addedBlock;
         var addedTo = toRedo.addedTo;
         var origParent = toRedo.originalParent;
         var nextBlock = toRedo.nextBlock;
 
         //remove the block from it's original parent again
-        if(toRedo.type === 'move-block'){
+        if (toRedo.type === 'move-block') {
             origParent.removeChild(addedBlock);
-        }
-        else{ //type is add-var-block; must add back into setVariable block too
+        } else { //type is add-var-block; must add back into setVariable block too
             origParent.removeChild(toRedo.insideBlock);
             addedBlock
                 .querySelector('wb-value[type="any"]')
@@ -116,25 +108,24 @@
         }
 
         //add block back to where it was before the undo
-        if(nextBlock){
+        if (nextBlock) {
             addedTo.insertBefore(addedBlock, nextBlock);
-        }
-        else{
+        } else {
             addedTo.appendChild(addedBlock);
         }
     }
 
     function undoKeyCombo(evt) {
-        if((Event.keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
-           (Event.keyForEvent(evt) == 'z' && Event.keys['meta'])) {
+        if ((Event.keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
+            (Event.keyForEvent(evt) == 'z' && Event.keys['meta'])) {
             evt.preventDefault();
             undoEvent();
         }
     }
 
     function redoKeyCombo(evt) {
-        if((Event.keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
-           (Event.keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
+        if ((Event.keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
+            (Event.keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
             evt.preventDefault();
             redoEvent();
         }
@@ -152,41 +143,39 @@
         redoEvent();
     }
 
-    function setButtonStatus(){
-        if(undoStack.length === 0){
+    function setButtonStatus() {
+        if (undoStack.length === 0) {
             document.getElementById('undoButton').disabled = true;
-        }
-        else{
+        } else {
             document.getElementById('undoButton').disabled = false;
         }
-        if(redoStack.length === 0){
+        if (redoStack.length === 0) {
             document.getElementById('redoButton').disabled = true;
-        }
-        else{
+        } else {
             document.getElementById('redoButton').disabled = false;
         }
     }
 
-    function clearStacks(){
+    function clearStacks() {
         undoStack = [];
         redoStack = [];
         setButtonStatus();
     }
 
     //add a new event to the undo stack
-    function addNewEvent(evt){
+    function addNewEvent(evt) {
         redoStack = [];
         undoStack.push(evt);
         setButtonStatus();
     }
 
-window.Undo = {
-    undoKeyCombo: undoKeyCombo,
-    redoKeyCombo: redoKeyCombo,
-    handleUndoButton: handleUndoButton,
-    handleRedoButton: handleRedoButton,
-    addNewEvent: addNewEvent,
-    clearStacks: clearStacks
-};
+    window.Undo = {
+        undoKeyCombo: undoKeyCombo,
+        redoKeyCombo: redoKeyCombo,
+        handleUndoButton: handleUndoButton,
+        handleRedoButton: handleRedoButton,
+        addNewEvent: addNewEvent,
+        clearStacks: clearStacks
+    };
 
 })();

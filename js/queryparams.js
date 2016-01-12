@@ -1,48 +1,48 @@
 // Extracts parameters from URL, used to switch embed modes, load from gist, etc.
-(function(runtime){
-'use strict';
+(function(runtime) {
+    'use strict';
     // Source: http://stackoverflow.com/a/13984429
-    function urlToQueryParams(url){
+    function urlToQueryParams(url) {
         var qparams = {},
-            parts = (url||'').split('?'),
+            parts = (url || '').split('?'),
             qparts, qpart,
-            i=0;
+            i = 0;
 
-        if(parts.length <= 1 ){
+        if (parts.length <= 1) {
             return qparams;
-        }else{
+        } else {
             qparts = parts[1].split('&');
-            for(i in qparts){
+            for (i in qparts) {
 
                 qpart = qparts[i].split('=');
                 qparams[decodeURIComponent(qpart[0])] =
-                               decodeURIComponent(qpart[1] || '').split('#')[0];
+                    decodeURIComponent(qpart[1] || '').split('#')[0];
             }
         }
         return qparams;
     }
 
-    function queryParamsToUrl(params){
+    function queryParamsToUrl(params) {
         var base = location.href.split('?')[0];
         var keys = Object.keys(params);
         var parts = [];
-        keys.forEach(function(key){
-            if (Array.isArray(params[key])){
-                params[key].forEach(function(value){
+        keys.forEach(function(key) {
+            if (Array.isArray(params[key])) {
+                params[key].forEach(function(value) {
                     parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
                 });
-            }else{
+            } else {
                 parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(params[key]));
             }
         });
-        if (!parts.length){
+        if (!parts.length) {
             return base;
         }
         return base + '?' + parts.join('&');
     }
 
     runtime.query = {
-        params: function (){
+        params: function() {
             return urlToQueryParams(location.toString());
         },
         urlToQueryParams: urlToQueryParams,

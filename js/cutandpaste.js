@@ -51,18 +51,13 @@
             defaultSelection = true;
             return;
         }
-        // DOM-select contents of sekritSelection in case there is a copy command
-//         var sel = window.getSelection();
-//         sel.removeAllRanges();
-//         var rng = document.createRange();
-//         rng.selectNodeContents(sekritSelection);
-//         sel.addRange(rng);
         sekritSelection.select();
         console.log('selected: %s', window.getSelection().toString().slice(0,30));
         evt.preventDefault();
         evt.stopPropagation();
     }
 
+    // check to see if pasteboard has changed and handle appropriately
     function cleanupFromCopyPaste(evt){
         // if ctrl or command key is not in event, return
         // FIXME: can get confused if both are pressed
@@ -74,16 +69,53 @@
             defaultSelection = false;
             return;
         }else{
+            // Don't keep hidden selection for next time
             window.getSelection().collapseToStart();
         }
         // test to see if contents of sekritSelection have changed
         if (sekritSelection.value === sekritValue){
             app.warn('sekrit has not changed');
-            console.log('sekritValue: %s', sekritValue.slice(0,30));
-            console.log('sekrit: %o', sekritSelection.value.slice(0,30));
             return;
         }
-        // if so, check to see if they are valid to paste into the script (parseable, valid blocks)
+        // If sekritSelection is empty, but sekritValue is not, the contents were cut, not copied or pasted
+        // and we need to handle deleting the original.
+        if (!sekritSelection.value && sekritValue){
+            return handleCut();
+        }
+        // OK, we have a changed pasteboard and it's not a cut, must be a paste:
+        return handlePaste();
+    }
+
+    function handleCut(){
+        // Check to see if they are valid to paste into the script (parseable, valid blocks)
+        parseBlock.innerHTML = sekritValue;
+        if (!parseBlock.firstElementChild){
+            app.warn('cut non-HTML content: %s', sekritValue);
+            return;
+        }
+        var ids = [].slice.apply(parseBlock.children).map(function(elem){ console.log(elem); return elem.id; });
+        console.log('ids: %o', ids);
+        parseBlock.innerHTML = ''; // don't leave elements with duplicate IDs laying around
+        ids.forEach(function(id){
+            if (!id){
+                console.warn('no id in handleCut()');
+                return;
+            }
+            var block = document.getElementById(id);
+            if (!block){
+                console.warn('no block for id %s in handleCut()', id);
+                return;
+            }
+            if (! dom.matches(block, 'wb-expression, wb-step, wb-context, wb-container')){
+                console.warn('pasted HTML, but not a block: %s', block.localName);
+                return;
+            }
+            dom.remove(block);
+        });
+    }
+
+    function handlePaste(){
+        // Check to see if they are valid to paste into the script (parseable, valid blocks)
         parseBlock.innerHTML = sekritSelection.value;
         if (!parseBlock.firstElementChild){
             app.warn('pasted non-HTML content: %s', sekritSelection.value);

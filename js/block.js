@@ -134,6 +134,9 @@
         if (this.getAttribute('context') === 'true') {
             setDefaultByTag(this, 'wb-disclosure');
         }
+        if (!this.hasAttribute('id')){
+            this.setAttribute('id', util.randomId());
+        }
         var children = [].slice.call(this.children);
         children.forEach(function(child) {
             if (headerOnly.indexOf(child.localName) > -1) {

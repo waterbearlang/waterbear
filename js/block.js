@@ -1111,6 +1111,7 @@
     }
 
     function canInsertExpressionHere(block, target){
+        // FIXME: Check for scope
         // Can't insert into literals
         if (dom.matches(target, 'wb-value[allow="literal"], wb-value[allow="literal"] *')) {
             return {test: false, reason: 'cannot drop on direct input value'};

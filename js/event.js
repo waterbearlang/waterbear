@@ -535,6 +535,7 @@
     }
 
     function handleKeyDown(evt) {
+        updateSpecialKeys(evt);
         var key = keyForEvent(evt);
         Event.keys[key] = true;
         if (Event.keyHandlers[key]) {
@@ -545,7 +546,15 @@
     }
 
     function handleKeyUp(evt) {
+        updateSpecialKeys(evt);
         Event.keys[keyForEvent(evt)] = false;
+    }
+
+    function updateSpecialKeys(evt){
+        Event.keys['shift'] = evt.shiftKey;
+        Event.keys['meta'] = evt.metaKey;
+        Event.keys['ctrl'] = evt.ctrlKey;
+        Event.keys['alt'] = evt.altKey;
     }
 
     function onKeyDown(key, handler) {
@@ -555,7 +564,14 @@
         Event.keyHandlers[key].push(handler);
     }
 
+    function clearKeysOnFocusChange(evt){
+        // doesn't really matter whether we're gaining or losing focus
+        console.log('window focus event: %o', evt);
+        Event.keys = {};
+    }
+
     function clearRuntime() {
+        Event.keys = {};
         Event.keyHandlers = {};
         Event.mouseOrTouchHandlers = {};
     }
@@ -612,6 +628,7 @@
         stagePointerY: 0,
         keys: {},
         keyHandlers: {},
+        clearKeysOnFocusChange: clearKeysOnFocusChange,
         clearRuntime: clearRuntime,
         initDrag: initDrag,
         dragging: dragging,

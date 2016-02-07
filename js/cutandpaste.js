@@ -85,10 +85,15 @@
         }
         // if so, check to see if they are valid to paste into the script (parseable, valid blocks)
         parseBlock.innerHTML = sekritSelection.value;
+        if (!parseBlock.firstElementChild){
+            app.warn('pasted non-HTML content: %s', sekritSelection.value);
+            return;
+        }
         var pasteBlock = dom.clone(parseBlock.firstElementChild);
         parseBlock.innerHTML = ''; // don't leave elements with duplicate IDs laying around
         if (! dom.matches(pasteBlock, 'wb-expression, wb-step, wb-context, wb-container')){
-            app.warn('sekrit is not a block');
+            app.warn('pasted HTML, but not a block: %s', pasteBlock.localName);
+            return;
         }
         // if so, replace selected blocks with pasted content, cloned to get new IDs
         var blocks = Select.blocks();

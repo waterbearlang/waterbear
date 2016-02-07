@@ -948,7 +948,6 @@
         var origTarget = evt.target;
         var triggerFilter = origTarget.localName === 'input';
         var value = dom.closest(evt.target, 'wb-value');
-        console.log('toggle filter %o', value);
         var selectedItem = dom.find(workspace, 'wb-value.selected');
 
         if (BLOCK_MENU.getAttribute('filtered') === 'true') {

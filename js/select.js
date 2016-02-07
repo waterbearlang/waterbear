@@ -120,6 +120,9 @@
 
     function manageSelections(evt) {
         var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
+        if (!block){
+            return;
+        }
         if (block.parentElement.localName === 'wb-local'){
             return;
         }
@@ -210,6 +213,20 @@
             }
         }
     }
+
+    function getSelectedBlocks(){
+        return dom.findAll(workspace, '.selected-value, .selected-block');
+    }
+
+    /**************************************
+    *
+    * Public API
+    *
+    ***************************************/
+
+    window.Select = {
+        blocks: getSelectedBlocks
+    };
 
     /**************************************
     *

@@ -4,7 +4,7 @@
     // FIXME: Manage cut (vs. copy)
 
     var sekritSelection = document.createElement('div');
-    var sekretValue = '';
+    var sekritValue = '';
     sekritSelection.id = 'sekritSelection';
     sekritSelection.className = 'hidden';
     document.body.appendChild(sekritSelection);

@@ -1102,6 +1102,63 @@
         block.classList.add('drop-target');
     }
 
+    function canInsertHere(block, target){
+        if (dom.matches(block, 'wb-expression')){
+            return canInsertExpressionHere(block, target);
+        }else{
+            return canInsertStepHere(block, target);
+        }
+    }
+
+    function canInsertExpressionHere(block, target){
+        // Can't insert into literals
+        if (dom.matches(target, 'wb-value[allow="literal"], wb-value[allow="literal"] *')) {
+            return {test: false, reason: 'cannot drop on direct input value'};
+        }
+        // Can't insert variables anywhere but update variable
+        if (dom.matches(target, 'wb-value[allow="variable"], wb-value[allow="variable"] *')) {
+            if (!dom.matches(block, '[fn="getVariable"]')) {
+                return {test: false, reason: 'can only drop variables on update variable'};
+            }
+        }
+        var origTarget = target;
+        target = dom.closest(target, 'wb-value[type]:not([allow="literal"])');
+        // if no longer a target, try dropping as a step
+        if (!target){
+            return canInsertStepHere(block, origTarget);
+        }
+        // Can't drop if there is already an expression in the socket
+        if (dom.child(target, 'wb-expression:not(.hide)')) {
+            return {test: false, reason: 'cannot drop an expression on another expression'};
+        }
+        // Only drop on matching types
+        var dropTypes = target.getAttribute('type').split(','); // FIXME: remove excess whitespace
+        var dragType = block.getAttribute('type');
+        if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1) {
+            return {test: true, target: target, tip: 'drop here to add block to script'};
+        } else {
+            return {test: false, reason: 'cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value'};
+        }
+        // what should the default be here?
+        return {test: false, reason: 'cannot drop on ' + target.localName};
+    }
+
+    function canInsertStepHere(block, target){
+        target = dom.closest(target, 'wb-step, wb-context, wb-contains');
+        // FIXME: Don't drop onto locals
+        if (!target){
+            return {test: false, reason: 'drop anywhere else (or hit Esc) to cancel the drag'};
+        }
+        if (!isInsertionInScope(block, target)){
+            return {test: false, reason: 'instances can only be dropped within the scope of their local'};
+        }
+        if (dom.matches(target, 'wb-contains')) {
+            return {test: true, target: target, tip: 'drop to add to top of the block container'};
+        } else {
+            return {test: true, target: target, tip: 'drop to add after this block'};
+        }
+    }
+
     function dragBlock(evt) {
         if (!dragTarget) {
             return;
@@ -1123,52 +1180,17 @@
             return;
         }
 
-        // When we're dragging an expression...
-        if (dom.matches(dragTarget, 'wb-expression')) {
-            // Check if we're on a literal block.
-            if (dom.matches(potentialDropTarget, 'wb-value[allow="literal"], wb-value[allow="literal"] *')) {
-                potentialDropTarget.classList.add('no-drop');
-                app.warn("cannot drop on direct input value");
-                return;
+        var canInsert = canInsertHere(dragTarget, potentialDropTarget)
+        if (!canInsert.test){
+            potentialDropTarget.classList.add('no-drop');
+            app.warn(canInsert.reason);
+            dropTarget = null;
+        }else{
+            dropTarget = canInsert.target;
+            markDropTarget(dropTarget);
+            if (canInsert.tip){
+                app.tip(canInsert.tip);
             }
-            if (dom.matches(potentialDropTarget, 'wb-value[allow="variable"], wb-value[allow="variable"] *')) {
-                if (!dom.matches(dragTarget, '[fn="getVariable"]')) {
-                    potentialDropTarget.classList.add('no-drop');
-                    app.warn("can only drop variables on update variable");
-                    return;
-                }
-            }
-
-            // FIXME
-            dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
-
-            if (dropTarget) {
-                if (dom.child(dropTarget, 'wb-expression:not(.hide)')) {
-                    dropTarget.classList.add('no-drop');
-                    app.warn('cannot drop an expression on another expression');
-                    dropTarget = null;
-                    return;
-                }
-
-                var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
-                var dragType = dragTarget.getAttribute('type');
-                if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1) {
-                    markDropTarget(dropTarget);
-                    app.tip('drop here to add block to script');
-                } else {
-                    dropTarget.classList.add('no-drop');
-                    app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');
-                    dropTarget = null;
-                }
-            } else {
-                // Pretend the expression is a step.
-                dropTargetIsContainer(potentialDropTarget);
-            }
-            return;
-        } else {
-            // It's a step or a context.
-            dropTargetIsContainer(potentialDropTarget);
-            return;
         }
     }
 
@@ -1184,28 +1206,6 @@
         return true;
     }
 
-    function dropTargetIsContainer(potentialDropTarget) {
-        dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
-        // FIXME: Don't drop onto locals
-        if (dropTarget && dragTarget) {
-            if (!isInsertionInScope(dragTarget, dropTarget)){
-                dropTarget.classList.add('no-drop');
-                dropTarget = null;
-                app.warn('instances can only be dropped within the scope of their local');
-            }
-        }
-        if (dropTarget) {
-            markDropTarget(dropTarget);
-            if (dom.matches(dropTarget, 'wb-contains')) {
-                app.tip('drop to add to top of the block container');
-            } else {
-                app.tip('drop to add after this block');
-            }
-        } else {
-            app.warn('drop anywhere else (or hit Esc) to cancel the drag');
-            potentialDropTarget.classList.add('no-drop');
-        }
-    }
 
     function addToContains(block, evt, addBlockEvent, originalBlock) {
         // dropping directly into a contains section
@@ -1458,6 +1458,7 @@
     Event.on(workspace, 'editor:click', '*', toggleFilter);
 
     window.Block = {
+        canInsertHere: canInsertHere,
         isInsertionInScope: isInsertionInScope
     };
 

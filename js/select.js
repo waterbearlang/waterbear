@@ -38,12 +38,13 @@
                 return;
             }
             oldValue.classList.remove('selected-value');
-            if (!valueBlock) {
-                return;
-            }
         }
         if (valueBlock) {
+            selectByBlock(null);
             valueBlock.classList.add('selected-value');
+        }
+        if (oldValue || valueBlock){
+            Event.trigger(window, 'wb-changedSelection');
         }
     }
 
@@ -66,11 +67,15 @@
             block = dom.closest(block.parentElement, 'wb-context, wb-step, wb-expression');
         }
         if (block) {
+            selectByValue(null);
             if (block.localName === 'wb-context' && added) {
                 dom.find(block, 'wb-contains').classList.add('selected-block');
             } else {
                 block.classList.add('selected-block');
             }
+        }
+        if (oldBlocks.length || block){
+            Event.trigger(window, 'wb-selectionChanged');
         }
     }
 
@@ -119,31 +124,22 @@
     }
 
     function manageSelections(evt) {
-        var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
-        if (!block){
-            return;
+        var value, block;
+        if (dom.matches(evt.target, 'wb-value > input')){
+            value = dom.closest(evt.target, 'wb-value');
         }
-        if (block.parentElement.localName === 'wb-local'){
-            return;
+        if (!value){
+            block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-contains');
         }
-        var value = block;
-        var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
-        if (!block) {
+        if (!block && !value){
             // clicking away should deselect
             unselectAllBlocks(null);
             return;
         }
-        if (block.localName === 'wb-value') {
-            selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'), retainSelection, evt.type === 'wb-added');
-        } else {
-            selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression, wb-contains'), retainSelection, evt.type === 'wb-added');
-        }
-        if (block.localName !== 'wb-value') {
-            value = firstSocket(block);
-        } else if (!isValueSelectable(value)) {
-            value = firstSocket(dom.closest(value, 'wb-context, wb-step, wb-expression'));
-        }
-        if (value) {
+        var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
+        if (block){
+            selectByBlock(block, retainSelection, evt.type === 'wb-added');
+        }else if (value){
             selectByValue(value);
         }
     }

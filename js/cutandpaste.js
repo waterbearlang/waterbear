@@ -3,27 +3,21 @@
     // FIXME: Manage scope
     // FIXME: Manage cut (vs. copy)
 
-    var sekritSelection = document.createElement('div');
+    var sekritSelection = document.createElement('textarea');
     var sekritValue = '';
+    var parseBlock = document.createElement('div');
     sekritSelection.id = 'sekritSelection';
     sekritSelection.className = 'hidden';
+    var defaultSelection = false;
     document.body.appendChild(sekritSelection);
 
-    function setupForCopyPaste(evt){
-        // if ctrl or command key is not in event, return
-        var key = Event.keyForEvent(evt);
-        if (key !== 'ctrl' && key !== 'meta'){
-            return;
-        }
-        // if DOM-selection is non-empty return
-        if (!window.getSelection().isCollapsed){
-            app.warn('non-block selected');
-            return;
-        }
+    // Call this when the selection changes
+    function setupPasteboard(evt){
         // get selected element (warn if multiple elements are selected)
         var blocks = Select.blocks();
         if (blocks.length < 1){
             app.warn('No blocks to copy');
+            sekritSelection.value = sekritValue = '';
             return;
         }
         if (blocks.length > 1){
@@ -41,14 +35,30 @@
             }
         }
         // copy their outerHTML into both sekritSelection and a variable.
-        sekritValue = blocks[0].outerHTML;
-        sekritSelection.innerHTML = sekritValue;
+        sekritSelection.value = sekritValue = blocks[0].outerHTML;
+    }
+
+    // Call this when the Ctrl / Meta key is pressed
+    function setupForCopyPaste(evt){
+        // if ctrl or command key is not in event, return
+        var key = Event.keyForEvent(evt);
+        if (key !== 'ctrl' && key !== 'meta'){
+            return;
+        }
+        // if DOM-selection is non-empty return
+        if (!window.getSelection().isCollapsed){
+            app.warn('non-block selected: ' + window.getSelection());
+            defaultSelection = true;
+            return;
+        }
         // DOM-select contents of sekritSelection in case there is a copy command
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        var rng = document.createRange();
-        rng.selectNodeContents(sekritSelection);
-        sel.addRange(rng);
+//         var sel = window.getSelection();
+//         sel.removeAllRanges();
+//         var rng = document.createRange();
+//         rng.selectNodeContents(sekritSelection);
+//         sel.addRange(rng);
+        sekritSelection.select();
+        console.log('selected: %s', window.getSelection().toString().slice(0,30));
         evt.preventDefault();
         evt.stopPropagation();
     }
@@ -60,15 +70,24 @@
         if (key !== 'ctrl' && key !== 'meta'){
             return;
         }
+        if (defaultSelection){
+            defaultSelection = false;
+            return;
+        }else{
+            window.getSelection().collapseToStart();
+        }
         // test to see if contents of sekritSelection have changed
-        if (sekritSelection.innerHTML === sekritValue){
+        if (sekritSelection.value === sekritValue){
             app.warn('sekrit has not changed');
-            console.log('sekrit: %o', sekritSelection.firstElementChild);
+            console.log('sekritValue: %s', sekritValue.slice(0,30));
+            console.log('sekrit: %o', sekritSelection.value.slice(0,30));
             return;
         }
         // if so, check to see if they are valid to paste into the script (parseable, valid blocks)
-        var pasteBlock = dom.clone(secretSelection.firstElementChild);
-        if (! dom.matches(block, 'wb-expression, wb-step, wb-context, wb-container')){
+        parseBlock.innerHTML = sekritSelection.value;
+        var pasteBlock = dom.clone(parseBlock.firstElementChild);
+        parseBlock.innerHTML = ''; // don't leave elements with duplicate IDs laying around
+        if (! dom.matches(pasteBlock, 'wb-expression, wb-step, wb-context, wb-container')){
             app.warn('sekrit is not a block');
         }
         // if so, replace selected blocks with pasted content, cloned to get new IDs
@@ -118,10 +137,9 @@
             }
         }
         // validate results
-        // clear sekrits
-        sekritSelection.innerHTML = sekritValue = '';
     }
 
+    Event.on(window, 'editor:wb-selectionChanged', null, setupPasteboard);
     Event.on(window, 'editor:keydown', null, setupForCopyPaste);
     Event.on(window, 'editor:keyup', null, cleanupFromCopyPaste);
 

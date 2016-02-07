@@ -566,7 +566,6 @@
 
     function clearKeysOnFocusChange(evt){
         // doesn't really matter whether we're gaining or losing focus
-        console.log('window focus event: %o', evt);
         Event.keys = {};
     }
 

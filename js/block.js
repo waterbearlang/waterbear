@@ -1202,6 +1202,9 @@
         var localId = block.getAttribute('instanceof');
         if (localId) {
             var local = document.getElementById(localId);
+            if (!local){
+                return false; // can happen when pasting from another document
+            }
             var localContext = dom.closest(local, 'wb-contains');
             if (!localContext.contains(dropTarget) && localContext !== dropTarget) {
                 return false;
@@ -1353,7 +1356,7 @@
 
     function cancelDragBlock() {
         if (dragTarget) {
-            dragTarget.parentElement.removeChild(dragTarget);
+            dom.remove(dragTarget);
         }
         resetDragging();
     }

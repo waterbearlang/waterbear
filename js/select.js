@@ -101,23 +101,6 @@
         return true;
     }
 
-    function firstSocket(block) {
-        var sockets = dom.findAll(block, 'wb-value');
-        var socket;
-        for (var i = 0; i < sockets.length; i++) {
-            socket = sockets[i];
-            // Don't return a socket from a child block
-            if (socket.closest('wb-context, wb-step, wb-expression') !== block) {
-                continue;
-            }
-            if (!isValueSelectable(socket)) {
-                continue;
-            }
-            // otherwise, return the socket
-            return socket;
-        }
-    }
-
     function unselectAllBlocks() {
         selectByBlock(null);
         selectByValue(null);
@@ -176,10 +159,10 @@
             var selectedValue = dom.find(workspace, '.selected-value');
             if (selectedValue){
                 if (!inAllowedTypes(block, selectedValue)){
-                    app.warn('This local block would be out of scope at the selected socket');
                     return;
                 }
                 if (Block.isInsertionInScope(block, selectedValue)){
+                    app.warn('block would be out of scope here');
                     selectedValue.appendChild(block);
                 }
             }

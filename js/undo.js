@@ -8,11 +8,11 @@
     var redoStack = [];
 
     function removeFromEvent(evt) {
-        evt.addedTo.removeChild(evt.addedBlock);
+        evt.parent.removeChild(evt.block);
     }
 
     function insertFromEvent(evt) {
-        evt.insertBefore(evt.deletedBlock, evt.nexBlock);
+        evt.parent.insertBefore(evt.block, evt.nextSibling);
     }
 
     var undoFns = {
@@ -110,7 +110,10 @@
         handleUndoButton: handleUndoButton,
         handleRedoButton: handleRedoButton,
         addNewEvent: addNewEvent,
-        clearStacks: clearStacks
+        clearStacks: clearStacks,
+        getStacks: function(){
+            return {undoStack: undoStack, redoStack: redoStack}; // for debugging
+        }
     };
 
 })();

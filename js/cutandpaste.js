@@ -70,7 +70,10 @@
             return;
         }else{
             // Don't keep hidden selection for next time
-            window.getSelection().collapseToStart();
+            var sel = window.getSelection();
+            if (!sel.isCollapsed){
+                window.getSelection().collapseToStart();
+            }
         }
         // test to see if contents of sekritSelection have changed
         if (sekritSelection.value === sekritValue){

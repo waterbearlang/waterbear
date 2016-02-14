@@ -61,7 +61,7 @@
             selectByValue(null);
             oldBlocks.forEach(function(e) {
                 e.classList.remove('selected-block');
-            })
+            });
         }
         if (block && block.parentElement.localName === 'wb-local') {
             block = dom.closest(block.parentElement, 'wb-context, wb-step, wb-expression');
@@ -119,7 +119,7 @@
             unselectAllBlocks(null);
             return;
         }
-        var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
+        var retainSelection = evt.type === 'click' && (Event.keys.ctrl || Event.keys.meta);
         if (block){
             selectByBlock(block, retainSelection, evt.type === 'wb-added');
         }else if (value){
@@ -133,63 +133,24 @@
     *
     **************************************/
 
-    function inAllowedTypes(block, target){
-        var allowedTypes = target.getAttribute('type').split(',');
-        if (!allowedTypes.length){
-            app.warn('No allowed types found, cannot insert block (this should never happen, probably a problem with Waterbear)');
-            return false;
-        }
-        if (allowedTypes[0] == 'any'){
-            return true;
-        }
-        var type = block.getAttribute('type');
-        if (type === 'any'){
-            return true;
-        }
-        if (allowedTypes.indexOf(type) > -1){
-            return true;
-        }
-        app.warn('Expression block is the wrong type to insert in the selected socket');
-        return false;
-    }
-
     function insertBlockAtSelection(evt){
+        // we clone because we assume this is coming from a block catalog
         var block = dom.clone(dom.closest(evt.target, 'wb-context, wb-step, wb-expression'));
-        if (block.localName === 'wb-expression'){
-            var selectedValue = dom.find(workspace, '.selected-value');
-            if (selectedValue){
-                if (!inAllowedTypes(block, selectedValue)){
-                    return;
-                }
-                if (Block.isInsertionInScope(block, selectedValue)){
-                    app.warn('block would be out of scope here');
-                    selectedValue.appendChild(block);
-                }
-            }
+        var selected = getSelectedBlocks();
+        if (selected.length > 1){
+            app.warn('Can only insert at one position, multiple blocks are selected');
+            return;
+        }
+        if (selected.length < 1){
+            app.warn('Cannot insert unless you select a block to insert at');
+            return;
+        }
+        var target = selected[0];
+        var canInsert = Block.canInsertHere(block, target);
+        if (canInsert.test){
+            Undo.addNewEvent(Block.insertHere(block, target));
         }else{
-            // handle wb-context and wb-step
-            var selectedBlock = dom.find(workspace, '.selected-block');
-            if (selectedBlock){
-                switch(selectedBlock.localName){
-                    case 'wb-context': // fall-through
-                    case 'wb-step':
-                        selectedBlock.parentElement.insertBefore(block, selectedBlock.nextElementSibling);
-                        break;
-                    case 'wb-contains':
-                        selectedBlock.insertBefore(block, selectedBlock.firstElementChild);
-                        break;
-                    case 'wb-expression':
-                        // do nothing
-                        app.warn('Cannot insert a block around an Expression block');
-                        break;
-                    default:
-                        // do nothing
-                        app.warn('No valid insertion point found');
-                        break;
-                }
-            }else{
-                app.warn('Select an insertion point to add the block to before clicking');
-            }
+            app.warn(canInsert.reason);
         }
     }
 

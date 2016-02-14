@@ -26,7 +26,7 @@
                 types: 'warning',
                 position: 'right',
                 timeout: 5000
-            })
+            });
         } else {
             message('orange', text);
         }
@@ -196,7 +196,7 @@
                 File.loadScriptsFromExample(filename);
                 modal.hide();
             }
-        }
+        };
     }
 
     function handleExampleButton(evt) {

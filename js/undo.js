@@ -18,64 +18,96 @@
     var undoFns = {
         'remove-block': insertFromEvent,
         'add-block': removeFromEvent
-    }
+    };
 
     var redoFns = {
         'remove-block': removeFromEvent,
         'add-block': insertFromEvent
-    }
+    };
 
-    function undoEvent(toUndo) {
+    function undoNextEvent() {
         if (undoStack.length !== 0) {
             var undoEvts = undoStack.pop();
             redoStack.push(undoEvts);
             setButtonStatus();
-            for (var i = undoEvts.length; i > 0; i--){ // count backwards when undo-ing
-                var evt = undoEvts[i-1];
-                undoFns[evt.type](evt);
+            undoEvent(undoEvts);
+        }
+    }
+    
+    function undoEvent(undoEvts){
+        if (Array.isArray(undoEvts)){
+            for (var i = undoEvts.length; i > 0; i--){
+                undoSingleEvent(undoEvts[i-1]);
             }
+        }else if(undoEvts.type){
+            undoSingleEvent(undoEvts);
+        }else{
+            throw new Exception('Unexpected undoEvent: ' + undoEvts.toString());
+        }
+    }
+    
+    function undoSingleEvent(evt){
+        undoFns[evt.type](evt);
+        if (evt.subEvents){
+            undoEvent(evt.subEvents);
+        }
+    }
+    
+    function redoSingleEvent(evt){
+        redoFns[evt.type](evt);
+        if (evt.subEvents){
+            redoEvent(evt.subEvents);
+        }
+    }
+    
+    function redoEvent(redoEvts){
+        if (Array.isArray(redoEvts)){
+            for (var i = 0; i < redoEvts.length; i++){
+                redoSingleEvent(redoEvts[i]);
+            }
+        }else if (redoEvts.type){
+            redoSingleEvent(redoEvts);
+        }else{
+            throw new Exception('Unexpected redoEvent: ' + redoEvts.toString());
         }
     }
 
-    function redoEvent() {
+    function redoNextEvent() {
         if (redoStack.length !== 0) {
             var redoEvts = redoStack.pop();
             undoStack.push(redoEvts);
             setButtonStatus();
-            for (var i = 0; i < redoEvts.length; i++){
-                var evt = redoEvts[i-1];
-                redoFns[evt.type](evt);
-            }
+            redoEvent(redoEvts);
         }
     }
 
 
     function undoKeyCombo(evt) {
-        if ((Event.keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
-            (Event.keyForEvent(evt) == 'z' && Event.keys['meta'])) {
+        if ((Event.keyForEvent(evt) == 'z' && Event.keys.ctrl) ||
+            (Event.keyForEvent(evt) == 'z' && Event.keys.meta)) {
             evt.preventDefault();
-            undoEvent();
+            Pasteboard.cancelPasteboard();
+            undoNextEvent();
         }
     }
 
     function redoKeyCombo(evt) {
-        if ((Event.keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
-            (Event.keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
+        if ((Event.keyForEvent(evt) === 'y' && Event.keys.ctrl) ||
+            (Event.keyForEvent(evt) === 'z' && Event.keys.meta && Event.keys.shift)) {
             evt.preventDefault();
-            redoEvent();
+            Pasteboard.cancelPasteboard();
+            redoNextEvent();
         }
     }
 
     function handleUndoButton(evt) {
         evt.preventDefault();
-        _gaq.push(['_trackEvent', 'Undo', 'undo']);
-        undoEvent();
+        undoNextEvent();
     }
 
     function handleRedoButton(evt) {
         evt.preventDefault();
-        _gaq.push(['_trackEvent', 'Redo', 'redo']);
-        redoEvent();
+        redoNextEvent();
     }
 
     function setButtonStatus() {
@@ -111,6 +143,7 @@
         handleRedoButton: handleRedoButton,
         addNewEvent: addNewEvent,
         clearStacks: clearStacks,
+        partialUndo: undoEvent,
         getStacks: function(){
             return {undoStack: undoStack, redoStack: redoStack}; // for debugging
         }

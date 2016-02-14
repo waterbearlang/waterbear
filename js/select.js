@@ -157,6 +157,16 @@
     function getSelectedBlocks(){
         return dom.findAll(workspace, '.selected-value, .selected-block');
     }
+    
+    function clearSelection(evt){
+        var selected = getSelectedBlocks();
+        if (selected.length){
+            Undo.addNewEvent(selected.map(function(block){ return block.undoableRemove(); }));
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+    }
 
     /**************************************
     *
@@ -187,4 +197,8 @@
     // Insert block
     Event.on(BLOCK_MENU, 'editor:click', 'wb-context, wb-step, wb-expression', insertBlockAtSelection);
     Event.on(workspace, 'editor:click', 'wb-local > wb-context, wb-local > wb-step, wb-local > wb-expression', insertBlockAtSelection);
+    
+    // Clear (delete) selected elements on backspace or delete
+    Event.onKeyDown('delete', clearSelection);
+    Event.onKeyDown('backspace', clearSelection);
 })();

@@ -23,7 +23,7 @@
             };
         };
     }
-
+    
     function isDrawingPath() {
         return drawingPath;
     }
@@ -43,6 +43,10 @@
             list.splice(idx, 1);
         }
         return item;
+    }
+
+    function inList(val, list){
+        return list.indexOf(val) > -1;
     }
 
     // check if a string is a number (works on numbers too)
@@ -1286,6 +1290,7 @@
         Size: Size,
         extend: extend,
         deleteItem: deleteItem,
+        inList: inList,
         setDefault: setDefault,
         type: type,
         dist: dist,

@@ -129,7 +129,7 @@
 
     /**************************************
     *
-    * Click to insert at selection (if possible
+    * Click/Tap to insert at selection (if possible
     *
     **************************************/
 
@@ -159,9 +159,20 @@
     }
     
     function clearSelection(evt){
+        var ts = getSelection();
+        if (ts.baseNode && util.inList(ts.baseNode.localName, ['wb-value', 'input'])){
+            return;
+        }
         var selected = getSelectedBlocks();
         if (selected.length){
-            Undo.addNewEvent(selected.map(function(block){ return block.undoableRemove(); }));
+            Undo.addNewEvent(selected
+                .filter(function(block){
+                    // filter to only actual blocks, not wb-contains or wb-value, which are also selectable
+                    return util.inList(block.localName, ['wb-context', 'wb-step', 'wb-expression']);
+                }).map(function(block){
+                    return block.undoableRemove(); 
+                })
+            );
         }
         event.preventDefault();
         event.stopPropagation();

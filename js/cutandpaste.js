@@ -52,13 +52,12 @@
             return;
         }
         // if DOM-selection is non-empty return
-        if (!window.getSelection().isCollapsed){
+        var sel = window.getSelection();
+        if (!sel.isCollapsed || util.inList(sel.baseNode.localName, ['wb-value', 'input'])){
             defaultSelection = true;
             return;
         }
         sekritSelection.select();
-        evt.preventDefault();
-        evt.stopPropagation();
     }
 
     // check to see if pasteboard has changed and handle appropriately
@@ -94,7 +93,7 @@
             return handleCut();
         }
         // OK, we have a changed pasteboard and it's not a cut or copy, must be a paste:
-        console.log('changed pastboard, must be a paste');
+        console.log('changed pasteboard, must be a paste');
         return handlePaste();
     }
 
@@ -158,10 +157,46 @@
             app.warn(canInsert.reason);
         }
     }
+    
+    function confirmCutCopyPaste(evt){
+        if (!(evt.metaKey || evt.ctrlKey)){
+            return;
+        }
+        var key = Event.keyForEvent(evt);
+        switch(key){
+            case 'c': Event.triggerAsync(window, 'wb-copy'); break;
+            case 'v': Event.triggerAsync(window, 'wb-paste'); break;
+            case 'x': Event.triggerAsync(window, 'wb-cut'); break;
+            default: break;
+        }
+    }
+    
+    function doCut(){
+        console.log('actual cut now (implemente me)');
+    }
+    
+    function doCopy(){
+        console.log('actual copy now (nothing to do)');
+    }
+    
+    function doPaste(){
+        console.log('actual paste now (implement me)');
+    }
+    
+    function doClear(){
+        console.log('actual clear now (implement me)');
+    }
 
+    Event.on(window, 'editor:wb-cut', null, doCut);
+    Event.on(window, 'editor:wb-copy', null, doCopy);
+    Event.on(window, 'editor:wb-paste', null, doPaste);
+    Event.on(window, 'editor:wb-clear', null, doClear);
+    
     Event.on(window, 'editor:wb-selectionChanged', null, setupPasteboard);
     Event.on(window, 'editor:keydown', null, setupForCopyPaste);
     Event.on(window, 'editor:keyup', null, cleanupFromCopyPaste);
+    
+    Event.on(document, 'editor:keydown', null, confirmCutCopyPaste);
     
     window.Pasteboard = {
         cancelPasteboard: cancelPasteboard

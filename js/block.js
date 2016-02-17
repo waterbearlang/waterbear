@@ -56,7 +56,7 @@
                 // Maybe mark then and provide a button to remove all of them at
                 // user discretion?
                 app.warn('Removing instance of ' + instance.getAttribute('fn') + ' because it now has a type which is illegal in this position', true);
-                instance.parentElement.removeChild(instance);
+                dom.remove(instance);
             }
         });
     }
@@ -253,6 +253,7 @@
     BlockProto.undoableInsert = function(parent, nextSibling /*nextSibling is optional */){
         parent.insertBefore(this, nextSibling); /* if nextSibling is undefined, this is the same as parent.appendChild(this) */
         // Return info for undo stack
+        this.makeSelected();
         return {
             type: 'add-block',
             block: this,
@@ -269,6 +270,7 @@
             nextSibling: this.nextSibling,
             subEvents: this.removeInstances()
         };
+        this.classList.remove('selected selected-block selected-value');
         dom.remove(this);
         return undoEvt;
     };
@@ -938,39 +940,7 @@
         prototype: ValueProto
     });
 
-    // toggle an input's selection
-    // TODO: Move this to select.js
-//    ValueProto.toggleSelect = function() {
-//        var selectedItem = dom.find(workspace, 'wb-value.selected');
-//        if (this != selectedItem) {
-//            if (selectedItem) {
-//                selectedItem.deselect();
-//            }
-//            this.select();
-//        }
-//    };
 
-    //select an input field
-    // TODO: Move this to select.js
-//    ValueProto.select = function() {
-//        this.setAttribute('selected', 'true');
-//
-//        // Highlight input field with one click
-//        var input = this.getElementsByTagName('input');
-//        if (input.length) {
-//            input[0].select();
-//            input[0].focus();
-//        }
-//    };
-//
-//    // deselect an input field
-//    // TODO: Move this to select.js
-//    ValueProto.deselect = function() {
-//        this.removeAttribute('selected');
-//    };
-
-    //deselect an input field and unfilter the sidebar
-    // TODO: Move this to select.js
     function toggleFilter(evt) {
         if (dom.closest(evt.target, 'wb-local')){
             return;
@@ -978,13 +948,8 @@
         var origTarget = evt.target;
         var triggerFilter = origTarget.localName === 'input';
         var value = dom.closest(evt.target, 'wb-value');
-//        var selectedItem = dom.find(workspace, 'wb-value.selected');
 
         if (BLOCK_MENU.getAttribute('filtered') === 'true') {
-            // if click outside of wb-contains then deselect the selectedItem
-//            if (!value && selectedItem) {
-//                selectedItem.deselect();
-//            }
             app.clearFilter();
 
             // filter on value which is the next value for selectedItem
@@ -1000,7 +965,6 @@
     //when a user clicks on an input box in the workspace
     function changeValueOnInputChange(evt) {
         dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
-        // evt.stopPropagation();
     }
 
 
@@ -1049,13 +1013,6 @@
     window.WBContains = document.registerElement('wb-contains', {
         prototype: ContainsProto
     });
-
-//    Event.on(document.body, 'ui:click', 'wb-value > input', function(evt) {
-//        if (dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')) {
-//            dom.closest(evt.target, 'wb-value').toggleSelect();
-//        }
-//    });
-
 
     /* DRAGGING */
 
@@ -1138,7 +1095,6 @@
     function insertHere(block, target, evt /*optional, only used in dragging */){
         if (dom.matches(block, 'wb-expression')) {
             if (dom.matches(target, 'wb-value')) {
-//                target.deselect(); // FIXME: This belongs in select.js
                 BLOCK_MENU.removeAttribute('filtered'); // FIXME: where does this go?
                 return block.undoableInsert(target);
             } else if (dom.matches(target, 'wb-context, wb-step, wb-contains')) {
@@ -1200,7 +1156,7 @@
         if (dom.matches(target, 'wb-context, wb-step')) {
             return {test: true, target: target, tip: 'drop to add after this block'};
         }   
-        return {test: false, reason: 'you cannot insert a ' + block.localName + ' on a ' + target.localName}
+        return {test: false, reason: 'you cannot insert a ' + block.localName + ' on a ' + target.localName};
     }
 
     function dragBlock(evt) {
@@ -1398,6 +1354,9 @@
     Event.on(workspace, 'editor:click', '*', toggleFilter);
 
     window.Block = {
+        proto : BlockProto,
+        valueProto: ValueProto,
+        containedProto: ContainsProto,
         canInsertHere: canInsertHere,
         insertHere: insertHere
     };

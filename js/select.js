@@ -25,105 +25,55 @@
         }
         return false;
     }
+    
+    Block.proto.makeSelected = function(){
+        if (!isBlockSelectable(this)){
+            return;
+        }
+        unselectAllBlocks();
+        this.classList.add('selected');
+    };
+    
+    Block.valueProto.makeSelected = Block.proto.makeSelected;
+    Block.containedProto.makeSelected = Block.proto.makeSelected;
 
-    function selectByValue(valueBlock) {
-        // Todo:
-        // * make sure this is a valid block to select
-        // * move selection to next block as needed
-        var oldValue = dom.find(workspace, '.selected-value');
-        if (oldValue) {
-            // clicking an item for a second time is not deselecting
-            if (oldValue === valueBlock) {
-                /* nothing to do */
-                return;
-            }
-            oldValue.classList.remove('selected-value');
-        }
-        if (valueBlock) {
-            selectByBlock(null);
-            valueBlock.classList.add('selected-value');
-        }
-        if (oldValue || valueBlock){
-            Event.trigger(window, 'wb-changedSelection');
-        }
-    }
-
-    function selectByBlock(block, retainSelection, added) {
-        // Todo:
-        // * make sure this is a valid block to select
-        // * move selection to next block as needed
-        var oldBlocks = dom.findAll(workspace, '.selected-block');
-        if (oldBlocks.length && !retainSelection) {
-            if (oldBlocks.length === 1 && oldBlocks[0] === block) {
-                /* nothing to do */
-                return;
-            }
-            selectByValue(null);
-            oldBlocks.forEach(function(e) {
-                e.classList.remove('selected-block');
-            });
-        }
-        if (block && block.parentElement.localName === 'wb-local') {
-            block = dom.closest(block.parentElement, 'wb-context, wb-step, wb-expression');
-        }
-        if (block) {
-            selectByValue(null);
-            if (block.localName === 'wb-context' && added) {
-                dom.find(block, 'wb-contains').classList.add('selected-block');
-            } else {
-                block.classList.add('selected-block');
-            }
-        }
-        if (oldBlocks.length || block){
-            Event.trigger(window, 'wb-selectionChanged');
-        }
-    }
 
     // Manage block selections
 
-    function isValueSelectable(value) {
+    function isBlockSelectable(block) {
         // Don't select literals, we don't want you adding blocks there
-        if (value.getAttribute('allow') === 'literal') {
+        if (block.getAttribute('allow') === 'literal') {
             return false;
         }
         // don't select locals
-        if (value.parentElement.localName === 'wb-local') {
+        if (block.parentElement.localName === 'wb-local') {
             return false;
         }
-        // don't select values which contain a block already
-        if (dom.find(value, 'wb-expression')) {
-            return false;
-        }
-        // don't select values which don't have a socket (i.e., an <input>)
-        if (!dom.find(value, 'input')) {
-            return false;
+        if (block.localName === 'wb-value'){
+            // don't select values which contain a block already
+            if (dom.find(block, 'wb-expression')) {
+                return false;
+            }
+            // don't select values which don't have a socket (i.e., an <input>)
+            if (!dom.find(block, 'input')) {
+                return false;
+            }
         }
         return true;
     }
 
     function unselectAllBlocks() {
-        selectByBlock(null);
-        selectByValue(null);
+        dom.findAll(workspace, '.selected').forEach(function(block){
+            block.classList.remove('selected');
+        });
     }
 
     function manageSelections(evt) {
-        var value, block;
-        if (dom.matches(evt.target, 'wb-value > input')){
-            value = dom.closest(evt.target, 'wb-value');
-        }
-        if (!value){
-            block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-contains');
-        }
-        if (!block && !value){
-            // clicking away should deselect
-            unselectAllBlocks(null);
-            return;
-        }
-        var retainSelection = evt.type === 'click' && (Event.keys.ctrl || Event.keys.meta);
+        var block = dom.closest(evt.target, 'wb-value, wb-contains, wb-context, wb-step, wb-expression');
         if (block){
-            selectByBlock(block, retainSelection, evt.type === 'wb-added');
-        }else if (value){
-            selectByValue(value);
+            block.makeSelected();
+        }else{
+            unselectAllBlocks();
         }
     }
 

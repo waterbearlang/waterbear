@@ -479,7 +479,7 @@ wb-local wb-disclosure{
 
 /* Used for input resizing */
 
-.sekrit-svg {
+.sekrit-svg, .hidden {
     position: absolute;
     left: -1000px;
     /* cannot get size if display: none */

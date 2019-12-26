@@ -251,7 +251,7 @@
                 return a || b;
             },
             xor: function booleanXorExpr(a, b) {
-                return !a !== !b;
+                return Boolean(a) !== Boolean(b);
             },
             not: function booleanNotExpr(a) {
                 return !a;
@@ -350,7 +350,7 @@
                         len = list;
                         break;
                     case 'boolean':
-                        len = list ? Infinity : 0
+                        len = list ? Infinity : 0;
                 }
 
                 /* For every element in the container place
@@ -414,7 +414,7 @@
             },
             ternary: function controlTernaryExpr(cond, iftrue, otherwise) {
                 var args = this.gatherArguments();
-                var cond = args[0].getValue();
+                cond = args[0].getValue();
                 return cond ? args[1].getValue() : args[2].getValue();
             },
             ask: function controlAskStep(message, name) {
@@ -612,7 +612,7 @@
             round: Math.round,
             abs: Math.abs,
             sgn: Math.sign || function(a) {
-                if (a == 0) return 0;
+                if (a === 0) return 0;
                 return a / Math.abs(a);
             },
             floor: Math.floor,
@@ -790,7 +790,7 @@
                     new SAT.Vector(width + pt.x, pt.y),
                     new SAT.Vector(width + pt.x, height + pt.y),
                     new SAT.Vector(pt.x, height + pt.y)
-                ]);;
+                ]);
 
                 return new util.Shape(satObject);
             },
@@ -825,7 +825,7 @@
 
                 for (var i = 0; i < points.length; i++) {
                     points[i] = new SAT.Vector(points[i].x, points[i].y);
-                };
+                }
 
                 satObject.setPoints(points);
 
@@ -997,8 +997,10 @@
         },
 
         sound: {
+            /* turn off jshint warnings for using constructors without "new" */
+            /* jshint -W064 */
             get: function(wave, a, r) {
-                var osc = T(wave);
+                var osc = T(wave); 
                 var env = T("perc", {
                     a: a,
                     r: r
@@ -1011,12 +1013,13 @@
                 return oscenv;
             },
             getAudio: function(file) {
-                var audio = T("audio", {
+                var audio = T("audio", { 
                     load: file
                 });
                 return audio;
             },
             addNote: function(note, octave, beats) {
+                var octave_diff, i;
                 switch (note) {
                     case "A":
                         note = "a";
@@ -1059,13 +1062,13 @@
                         break;
                 }
                 if (octave > current_octave) {
-                    var octave_diff = octave - current_octave;
-                    for (var i = 0; i < octave_diff; i++) {
+                    octave_diff = octave - current_octave;
+                    for (i = 0; i < octave_diff; i++) {
                         song += "<";
                     }
                 } else if (octave < current_octave) {
-                    var octave_diff = current_octave - octave;
-                    for (var i = 0; i < octave_diff; i++) {
+                    octave_diff = current_octave - octave;
+                    for (i = 0; i < octave_diff; i++) {
                         song += ">";
                     }
                 }
@@ -1095,9 +1098,9 @@
                 song += newNote;
             },
             playChord: function() {
-                var args = [].slice.call(arguments)
+                var args = [].slice.call(arguments);
                 var oscenv = args[0];
-                var freqs = []
+                var freqs = [];
                 for (var i = 1; i < args.length; i++) {
                     var freq;
                     switch (args[i]) {
@@ -1210,9 +1213,10 @@
                 }).start();
             },
             soundEffect: function(effect) {
+                var table;
                 switch (effect) {
                     case "laser":
-                        var table = [1760, [110, "200ms"]];
+                        table = [1760, [110, "200ms"]];
 
                         var freq = T("env", {
                             table: table
@@ -1228,7 +1232,7 @@
                         freq.bang();
                         break;
                     case "alarm":
-                        var table = [440, [880, 500],
+                        table = [440, [880, 500],
                             [660, 250]
                         ];
                         var env = T("env", {
@@ -1252,6 +1256,7 @@
                         break;
                 }
             }
+            /* jshint +W064 */
         },
 
         sprite: {
@@ -1429,7 +1434,7 @@
                 return x === y;
             },
             doesntMatch: function(x, y) {
-                return !(x === y);
+                return (x !== y);
             },
             startsWith: function(x, y) {
                 return (x.lastIndexOf(y, 0) === 0);
@@ -1521,7 +1526,7 @@
                 var today = new Date();
                 // Seems like "now" should have time as well, but
                 // maybe "today" shouldn't?
-                today.setHours(0, 0, 0, 0)
+                today.setHours(0, 0, 0, 0);
                 return today;
             },
             addDays: function(prevDate, days) {

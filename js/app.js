@@ -26,7 +26,7 @@
                 types: 'warning',
                 position: 'right',
                 timeout: 5000
-            })
+            });
         } else {
             message('orange', text);
         }
@@ -196,7 +196,7 @@
                 File.loadScriptsFromExample(filename);
                 modal.hide();
             }
-        }
+        };
     }
 
     function handleExampleButton(evt) {
@@ -243,6 +243,8 @@
     Event.on(document.body, 'ui:click', '.redo', Undo.handleRedoButton);
     Event.on(window, 'input:keydown', null, Undo.undoKeyCombo);
     Event.on(window, 'input:keydown', null, Undo.redoKeyCombo);
+    Event.on(window, 'input:focus', null, Event.clearKeysOnFocusChange);
+    Event.on(window, 'input:blur', null, Event.clearKeysOnFocusChange);
     //deselect all of the blocks and unfilter the sidebar if the 'Available Blocks' button is clicked
     Event.on(document.body, 'ui:click', '.availableBlocks', clearFilter);
 

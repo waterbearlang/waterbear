@@ -24,7 +24,7 @@
             var evt = document.createEvent('CustomEvent');
             evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
             return evt;
-        }
+        };
         CustomEvent.prototype = window.Event.prototype;
         window.CustomEvent = CustomEvent;
     }
@@ -284,7 +284,7 @@
                 }
                 [].slice.apply(mutation.removedNodes)
                     .filter(function(node) {
-                        return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)
+                        return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList);
                     }) // only child elements
                     .forEach(function(node) {
                         Event.trigger(blockParent, eventPrefix + 'removedChild', node);
@@ -294,7 +294,7 @@
                     });
                 [].slice.apply(mutation.addedNodes)
                     .filter(function(node) {
-                        return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList)
+                        return node.nodeType === node.ELEMENT_NODE && dom.matches(node, childList);
                     }) // only block elements
                     .forEach(function(node) {
                         Event.trigger(blockParent, 'wb-addedChild', node);
@@ -311,7 +311,7 @@
         // Only observe after script is loaded?
         blockObserver.observe(document.body, blockObserverConfig);
 
-    };
+    }
 
 
     /****************************
@@ -535,6 +535,7 @@
     }
 
     function handleKeyDown(evt) {
+        updateSpecialKeys(evt);
         var key = keyForEvent(evt);
         Event.keys[key] = true;
         if (Event.keyHandlers[key]) {
@@ -545,7 +546,15 @@
     }
 
     function handleKeyUp(evt) {
+        updateSpecialKeys(evt);
         Event.keys[keyForEvent(evt)] = false;
+    }
+
+    function updateSpecialKeys(evt){
+        Event.keys.shift = evt.shiftKey;
+        Event.keys.meta = evt.metaKey;
+        Event.keys.ctrl = evt.ctrlKey;
+        Event.keys.alt = evt.altKey;
     }
 
     function onKeyDown(key, handler) {
@@ -555,7 +564,13 @@
         Event.keyHandlers[key].push(handler);
     }
 
+    function clearKeysOnFocusChange(evt){
+        // doesn't really matter whether we're gaining or losing focus
+        Event.keys = {};
+    }
+
     function clearRuntime() {
+        Event.keys = {};
         Event.keyHandlers = {};
         Event.mouseOrTouchHandlers = {};
     }
@@ -612,6 +627,7 @@
         stagePointerY: 0,
         keys: {},
         keyHandlers: {},
+        clearKeysOnFocusChange: clearKeysOnFocusChange,
         clearRuntime: clearRuntime,
         initDrag: initDrag,
         dragging: dragging,

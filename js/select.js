@@ -25,191 +25,119 @@
         }
         return false;
     }
+    
+    Block.proto.makeSelected = function(){
+        if (!isBlockSelectable(this)){
+            return;
+        }
+        unselectAllBlocks();
+        this.classList.add('selected');
+    };
+    
+    Block.valueProto.makeSelected = Block.proto.makeSelected;
+    Block.containedProto.makeSelected = Block.proto.makeSelected;
 
-    function selectByValue(valueBlock) {
-        // Todo:
-        // * make sure this is a valid block to select
-        // * move selection to next block as needed
-        var oldValue = dom.find(workspace, '.selected-value');
-        if (oldValue) {
-            // clicking an item for a second time is not deselecting
-            if (oldValue === valueBlock) {
-                /* nothing to do */
-                return;
-            }
-            oldValue.classList.remove('selected-value');
-            if (!valueBlock) {
-                return;
-            }
-        }
-        if (valueBlock) {
-            valueBlock.classList.add('selected-value');
-        }
-    }
-
-    function selectByBlock(block, retainSelection, added) {
-        // Todo:
-        // * make sure this is a valid block to select
-        // * move selection to next block as needed
-        var oldBlocks = dom.findAll(workspace, '.selected-block');
-        if (oldBlocks.length && !retainSelection) {
-            if (oldBlocks.length === 1 && oldBlocks[0] === block) {
-                /* nothing to do */
-                return;
-            }
-            selectByValue(null);
-            oldBlocks.forEach(function(e) {
-                e.classList.remove('selected-block');
-            })
-        }
-        if (block && block.parentElement.localName === 'wb-local') {
-            block = dom.closest(block.parentElement, 'wb-context, wb-step, wb-expression');
-        }
-        if (block) {
-            if (block.localName === 'wb-context' && added) {
-                dom.find(block, 'wb-contains').classList.add('selected-block');
-            } else {
-                block.classList.add('selected-block');
-            }
-        }
-    }
 
     // Manage block selections
 
-    function isValueSelectable(value) {
+    function isBlockSelectable(block) {
         // Don't select literals, we don't want you adding blocks there
-        if (value.getAttribute('allow') === 'literal') {
+        if (block.getAttribute('allow') === 'literal') {
             return false;
         }
         // don't select locals
-        if (value.parentElement.localName === 'wb-local') {
+        if (block.parentElement.localName === 'wb-local') {
             return false;
         }
-        // don't select values which contain a block already
-        if (dom.find(value, 'wb-expression')) {
-            return false;
-        }
-        // don't select values which don't have a socket (i.e., an <input>)
-        if (!dom.find(value, 'input')) {
-            return false;
+        if (block.localName === 'wb-value'){
+            // don't select values which contain a block already
+            if (dom.find(block, 'wb-expression')) {
+                return false;
+            }
+            // don't select values which don't have a socket (i.e., an <input>)
+            if (!dom.find(block, 'input')) {
+                return false;
+            }
         }
         return true;
     }
 
-    function firstSocket(block) {
-        var sockets = dom.findAll(block, 'wb-value');
-        var socket;
-        for (var i = 0; i < sockets.length; i++) {
-            socket = sockets[i];
-            // Don't return a socket from a child block
-            if (socket.closest('wb-context, wb-step, wb-expression') !== block) {
-                continue;
-            }
-            if (!isValueSelectable(socket)) {
-                continue;
-            }
-            // otherwise, return the socket
-            return socket;
-        }
-    }
-
     function unselectAllBlocks() {
-        selectByBlock(null);
-        selectByValue(null);
+        dom.findAll(workspace, '.selected').forEach(function(block){
+            block.classList.remove('selected');
+        });
     }
 
     function manageSelections(evt) {
-        var block = dom.closest(evt.target, 'wb-context, wb-step, wb-expression, wb-value, wb-contains');
-        if (block.parentElement.localName === 'wb-local'){
-            return;
-        }
-        var value = block;
-        var retainSelection = evt.type === 'click' && (Event.keys['ctrl'] || Event.keys['meta']);
-        if (!block) {
-            // clicking away should deselect
-            unselectAllBlocks(null);
-            return;
-        }
-        if (block.localName === 'wb-value') {
-            selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression'), retainSelection, evt.type === 'wb-added');
-        } else {
-            selectByBlock(dom.closest(block, 'wb-context, wb-step, wb-expression, wb-contains'), retainSelection, evt.type === 'wb-added');
-        }
-        if (block.localName !== 'wb-value') {
-            value = firstSocket(block);
-        } else if (!isValueSelectable(value)) {
-            value = firstSocket(dom.closest(value, 'wb-context, wb-step, wb-expression'));
-        }
-        if (value) {
-            selectByValue(value);
+        var block = dom.closest(evt.target, 'wb-value, wb-contains, wb-context, wb-step, wb-expression');
+        if (block){
+            block.makeSelected();
+        }else{
+            unselectAllBlocks();
         }
     }
 
     /**************************************
     *
-    * Click to insert at selection (if possible
+    * Click/Tap to insert at selection (if possible
     *
     **************************************/
 
-    function inAllowedTypes(block, target){
-        var allowedTypes = target.getAttribute('type').split(',');
-        if (!allowedTypes.length){
-            app.warn('No allowed types found, cannot insert block (this should never happen, probably a problem with Waterbear)');
-            return false;
+    function insertBlockAtSelection(evt){
+        // we clone because we assume this is coming from a block catalog
+        var block = dom.clone(dom.closest(evt.target, 'wb-context, wb-step, wb-expression'));
+        var selected = getSelectedBlocks();
+        if (selected.length > 1){
+            app.warn('Can only insert at one position, multiple blocks are selected');
+            return;
         }
-        if (allowedTypes[0] == 'any'){
-            return true;
+        if (selected.length < 1){
+            app.warn('Cannot insert unless you select a block to insert at');
+            return;
         }
-        var type = block.getAttribute('type');
-        if (type === 'any'){
-            return true;
+        var target = selected[0];
+        var canInsert = Block.canInsertHere(block, target);
+        if (canInsert.test){
+            Undo.addNewEvent(Block.insertHere(block, target));
+        }else{
+            app.warn(canInsert.reason);
         }
-        if (allowedTypes.indexOf(type) > -1){
-            return true;
+    }
+
+    function getSelectedBlocks(){
+        return dom.findAll(workspace, '.selected-value, .selected-block');
+    }
+    
+    function clearSelection(evt){
+        var ts = getSelection();
+        if (ts.baseNode && util.inList(ts.baseNode.localName, ['wb-value', 'input'])){
+            return;
         }
-        app.warn('Expression block is the wrong type to insert in the selected socket');
+        var selected = getSelectedBlocks();
+        if (selected.length){
+            Undo.addNewEvent(selected
+                .filter(function(block){
+                    // filter to only actual blocks, not wb-contains or wb-value, which are also selectable
+                    return util.inList(block.localName, ['wb-context', 'wb-step', 'wb-expression']);
+                }).map(function(block){
+                    return block.undoableRemove(); 
+                })
+            );
+        }
+        event.preventDefault();
+        event.stopPropagation();
         return false;
     }
 
-    function insertBlockAtSelection(evt){
-        var block = dom.clone(dom.closest(evt.target, 'wb-context, wb-step, wb-expression'));
-        if (block.localName === 'wb-expression'){
-            var selectedValue = dom.find(workspace, '.selected-value');
-            if (selectedValue){
-                if (!inAllowedTypes(block, selectedValue)){
-                    app.warn('This local block would be out of scope at the selected socket');
-                    return;
-                }
-                if (Block.isInsertionInScope(block, selectedValue)){
-                    selectedValue.appendChild(block);
-                }
-            }
-        }else{
-            // handle wb-context and wb-step
-            var selectedBlock = dom.find(workspace, '.selected-block');
-            if (selectedBlock){
-                switch(selectedBlock.localName){
-                    case 'wb-context': // fall-through
-                    case 'wb-step':
-                        selectedBlock.parentElement.insertBefore(block, selectedBlock.nextElementSibling);
-                        break;
-                    case 'wb-contains':
-                        selectedBlock.insertBefore(block, selectedBlock.firstElementChild);
-                        break;
-                    case 'wb-expression':
-                        // do nothing
-                        app.warn('Cannot insert a block around an Expression block');
-                        break;
-                    default:
-                        // do nothing
-                        app.warn('No valid insertion point found');
-                        break;
-                }
-            }else{
-                app.warn('Select an insertion point to add the block to before clicking');
-            }
-        }
-    }
+    /**************************************
+    *
+    * Public API
+    *
+    ***************************************/
+
+    window.Select = {
+        blocks: getSelectedBlocks
+    };
 
     /**************************************
     *
@@ -230,4 +158,8 @@
     // Insert block
     Event.on(BLOCK_MENU, 'editor:click', 'wb-context, wb-step, wb-expression', insertBlockAtSelection);
     Event.on(workspace, 'editor:click', 'wb-local > wb-context, wb-local > wb-step, wb-local > wb-expression', insertBlockAtSelection);
+    
+    // Clear (delete) selected elements on backspace or delete
+    Event.onKeyDown('delete', clearSelection);
+    Event.onKeyDown('backspace', clearSelection);
 })();

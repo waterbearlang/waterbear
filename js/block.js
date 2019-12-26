@@ -11,7 +11,8 @@
 // Or should we avoid that kind of magic? I think if it is documented it might be OK and help keep
 // the code readable.
 
-(function() {
+
+(function () {
     'use strict';
 
     /*******************
@@ -20,10 +21,10 @@
      *
      ********************/
 
-    var elem = dom.html;
-    var workspace = dom.find(document.body, 'wb-workspace');
-    var scriptspace = dom.find(document.body, 'wb-workspace > wb-contains');
-    var BLOCK_MENU = document.querySelector('sidebar');
+    var elem = dom.html,
+        workspace = dom.find(document.body, 'wb-workspace'),
+        scriptspace = dom.find(document.body, 'wb-workspace > wb-contains'),
+        BLOCK_MENU = document.querySelector('sidebar');
 
     /************************
      *
@@ -41,9 +42,8 @@
     }
 
     function updateLocalInstancesType(variableStep, type) {
-        var parentContext = dom.closest(variableStep, 'wb-contains');
-        var localInstances = getLocalInstances(parentContext, variableStep.id);
-        localInstances.forEach(function(instance) {
+        var localInstances = variableStep.getLocalInstances(variableStep.id);
+        localInstances.forEach(function (instance) {
             // set instance
             var expr = dom.closest(instance, 'wb-expression');
             expr.setAttribute('type', type);
@@ -56,7 +56,7 @@
                 // Maybe mark then and provide a button to remove all of them at
                 // user discretion?
                 app.warn('Removing instance of ' + instance.getAttribute('fn') + ' because it now has a type which is illegal in this position', true);
-                instance.parentElement.removeChild(instance);
+                dom.remove(instance);
             }
         });
     }
@@ -73,7 +73,7 @@
 
 
     function updateVariableNameInInstances(newVariableName, localInstances) {
-        localInstances.forEach(function(instance) {
+        localInstances.forEach(function (instance) {
             var wbValue = dom.find(instance, 'wb-value');
             wbValue.setAttribute('value', newVariableName);
             wbValue.innerHTML = newVariableName;
@@ -113,10 +113,6 @@
         return test;
     }
 
-    function getLocalInstances(parentContext, setVarId) {
-        return dom.findAll(parentContext, '[instanceof="' + setVarId + '"]');
-    }
-
     /*****************
      *
      *  BlockProto
@@ -133,6 +129,9 @@
         // Put blocks that should only live in the header there
         if (this.getAttribute('context') === 'true') {
             setDefaultByTag(this, 'wb-disclosure');
+        }
+        if (!this.hasAttribute('id')){
+            this.setAttribute('id', util.randomId());
         }
         var children = [].slice.call(this.children);
         children.forEach(function(child) {
@@ -239,9 +238,41 @@
         var instances = [];
         var self = this;
         this.getLocals().forEach(function(theLocal) {
-            instances = instances.concat(getLocalInstances(self, theLocal.id));
+            instances = instances.concat(self.getLocalInstances(theLocal.id));
         });
         return instances;
+    };
+
+    // typically called on the parent context
+    BlockProto.getLocalInstances = function blockGetLocalInstances(setVarId) {
+        var parentContext = dom.closest(this, 'wb-contains');
+        return dom.findAll(parentContext, '[instanceof="' + setVarId + '"]');
+    };
+
+
+    BlockProto.undoableInsert = function(parent, nextSibling /*nextSibling is optional */){
+        parent.insertBefore(this, nextSibling); /* if nextSibling is undefined, this is the same as parent.appendChild(this) */
+        // Return info for undo stack
+        this.makeSelected();
+        return {
+            type: 'add-block',
+            block: this,
+            parent: parent,
+            nextSibling: nextSibling
+        };
+    };
+
+    BlockProto.undoableRemove = function(){
+        var undoEvt = {
+            type: 'remove-block',
+            block: this,
+            parent: this.parentElement,
+            nextSibling: this.nextSibling,
+            subEvents: this.removeInstances()
+        };
+        this.classList.remove('selected,selected-block,selected-value');
+        dom.remove(this);
+        return undoEvt;
     };
 
     // Validation maintenance
@@ -251,9 +282,9 @@
         if (instances.length) {
             app.warn('Removing ' + instances.length + ' instances of ' + this.getAttribute('fn') + ' because their value was removed', true);
         }
-        instances.forEach(function(instance) {
+        return instances.map(function(instance){
             // FIXME: Some animation here would be nice
-            instance.parentElement.removeChild(instance);
+            return instance.undoableRemove(); // return list of undo data
         });
     };
 
@@ -270,9 +301,9 @@
         if (invalidInstances.length) {
             app.warn('Removing ' + invalidInstances.length + ' instances of ' + this.getAttribute('fn') + ' because the are no longer in scope', true);
         }
-        invalidInstances.forEach(function(instance) {
+        return invalidInstances.map(function(instance){
             // FIXME: Some animation here would be nice
-            instance.parentElement.removeChild(instance);
+            return instance.undoableRemove(); // return list of undo data
         });
     };
 
@@ -499,6 +530,7 @@
 
     ExpressionProto.removeInstances = function() {
         /* do nothing */
+        return [];
     };
 
     ExpressionProto.setValue = function(val) {
@@ -567,9 +599,8 @@
         if (!dom.matches(input.parentElement, ':first-of-type')) {
             return;
         }
-        var context = dom.closest(stepBlock, 'wb-contains');
         var newVariableName = input.value;
-        updateVariableNameInInstances(newVariableName, getLocalInstances(context, stepBlock.id));
+        updateVariableNameInInstances(newVariableName, stepBlock.getLocalInstances(stepBlock.id));
         // evt.stopPropagation();
     }
 
@@ -589,6 +620,7 @@
     }
 
     function ensureNameIsUniqueInContext(input) {
+        var block = dom.closest(input, 'wb-expression, wb-step, wb-context');
         var parentContext = dom.closest(input, 'wb-contains');
         var getVariable = dom.closest(input, '[fn="getVariable"]');
         var valueBlock = dom.closest(input, 'wb-value');
@@ -618,7 +650,7 @@
         if (newVariableName !== oldVariableName) {
             input.value = newVariableName;
             valueBlock.setAttribute('value', newVariableName);
-            var variablesToUpdate = getLocalInstances(parentContext, getVariable.id);
+            var variablesToUpdate = block.getLocalInstances(getVariable.id);
             updateVariableNameInInstances(newVariableName, variablesToUpdate);
         }
     }
@@ -908,39 +940,7 @@
         prototype: ValueProto
     });
 
-    // toggle an input's selection
-    // TODO: Move this to select.js
-    ValueProto.toggleSelect = function() {
-        var selectedItem = dom.find(workspace, 'wb-value.selected');
-        if (this != selectedItem) {
-            if (selectedItem) {
-                selectedItem.deselect();
-            }
-            this.select();
-        }
-    };
 
-    //select an input field
-    // TODO: Move this to select.js
-    ValueProto.select = function() {
-        this.setAttribute('selected', 'true');
-
-        // Highlight input field with one click
-        var input = this.getElementsByTagName('input');
-        if (input.length) {
-            input[0].select();
-            input[0].focus();
-        }
-    };
-
-    // deselect an input field
-    // TODO: Move this to select.js
-    ValueProto.deselect = function() {
-        this.removeAttribute('selected');
-    };
-
-    //deselect an input field and unfilter the sidebar
-    // TODO: Move this to select.js
     function toggleFilter(evt) {
         if (dom.closest(evt.target, 'wb-local')){
             return;
@@ -948,14 +948,8 @@
         var origTarget = evt.target;
         var triggerFilter = origTarget.localName === 'input';
         var value = dom.closest(evt.target, 'wb-value');
-        console.log('toggle filter %o', value);
-        var selectedItem = dom.find(workspace, 'wb-value.selected');
 
         if (BLOCK_MENU.getAttribute('filtered') === 'true') {
-            // if click outside of wb-contains then deselect the selectedItem
-            if (!value && selectedItem) {
-                selectedItem.deselect();
-            }
             app.clearFilter();
 
             // filter on value which is the next value for selectedItem
@@ -971,7 +965,6 @@
     //when a user clicks on an input box in the workspace
     function changeValueOnInputChange(evt) {
         dom.closest(evt.target, 'wb-value').setAttribute('value', evt.target.value);
-        // evt.stopPropagation();
     }
 
 
@@ -1021,30 +1014,28 @@
         prototype: ContainsProto
     });
 
-    Event.on(document.body, 'ui:click', 'wb-value > input', function(evt) {
-        if (dom.matches(dom.closest(evt.target, 'wb-value'), 'wb-contains *')) {
-            dom.closest(evt.target, 'wb-value').toggleSelect();
-        }
-    });
-
-
     /* DRAGGING */
 
     var dragTarget = null;
-    var origTarget = null;
     var dragStart = '';
     var dropTarget = null;
     var blockTop = 0;
+    var undoDrag = [];
 
     function startDragBlock(evt) {
         // Don't start dragging if ctrl is down (menu interferes)
-        if (Event.keys['ctrl']) {
+        if (Event.keys.ctrl) {
             return;
         }
-        origTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
-        // Maybe move to object notation later
-        //    return target.startDrag(evt);
-
+        dragTarget = dom.closest(evt.target, 'wb-step, wb-context, wb-expression');
+        if (dom.matches(dragTarget, 'sidebar *, wb-local *')){
+            dragTarget = dom.clone(dragTarget);
+            dragStart = 'menu';
+        }else{
+            undoDrag.push(dragTarget.undoableRemove());
+            dragStart = 'script';
+        }
+        
         // Show trash can, should be in app.js, not block.js
         blockTop = BLOCK_MENU.scrollTop;
         BLOCK_MENU.classList.add('trashcan');
@@ -1052,21 +1043,8 @@
         workspace.classList.add('block-dragging');
         // FIXME: Highlight droppable places (or grey out non-droppable)
 
-        dragTarget = dom.clone(origTarget);
         document.body.appendChild(dragTarget);
-        dragStart = dom.matches(origTarget, 'wb-contains *, wb-value *') ? 'script' : 'menu';
-        // Warning here: origTarget may be null, and thus, not have a
-        // parentElement.
-        if (origTarget.parentElement.localName === 'wb-local') {
-            dragStart = 'menu';
-        }
-        if (dragStart === 'script') {
-            origTarget.classList.add('hide');
-            var siblingInput = dom.child(origTarget.parentElement, 'input, select');
-            if (siblingInput) {
-                siblingInput.classList.remove('hide');
-            }
-        }
+
         dragTarget.classList.add('dragging');
         dragTarget.style.left = (evt.pageX - 15) + 'px';
         dragTarget.style.top = (evt.pageY - 15) + 'px';
@@ -1103,6 +1081,84 @@
         block.classList.add('drop-target');
     }
 
+    function canInsertHere(block, target){
+        if (!isInsertionInScope(block, target)){
+            return {test: false, reason: 'instances can only be dropped within the scope of their local'};
+        }
+        if (dom.matches(block, 'wb-expression')){
+            return canInsertExpressionHere(block, target);
+        }else{
+            return canInsertStepHere(block, target);
+        }
+    }
+    
+    function insertHere(block, target, evt /*optional, only used in dragging */){
+        if (dom.matches(block, 'wb-expression')) {
+            if (dom.matches(target, 'wb-value')) {
+                BLOCK_MENU.removeAttribute('filtered'); // FIXME: where does this go?
+                return block.undoableInsert(target);
+            } else if (dom.matches(target, 'wb-context, wb-step, wb-contains')) {
+                // Create variable block to wrap the expression
+                return addToContains(createVariableBlock(block), target, evt);
+            }
+        } else if (dom.matches(target, 'wb-context, wb-step, wb-contains')) {
+            return addToContains(block, target, evt);
+        }
+        throw new Exception('You cannot insert ' + block.localName + ' on ' + target.localName);
+    }
+
+    function canInsertExpressionHere(block, target){
+        // FIXME: Check for scope
+        // Can't insert into literals
+        if (dom.matches(target, 'wb-value[allow="literal"], wb-value[allow="literal"] *')) {
+            return {test: false, reason: 'cannot insert on direct input value'};
+        }
+        // Can't insert variables anywhere but update variable
+        if (dom.matches(target, 'wb-value[allow="variable"], wb-value[allow="variable"] *')) {
+            if (!dom.matches(block, '[fn="getVariable"]')) {
+                return {test: false, reason: 'can only insert variables on update variable'};
+            }
+        }
+        var origTarget = target;
+        target = dom.closest(target, 'wb-value[type]:not([allow="literal"])');
+        // if no longer a target, try dropping as a step
+        if (!target){
+            return canInsertStepHere(block, origTarget);
+        }
+        // Can't drop if there is already an expression in the socket
+        if (dom.child(target, 'wb-expression:not(.hide)')) {
+            return {test: false, reason: 'cannot insert an expression on another expression'};
+        }
+        // Only drop on matching types
+        var dropTypes = target.getAttribute('type').split(','); // FIXME: remove excess whitespace
+        var dragType = block.getAttribute('type');
+        if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1) {
+            return {test: true, target: target, tip: 'insert here to add block to script'};
+        } else {
+            return {test: false, reason: 'cannot insert a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value'};
+        }
+        // what should the default be here?
+        return {test: false, reason: 'cannot insert on ' + target.localName};
+    }
+
+    function canInsertStepHere(block, target){
+        target = dom.closest(target, 'wb-step, wb-context, wb-contains, wb-value');
+        // FIXME: Don't drop onto locals
+        if (!target){
+            return {test: false, reason: 'drop anywhere else (or hit Esc) to cancel the drag'};
+        }
+        if (dom.matches(target, 'wb-value')) {
+            return {test: false, reason: 'you cannot insert a ' + block.localName + ' on a value block'};
+        }
+        if (dom.matches(target, 'wb-contains')) {
+            return {test: true, target: target, tip: 'drop to add to top of the block container'};
+        }
+        if (dom.matches(target, 'wb-context, wb-step')) {
+            return {test: true, target: target, tip: 'drop to add after this block'};
+        }   
+        return {test: false, reason: 'you cannot insert a ' + block.localName + ' on a ' + target.localName};
+    }
+
     function dragBlock(evt) {
         if (!dragTarget) {
             return;
@@ -1124,52 +1180,17 @@
             return;
         }
 
-        // When we're dragging an expression...
-        if (dom.matches(dragTarget, 'wb-expression')) {
-            // Check if we're on a literal block.
-            if (dom.matches(potentialDropTarget, 'wb-value[allow="literal"], wb-value[allow="literal"] *')) {
-                potentialDropTarget.classList.add('no-drop');
-                app.warn("cannot drop on direct input value");
-                return;
+        var canInsert = canInsertHere(dragTarget, potentialDropTarget);
+        if (!canInsert.test){
+            potentialDropTarget.classList.add('no-drop');
+            app.warn(canInsert.reason);
+            dropTarget = null;
+        }else{
+            dropTarget = canInsert.target;
+            markDropTarget(dropTarget);
+            if (canInsert.tip){
+                app.tip(canInsert.tip);
             }
-            if (dom.matches(potentialDropTarget, 'wb-value[allow="variable"], wb-value[allow="variable"] *')) {
-                if (!dom.matches(dragTarget, '[fn="getVariable"]')) {
-                    potentialDropTarget.classList.add('no-drop');
-                    app.warn("can only drop variables on update variable");
-                    return;
-                }
-            }
-
-            // FIXME
-            dropTarget = dom.closest(potentialDropTarget, 'wb-value[type]:not([allow="literal"])');
-
-            if (dropTarget) {
-                if (dom.child(dropTarget, 'wb-expression:not(.hide)')) {
-                    dropTarget.classList.add('no-drop');
-                    app.warn('cannot drop an expression on another expression');
-                    dropTarget = null;
-                    return;
-                }
-
-                var dropTypes = dropTarget.getAttribute('type').split(','); // FIXME: remove excess whitespace
-                var dragType = dragTarget.getAttribute('type');
-                if (dragType === 'any' || dropTypes.indexOf('any') > -1 || dropTypes.indexOf(dragType) > -1) {
-                    markDropTarget(dropTarget);
-                    app.tip('drop here to add block to script');
-                } else {
-                    dropTarget.classList.add('no-drop');
-                    app.warn('cannot drop a ' + dragType + ' block on a ' + dropTypes.join(',') + ' value');
-                    dropTarget = null;
-                }
-            } else {
-                // Pretend the expression is a step.
-                dropTargetIsContainer(potentialDropTarget);
-            }
-            return;
-        } else {
-            // It's a step or a context.
-            dropTargetIsContainer(potentialDropTarget);
-            return;
         }
     }
 
@@ -1177,90 +1198,41 @@
         var localId = block.getAttribute('instanceof');
         if (localId) {
             var local = document.getElementById(localId);
+            if (!local){
+                return false; // can happen when pasting from another document
+            }
             var localContext = dom.closest(local, 'wb-contains');
-            if (!localContext.contains(dropTarget) && localContext !== dropTarget) {
+            if (!localContext.contains(target) && localContext !== target) {
                 return false;
             }
         }
         return true;
     }
 
-    function dropTargetIsContainer(potentialDropTarget) {
-        dropTarget = dom.closest(potentialDropTarget, 'wb-step, wb-context, wb-contains');
-        // FIXME: Don't drop onto locals
-        if (dropTarget && dragTarget) {
-            if (!isInsertionInScope(dragTarget, dropTarget)){
-                dropTarget.classList.add('no-drop');
-                dropTarget = null;
-                app.warn('instances can only be dropped within the scope of their local');
-            }
-        }
-        if (dropTarget) {
-            markDropTarget(dropTarget);
-            if (dom.matches(dropTarget, 'wb-contains')) {
-                app.tip('drop to add to top of the block container');
-            } else {
-                app.tip('drop to add after this block');
-            }
-        } else {
-            app.warn('drop anywhere else (or hit Esc) to cancel the drag');
-            potentialDropTarget.classList.add('no-drop');
-        }
-    }
 
-    function addToContains(block, evt, addBlockEvent, originalBlock) {
+    function addToContains(block, target, evt) {
         // dropping directly into a contains section
         // insert as the first block unless dropped after the entire script
-        if (dragStart === 'script' && addBlockEvent.type !== 'add-var-block') {
-            addBlockEvent.type = 'move-block';
-            // Move a step or context block within the script
-            // Maintain original IDs for locals
-            var clonedBlock = block;
-            block = originalBlock;
-            clonedBlock.parentElement.removeChild(clonedBlock);
-            block.classList.remove('hide');
-        }
-        addBlockEvent.addedBlock = block;
-        if (dom.matches(dropTarget, 'wb-contains')) {
-            if (dropTarget.children.length && evt.pageY > dropTarget.lastElementChild.getBoundingClientRect().bottom) {
-                dropTarget.appendChild(block);
+        if (dom.matches(target, 'wb-contains')) {
+            if (target.children.length && evt && evt.pageY > target.lastElementChild.getBoundingClientRect().bottom) {
+                return block.undoableInsert(target);
             } else {
-                addBlockEvent.nextBlock = dropTarget.firstElementChild;
-                dropTarget.insertBefore(block, dropTarget.firstElementChild);
+                return block.undoableInsert(target, target.firstElementChild);
             }
         } else {
             // dropping on a block in the contains, insert after that block
-            addBlockEvent.nextBlock = dropTarget.nextElementSibling;
-            addBlockEvent.addedTo = dropTarget.parentElement;
-            dropTarget.parentElement.insertBefore(block, dropTarget.nextElementSibling);
+            return block.undoableInsert(target.parentElement, target.nextElementSibling);
         }
-        if (addBlockEvent.type === 'move-block') {
-            // how can it now be out of context?
-            block.removeOutOfScopeInstances();
-        }
-        Undo.addNewEvent(addBlockEvent);
     }
-
+    
     /**
         Variable Glossary:
         dragStart = 'script' or 'menu', depending on where the original block is located (local vars also use 'menu' so they aren't hidden)
-        origTarget = the original block that has been cloned to be dragged
-                - hidden if it's in the script
-                - not hidden if it's in the menu, or is a local variable block
         dragTarget = the cloned block that is being dragged
         dropTarget = the block (or position) the clone is being dropped into
     **/
     function endDragBlock(evt) {
-        var originalBlock = origTarget;
-        var originalParent = null;
-        var nextElem = null;
-        var addBlockEvent, addValueEvent;
-        if (dragStart === 'script') {
-            if (origTarget) {
-                originalParent = origTarget.parentElement;
-                nextElem = origTarget.nextElementSibling;
-            }
-        }
+        var undoEvent = undoDrag;
         if (!dragTarget) {
             // Sometimes we get spurious drags, ignore
             return cancelDragBlock();
@@ -1269,88 +1241,25 @@
             // No legal target, probably outside of workspace
             return cancelDragBlock();
         }
-        if (dropTarget === originalParent) {
-            // Dragged back to where we started
-            return cancelDragBlock();
-        }
         if (dropTarget === BLOCK_MENU) {
-            // Drop on script menu to delete block, always delete clone
-            deleteOriginalBlock(originalBlock, originalParent, nextElem);
-            dragTarget.parentElement.removeChild(dragTarget);
-        } else if (dom.matches(dragTarget, 'wb-expression')) {
-            if (dom.matches(dropTarget, 'wb-value')) {
-                dropTarget.appendChild(dragTarget);
-                dropTarget.deselect(); // FIXME: This belongs in select.js
-                BLOCK_MENU.removeAttribute('filtered');
-                addValueEvent = {
-                    type: 'add-block',
-                    addedBlock: dragTarget,
-                    addedTo: dropTarget,
-                    nextBlock: dragTarget.nextElementSibling,
-                    originalParent: originalParent,
-                    originalNextEl: nextElem
-                };
-                if (dragStart === 'script') {
-                    addValueEvent.type = 'move-block';
-                }
-                Undo.addNewEvent(addValueEvent);
-            } else if (dom.matches(dropTarget, 'wb-context, wb-step, wb-contains')) {
-                // Create variable block to wrap the expression.
-                addBlockEvent = {
-                    type: 'add-block',
-                    addedBlock: null,
-                    addedTo: dropTarget,
-                    nextBlock: null,
-                    originalParent: originalParent,
-                    originalNextEl: nextElem
-                };
-                if (dragStart === 'script') {
-                    addBlockEvent.type = 'add-var-block';
-                    addBlockEvent.insideBlock = dragTarget;
-                }
-                addToContains(createVariableBlock(dragTarget), evt, addBlockEvent);
-            }
-            if (dragStart === 'script') { //only want to undo if it was deleted from the script
-                originalBlock.classList.remove('hide'); //un-hide block
-                originalBlock.removeInstances(); // FIXME: Make this undo-able!
-                originalBlock.parentElement.removeChild(originalBlock);
-            }
-        } else if (dom.matches(dragTarget, 'wb-context, wb-step')) {
-            addBlockEvent = {
-                type: 'add-block',
-                addedBlock: null,
-                addedTo: dropTarget,
-                nextBlock: null,
-                originalParent: originalParent,
-                originalNextEl: nextElem,
-                originalId: originalBlock.id
-            };
-            addToContains(dragTarget, evt, addBlockEvent, originalBlock);
+            // Drop on script menu to delete block
+            dom.remove(dragTarget);
+        }else if (canInsertHere(dragTarget, dropTarget)){
+            undoEvent.push(insertHere(dragTarget, dropTarget, evt));
         } else {
             /* something unexpected, cancel drag */
             return cancelDragBlock();
         }
+        Undo.addNewEvent(undoEvent);
         resetDragging();
     }
 
-    function deleteOriginalBlock(originalBlock, originalParent, nextElem) {
-        if (dragStart === 'script') { //only want to undo if it was deleted from the script
-            originalBlock.classList.remove('hide'); //un-hide block
-            var deleteEvent = {
-                type: 'delete-block',
-                deletedBlock: originalBlock,
-                deletedFrom: originalParent,
-                nextBlock: nextElem
-            };
-            Undo.addNewEvent(deleteEvent); //add new event to undo
-            originalBlock.removeInstances(); // FIXME: Make this undo-able!
-            originalBlock.parentElement.removeChild(originalBlock);
-        }
-    }
-
     function cancelDragBlock() {
-        if (dragTarget) {
-            dragTarget.parentElement.removeChild(dragTarget);
+        if (dragTarget){
+            dom.remove(dragTarget);
+        }
+        if (undoDrag.length) {
+            Undo.partialUndo(undoDrag);
         }
         resetDragging();
     }
@@ -1370,20 +1279,10 @@
             dragTarget.classList.remove('dragging');
             dragTarget.removeAttribute('style');
         }
-        if (origTarget) {
-            origTarget.classList.remove('hide');
-            if (origTarget.parentElement) {
-                // Hide the sibling input
-                var siblingInput = dom.child(origTarget.parentElement, 'input, select');
-                if (siblingInput) {
-                    siblingInput.classList.add('hide');
-                }
-            }
-        }
         dragTarget = null;
-        origTarget = null;
         dragStart = '';
         dropTarget = null;
+        undoDrag = [];
         app.info('');
         // Hide trash can, should be in app.js, not block.js
         BLOCK_MENU.classList.remove('trashcan');
@@ -1452,14 +1351,14 @@
     Event.on(workspace, 'editor:blur', 'wb-local input', handleVariableBlur); // Mozilla
     Event.on(workspace, 'editor:focusout', 'wb-local input', handleVariableBlur); // All other browsers
 
-
-    // Event.on(workspace, 'editor:blur', 'input', handleOnBlur);
-    // Event.on(workspace, 'editor:focusout', 'input', handleOnBlur);
-
     Event.on(workspace, 'editor:click', '*', toggleFilter);
 
     window.Block = {
-        isInsertionInScope: isInsertionInScope
+        proto : BlockProto,
+        valueProto: ValueProto,
+        containedProto: ContainsProto,
+        canInsertHere: canInsertHere,
+        insertHere: insertHere
     };
 
 })();

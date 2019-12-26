@@ -23,7 +23,7 @@
             };
         };
     }
-
+    
     function isDrawingPath() {
         return drawingPath;
     }
@@ -43,6 +43,10 @@
             list.splice(idx, 1);
         }
         return item;
+    }
+
+    function inList(val, list){
+        return list.indexOf(val) > -1;
     }
 
     // check if a string is a number (works on numbers too)
@@ -116,7 +120,7 @@
                 return this[signature].call(arguments).map(type).join('_');
             }
             throw new Exception('no match found for ' + signature.split('_').join(' '));
-        }
+        };
         return this;
     };
     // Use this to add a single function to call when no types match (fluent)
@@ -156,7 +160,7 @@
 
     // replace JavaScript % operator because of sign conversion
     function mod(a, b) {
-        return a - floor(a / b) * b
+        return a - floor(a / b) * b;
     }
 
     // angle between two vectors in radians
@@ -181,29 +185,29 @@
     Vector.fromPolar = function(degrees, mag) {
         var radians = deg2rad(degrees);
         return new Vector(cos(radians) * mag, sin(radians) * mag);
-    }
+    };
     Vector.fromPoint = function(pt) {
         return new Vector(pt.x, pt.y);
-    }
+    };
 
     Vector.prototype.getX = function() {
         return this.x;
-    }
+    };
 
     Vector.prototype.getY = function() {
         return this.y;
-    }
+    };
 
     Vector.prototype.magnitude = function() {
         return sqrt(this.x * this.x + this.y * this.y);
-    }
+    };
 
     Vector.prototype.radians = function() {
         return atan2(this.y, this.x);
-    }
+    };
     Vector.prototype.degrees = function() {
         return rad2deg(this.radians());
-    }
+    };
 
     // Make magnitude equal to 1
     Vector.prototype.normalize = function normalize() {
@@ -212,27 +216,27 @@
             return this;
         }
         return multiply(this, 1 / mag);
-    }
+    };
 
     Vector.prototype.rotateTo = function rotateTo(degrees) {
         return Vector.fromPolar(degrees, this.magnitude());
-    }
+    };
 
     Vector.prototype.rotate = function rotate(degrees) {
         var radians = this.radians() + deg2rad(degrees);
         var mag = this.magnitude();
         return new Vector(cos(radians) * mag, sin(radians) * mag);
-    }
+    };
 
     Vector.prototype.rotateRads = function rotate(rads) {
         var newAngle = this.radians() + rads;
         var mag = this.magnitude();
         return new Vector(cos(newAngle) * mag, sin(newAngle) * mag);
-    }
+    };
 
     Vector.prototype.toString = function strv() {
         return '<' + this.x + ',' + this.y + '>';
-    }
+    };
 
     // Size
 
@@ -292,17 +296,17 @@
         if (this.inputPoints !== undefined) {
             this.funcToCall.apply(ctx, this.inputPoints);
         } else {
-            this.funcToCall.apply(ctx, new Array());
+            this.funcToCall.apply(ctx, []);
         }
         ctx.fill();
         ctx.stroke();
-    }
+    };
 
     //Shape
     function Shape(pathArrayOrFunctionOrSAT, pointsArray) {
         if (type(pathArrayOrFunctionOrSAT) === 'function') {
             this._draw = pathArrayOrFunctionOrSAT;
-            if (pointsArray != undefined)
+            if (pointsArray !== undefined)
                 this.pointsArray = pointsArray;
         } else if (type(pathArrayOrFunctionOrSAT) === 'array') {
             this.pathArray = pathArrayOrFunctionOrSAT;
@@ -319,10 +323,10 @@
 
 
     Shape.prototype.draw = function(ctx) {
+        var i, paths, type;
         if (this.pathArray) {
-            var i;
-            var paths = this.pathArray.slice(0, this.pathArray.length - 1);
-            var type = this.pathArray[this.pathArray.length - 1];
+            paths = this.pathArray.slice(0, this.pathArray.length - 1);
+            type = this.pathArray[this.pathArray.length - 1];
 
             ctx.beginPath();
 
@@ -354,9 +358,9 @@
                 ctx.lineTo(x, y);
             }
 
-            for (var i = 1; i < this.satPolygon.points.length; i++) {
+            for (i = 1; i < this.satPolygon.points.length; i++) {
                 ctx.lineTo(this.satPolygon.points[i].x, this.satPolygon.points[i].y);
-            };
+            }
 
             ctx.lineTo(this.satPolygon.points[0].x, this.satPolygon.points[0].y);
         } else if (this.satCircle) {
@@ -366,7 +370,7 @@
         }
         ctx.fill();
         ctx.stroke();
-    }
+    };
 
 
     // Utilities for math
@@ -516,7 +520,7 @@
         var h = hash & 15; // CONVERT LO 4 BITS OF HASH CODE
         var u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
             v = h < 4 ? y : h == 12 || h == 14 ? x : z;
-        return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+        return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
     }
 
     function scale(n) {
@@ -1131,49 +1135,49 @@
         this.velocity.add(
             new SAT.Vector(this.facing.x * speed, this.facing.y * speed)
         );
-    }
+    };
 
     Sprite.prototype.setVelocity = function(vec) {
         this.velocity = new SAT.Vector(vec.x, vec.y);
-    }
+    };
 
     Sprite.prototype.getXvel = function() {
         return this.velocity.x;
-    }
+    };
 
     Sprite.prototype.getYvel = function() {
         return this.velocity.y;
-    }
+    };
 
     Sprite.prototype.getXpos = function() {
         return this.position.x;
-    }
+    };
 
     Sprite.prototype.getYpos = function() {
         return this.position.x;
-    }
+    };
 
     Sprite.prototype.applyForce = function(vec) {
         this.velocity.add(vec);
-    }
+    };
 
     Sprite.prototype.rotate = function(r) {
         this.facing.rotate(r * Math.PI / 180);
-    }
+    };
 
     Sprite.prototype.rotateTo = function(r) {
         this.facing.angle = r;
-    }
+    };
 
     Sprite.prototype.move = function() {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
-    }
+    };
 
     Sprite.prototype.moveTo = function(pt) {
         this.position.x = pt.x;
         this.position.y = pt.y;
-    }
+    };
 
     Sprite.prototype.draw = function(ctx) {
         if (!this.drawable.satCircle) {
@@ -1182,11 +1186,11 @@
         ctx.rotate(this.angle()); // drawable should be centered on 0,0
         this.drawable.draw(ctx);
         ctx.setTransform(1, 0, 0, 1, 0, 0); // back to identity matrix
-    }
+    };
 
     Sprite.prototype.angle = function() {
         return atan2(this.facing.y, this.facing.x);
-    }
+    };
     Sprite.prototype.toString = function() {
         return 'Sprite pos: ' + this.position + ', vel: ' + this.velocity;
     };
@@ -1202,7 +1206,7 @@
         } else if (this.position.y < r.y && this.velocity.y < 0) {
             this.velocity = new Vector(this.velocity.x, this.velocity.y *= -1);
         }
-    }
+    };
 
     Sprite.prototype.checkForCollision = function checkForCollision(other) {
 
@@ -1228,7 +1232,7 @@
 
         return collision;
 
-    }
+    };
 
     Sprite.prototype.wrapAroundRect = function(r) {
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0) {
@@ -1241,7 +1245,7 @@
         } else if (this.position.y < r.y && this.velocity.y < 0) {
             this.position = new Vector(this.position.x, this.position.y + r.y + r.height);
         }
-    }
+    };
 
     Sprite.prototype.stayWithinRect = function(r) {
         if (this.position.x > (r.x + r.width) && this.velocity.x > 0) {
@@ -1254,8 +1258,9 @@
         } else if (this.position.y < r.y && this.velocity.y < 0) {
             this.position = new Vector(this.position.x, r.y);
         }
-    }
+    };
 
+    /* jshint -W040 */
     function defaultDrawable(ctx) {
         var width = PI - PI / 6;
         var length = 20;
@@ -1272,6 +1277,7 @@
             sin(this.facing.rad + width) * length + this.position.y);
         ctx.stroke();
     }
+    /* jshint +W040 */
 
     function randomId() {
         // Based on Paul Irish's random hex color:http://www.paulirish.com/2009/random-hex-color-code-snippets/
@@ -1284,6 +1290,7 @@
         Size: Size,
         extend: extend,
         deleteItem: deleteItem,
+        inList: inList,
         setDefault: setDefault,
         type: type,
         dist: dist,

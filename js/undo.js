@@ -7,140 +7,107 @@
     var undoStack = [];
     var redoStack = [];
 
-    function undoEvent(toUndo) {
+    function removeFromEvent(evt) {
+        evt.parent.removeChild(evt.block);
+    }
+
+    function insertFromEvent(evt) {
+        evt.parent.insertBefore(evt.block, evt.nextSibling);
+    }
+
+    var undoFns = {
+        'remove-block': insertFromEvent,
+        'add-block': removeFromEvent
+    };
+
+    var redoFns = {
+        'remove-block': removeFromEvent,
+        'add-block': insertFromEvent
+    };
+
+    function undoNextEvent() {
         if (undoStack.length !== 0) {
-            var toUndo = undoStack.pop();
-            redoStack.push(toUndo);
+            var undoEvts = undoStack.pop();
+            redoStack.push(undoEvts);
             setButtonStatus();
-            if (toUndo.type === 'delete-block') {
-                undoDelete(toUndo);
-            } else if (toUndo.type === 'add-block') {
-                undoAdd(toUndo);
-            } else {
-                undoMove(toUndo);
+            undoEvent(undoEvts);
+        }
+    }
+    
+    function undoEvent(undoEvts){
+        if (Array.isArray(undoEvts)){
+            for (var i = undoEvts.length; i > 0; i--){
+                undoSingleEvent(undoEvts[i-1]);
             }
+        }else if(undoEvts.type){
+            undoSingleEvent(undoEvts);
+        }else{
+            throw new Exception('Unexpected undoEvent: ' + undoEvts.toString());
+        }
+    }
+    
+    function undoSingleEvent(evt){
+        undoFns[evt.type](evt);
+        if (evt.subEvents){
+            undoEvent(evt.subEvents);
+        }
+    }
+    
+    function redoSingleEvent(evt){
+        redoFns[evt.type](evt);
+        if (evt.subEvents){
+            redoEvent(evt.subEvents);
+        }
+    }
+    
+    function redoEvent(redoEvts){
+        if (Array.isArray(redoEvts)){
+            for (var i = 0; i < redoEvts.length; i++){
+                redoSingleEvent(redoEvts[i]);
+            }
+        }else if (redoEvts.type){
+            redoSingleEvent(redoEvts);
+        }else{
+            throw new Exception('Unexpected redoEvent: ' + redoEvts.toString());
         }
     }
 
-    function undoAdd(toUndo) {
-        var addedBlock = toUndo.addedBlock;
-        var addedTo = toUndo.addedTo;
-        addedTo.removeChild(addedBlock);
-    }
-
-    function undoDelete(toUndo) {
-        var deletedBlock = toUndo.deletedBlock;
-        var deletedFrom = toUndo.deletedFrom;
-        var nextBlock = toUndo.nextBlock;
-        if (nextBlock) {
-            deletedFrom.insertBefore(deletedBlock, nextBlock);
-        } else {
-            deletedFrom.appendChild(deletedBlock);
-        }
-    }
-
-    function undoMove(toUndo) {
-        var addedBlock = toUndo.addedBlock;
-        var addedTo = toUndo.addedTo;
-        var origParent = toUndo.originalParent;
-        var origNextEl = toUndo.originalNextEl;
-        //remove from parent expression
-        addedTo.removeChild(addedBlock);
-
-        if (toUndo.type === 'add-var-block') {
-            addedBlock = toUndo.insideBlock;
-        }
-
-        //add back to original parent expression
-        if (origNextEl) {
-            origParent.insertBefore(addedBlock, origNextEl);
-        } else {
-            origParent.appendChild(addedBlock);
-        }
-    }
-
-    function redoEvent() {
+    function redoNextEvent() {
         if (redoStack.length !== 0) {
-            var toRedo = redoStack.pop();
-            undoStack.push(toRedo);
+            var redoEvts = redoStack.pop();
+            undoStack.push(redoEvts);
             setButtonStatus();
-            if (toRedo.type === 'delete-block') {
-                redoDelete(toRedo);
-            } else if (toRedo.type === 'add-block') {
-                redoAdd(toRedo);
-            } else {
-                redoMove(toRedo);
-            }
+            redoEvent(redoEvts);
         }
     }
 
-    function redoAdd(toRedo) {
-        var addedBlock = toRedo.addedBlock;
-        var addedTo = toRedo.addedTo;
-        var nextBlock = toRedo.nextBlock;
-        if (nextBlock) {
-            addedTo.insertBefore(addedBlock, nextBlock);
-        } else {
-            addedTo.appendChild(addedBlock);
-        }
-    }
-
-    function redoDelete(toRedo) {
-        var deletedBlock = toRedo.deletedBlock;
-        var deletedFrom = toRedo.deletedFrom;
-        deletedFrom.removeChild(deletedBlock);
-    }
-
-    function redoMove(toRedo) {
-        var addedBlock = toRedo.addedBlock;
-        var addedTo = toRedo.addedTo;
-        var origParent = toRedo.originalParent;
-        var nextBlock = toRedo.nextBlock;
-
-        //remove the block from it's original parent again
-        if (toRedo.type === 'move-block') {
-            origParent.removeChild(addedBlock);
-        } else { //type is add-var-block; must add back into setVariable block too
-            origParent.removeChild(toRedo.insideBlock);
-            addedBlock
-                .querySelector('wb-value[type="any"]')
-                .appendChild(toRedo.insideBlock);
-        }
-
-        //add block back to where it was before the undo
-        if (nextBlock) {
-            addedTo.insertBefore(addedBlock, nextBlock);
-        } else {
-            addedTo.appendChild(addedBlock);
-        }
-    }
 
     function undoKeyCombo(evt) {
-        if ((Event.keyForEvent(evt) == 'z' && Event.keys['ctrl']) ||
-            (Event.keyForEvent(evt) == 'z' && Event.keys['meta'])) {
+        if ((Event.keyForEvent(evt) == 'z' && Event.keys.ctrl) ||
+            (Event.keyForEvent(evt) == 'z' && Event.keys.meta)) {
             evt.preventDefault();
-            undoEvent();
+            Pasteboard.cancelPasteboard();
+            undoNextEvent();
         }
     }
 
     function redoKeyCombo(evt) {
-        if ((Event.keyForEvent(evt) === 'y' && Event.keys['ctrl']) ||
-            (Event.keyForEvent(evt) === 'z' && Event.keys['meta'] && Event.keys['shift'])) {
+        if ((Event.keyForEvent(evt) === 'y' && Event.keys.ctrl) ||
+            (Event.keyForEvent(evt) === 'z' && Event.keys.meta && Event.keys.shift)) {
             evt.preventDefault();
-            redoEvent();
+            Pasteboard.cancelPasteboard();
+            redoNextEvent();
         }
     }
 
     function handleUndoButton(evt) {
         evt.preventDefault();
-        _gaq.push(['_trackEvent', 'Undo', 'undo']);
-        undoEvent();
+        undoNextEvent();
     }
 
     function handleRedoButton(evt) {
         evt.preventDefault();
-        _gaq.push(['_trackEvent', 'Redo', 'redo']);
-        redoEvent();
+        redoNextEvent();
     }
 
     function setButtonStatus() {
@@ -164,7 +131,7 @@
 
     //add a new event to the undo stack
     function addNewEvent(evt) {
-        redoStack = [];
+        redoStack = []; // clear redoStack when we add a new undo event
         undoStack.push(evt);
         setButtonStatus();
     }
@@ -175,7 +142,11 @@
         handleUndoButton: handleUndoButton,
         handleRedoButton: handleRedoButton,
         addNewEvent: addNewEvent,
-        clearStacks: clearStacks
+        clearStacks: clearStacks,
+        partialUndo: undoEvent,
+        getStacks: function(){
+            return {undoStack: undoStack, redoStack: redoStack}; // for debugging
+        }
     };
 
 })();

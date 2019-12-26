@@ -270,7 +270,7 @@
             nextSibling: this.nextSibling,
             subEvents: this.removeInstances()
         };
-        this.classList.remove('selected selected-block selected-value');
+        this.classList.remove('selected,selected-block,selected-value');
         dom.remove(this);
         return undoEvt;
     };

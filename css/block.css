@@ -87,7 +87,7 @@ wb-expression.dragging {
 }
 
 wb-value {
-    display: block;
+    display: inline-block;
     text-align: right;
     margin-right: 10px;
     white-space: nowrap;

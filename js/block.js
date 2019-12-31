@@ -139,8 +139,8 @@
     }
 
     function setDefaultSlot(element){
-        let tab = dom.child(element, 'svg.slot');
-        if (!tab){
+        let slot = dom.child(element, 'svg.slot');
+        if (!slot){
             element.append(dom.svg('svg', {'class': 'slot', width: 40, height: 12}, [dom.svg('path', {d: tabPath})]));
         }
     }
@@ -1038,10 +1038,6 @@
 
 
     var ContainsProto = Object.create(HTMLElement.prototype);
-
-    ContainsProto.createdCallback = function containsCreated(){
-        setDefaultSlot(this);
-    };
 
     /* You sure love Object.defineProperty, dontcha, Eddie? */
     Object.defineProperty(ContainsProto, 'firstInstruction', {

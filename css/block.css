@@ -73,12 +73,21 @@ wb-step > svg.tab, wb-context > svg.tab{
      fill: white;
  }
  
- wb-contains > svg.slot{
+ /* wb-contains > svg.slot{
      position: absolute;
      display: block;
      left: 34px;
      top: -12px;
      fill: white;
+ } */
+
+ wb-contains::before{
+    content: url("../images/tab.svg");
+    position: absolute;
+    display: block;
+    left: 34px;
+    top: -12px;
+    fill: white;
  }
 
  wb-step, wb-context{
@@ -233,7 +242,7 @@ wb-context > wb-contains {
     background-color: rgba(255, 255, 255, 1.0);
     position: relative;
     margin-bottom: 0;
-    padding-top: 2px;
+    padding-top: 3px;
     padding-left: 5px;
     padding-bottom: 10px;
     border-top-left-radius: 10px;

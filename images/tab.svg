@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="12" id="tab">
+    <path fill="white" stroke="grey" id="tab-shape"
+        d="M 0 12 
+        a 6 6 90 0 0 6 -6 
+        a 6 6 90 0 1 6 -6
+        h 16
+        a 6 6 90 0 1 6 6
+        a 6 6 90 0 0 6 6" />
+</svg>

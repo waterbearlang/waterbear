@@ -10,10 +10,27 @@ wb-expression {
     border-width: 2px;
     border-style: solid;
     margin: 5px 5px 2px 2px;
+    padding-left: 10px;
     float: left;
     clear: left;
     position: relative;
+    z-index: 0;
 }
+
+wb-workspace wb-context, wb-workspace wb-step{
+    margin-top: -2px;
+}
+
+wb-workspace wb-contains{
+    padding-top: 20px;
+    padding-left: 5px;
+    padding-right: 0;
+}
+
+/* header{
+    z-index: 0;
+} */
+
 
 body:not(.block-dragging) wb-step,
 body:not(.block-dragging) wb-context,
@@ -35,6 +52,70 @@ body:not(.block-dragging) wb-expression {
     cursor: -webkit-grabbing;
 }
 
+/* add a tab to steps */
+
+wb-step > svg.tab, wb-context > svg.tab{
+    position: absolute;
+    left: 25px;
+    top: -12px;
+    /* height: 12px; */
+ }
+
+ svg.slot{
+     display: none;
+ }
+
+ wb-step > svg.slot, wb-context > svg.slot{
+     position: absolute;
+     display: block;
+     left: 25px;
+     bottom: -2px;
+     fill: white;
+ }
+ 
+ /* wb-contains > svg.slot{
+     position: absolute;
+     display: block;
+     left: 34px;
+     top: -12px;
+     fill: white;
+ } */
+
+ wb-contains::before{
+    content: url("../images/tab.svg");
+    position: absolute;
+    display: block;
+    left: 34px;
+    top: -12px;
+    fill: white;
+ }
+
+ wb-step, wb-context{
+     padding-bottom: 14px;
+ }
+
+ wb-context > header{
+     margin-bottom: 14px;
+ }
+
+
+
+
+wb-step{
+    padding-bottom: 12px;
+    margin-top: -3px;
+}
+
+wb-context{
+    margin-top: -3px;
+}
+
+wb-context, wb-context > header{
+    padding-bottom: 15px;
+}
+
+/* end tab-related code */
+
 wb-contains.drop-target {
     background-color: #ffffe0;
 }
@@ -42,6 +123,10 @@ wb-contains.drop-target {
 wb-contains.selected-block {
     background-color: #ccffcc;
     /* not sure if selected and drop-target should be the same highlight colour? Which is least surprising? */
+}
+
+wb-workspace > wb-contains{
+    padding-top: 15px;
 }
 
 wb-value.drop-target input:first-of-type {
@@ -72,8 +157,18 @@ wb-context.dragging,
 wb-expression.dragging {
     opacity: 0.5;
     position: absolute;
+    z-index: 10;
     /* Necessary for dragging events. */
     pointer-events: none;
+}
+
+
+wb-context > wb-contains::after{
+    content: "";
+    height: 1px;
+    display: block;
+    visibility: none;
+    clear: both;
 }
 
 
@@ -146,28 +241,20 @@ wb-context > wb-contains {
     display: block;
     background-color: rgba(255, 255, 255, 1.0);
     position: relative;
-    padding-top: 7px;
-    margin-left: 10px;
     margin-bottom: 0;
-    padding-bottom: 1px;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    padding-top: 3px;
+    padding-left: 5px;
+    padding-bottom: 10px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    border-width: 2px 0 2px 2px;
+    /* border-width: 2px 0 2px 2px;
     border-style: solid;
     border-color: inherit;
-    border-right: 0;
+    border-right: 0; */
+    border: 0;
     right: -3px;
 }
 
-wb-context > wb-contains:last-child:after {
-    content: "";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
 
 wb-context > header > wb-disclosure:after {
     content: "▼";

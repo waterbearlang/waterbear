@@ -113,6 +113,38 @@
         return test;
     }
 
+    const tabMarkup = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="12">
+    <path
+        d="M 0 12 
+        a 6 6 90 0 0 6 -6 
+        a 6 6 90 0 1 6 -6
+        h 16
+        a 6 6 90 0 1 6 6
+        a 6 6 90 0 0 6 6" />
+    </svg>
+    `;
+    const tabPath=`M 0 12 
+    a 6 6 90 0 0 6 -6 
+    a 6 6 90 0 1 6 -6
+    h 16
+    a 6 6 90 0 1 6 6
+    a 6 6 90 0 0 6 6`
+
+    function setDefaultTab(element){
+        let tab = dom.child(element, 'svg.tab');
+        if (!tab){
+            element.prepend(dom.svg('svg', {'class': 'tab', width: 40, height: 12}, [dom.svg('path', {d: tabPath})]));
+        }
+    }
+
+    function setDefaultSlot(element){
+        let slot = dom.child(element, 'svg.slot');
+        if (!slot){
+            element.append(dom.svg('svg', {'class': 'slot', width: 40, height: 12}, [dom.svg('path', {d: tabPath})]));
+        }
+    }
+
     /*****************
      *
      *  BlockProto
@@ -356,6 +388,13 @@
 
     var StepProto = Object.create(BlockProto);
 
+    StepProto.createdCallback = function stepCreated() {
+        BlockProto.createdCallback.call(this);
+        setDefaultTab(this);
+        setDefaultSlot(this);
+    };
+
+
     StepProto.getLocals = function stepGetLocals() {
         // For Steps this should work, but for contexts we need to gather the steps and contexts
         return dom.findAll(dom.child(this, 'header'), 'wb-local > *');
@@ -385,8 +424,10 @@
         // Add disclosure, contained, local
         BlockProto.createdCallback.call(this);
         var header = dom.child(this, 'header');
+        setDefaultTab(this);
         setDefaultByTag(header, 'wb-disclosure');
         setDefaultByTag(this, 'wb-contains');
+        setDefaultSlot(this);
     };
 
     ContextProto.childContainers = function childContainers() {
@@ -997,6 +1038,7 @@
 
 
     var ContainsProto = Object.create(HTMLElement.prototype);
+
     /* You sure love Object.defineProperty, dontcha, Eddie? */
     Object.defineProperty(ContainsProto, 'firstInstruction', {
         get: function() {

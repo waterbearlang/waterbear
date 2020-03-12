@@ -3,6 +3,8 @@
  * highlighting selected blocks.
  */
 
+ 
+
 [ns="control"],
 .block-dragging [ns="control"].drop-target,
 .block-dragging [ns="control"].drop-target.selected-block {

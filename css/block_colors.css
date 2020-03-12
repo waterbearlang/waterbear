@@ -3,34 +3,38 @@
  * highlighting selected blocks.
  */
 
- [ns="control"]{
-     --color: hsl(0, 50%, 50%);
-     --border: hsl(0, 50%, 30%);
-     --color-light: hsl(0, 50%, 75%);
-     --border-light: hsl(0, 50%, 60%);
- }
+ /* This can all be further simplified by ghosting dragged blocks and highlighting targets
+    using JavaScript */
 
- [ns="sprite"]{
-    --color: hsl(105, 50%, 50%);
-    --border: hsl(105, 50%, 30%);
-    --color-light: hsl(105, 50%, 75%);
-    --border-light: hsl(105, 50%, 60%);
+[ns="control"]{ --hue: 0; }
+[ns="sprite"]{  --hue: 105; }
+[ns="music"]{ --hue: 210; }
+[ns="sound"]{ --hue: 315; }
+[ns="array"]{ --hue: 60; }
+[ns="boolean"]{ --hue: 165; }
+[ns="stage"]{ --hue: 270; }
+[ns="color"]{ --hue: 15; }
+[ns="image"]{ --hue: 120; }
+[ns="math"]{ --hue: 235; }
+[ns="random"]{ --hue: 330; }
+[ns="vector"]{ --hue: 75; }
+[ns="object"]{ --hue: 180; }
+[ns="string"]{ --hue: 285; }
+[ns="path"]{ --hue: 30; }
+[ns="rect"]{ --hue: 240; }
+[ns="input"]{ --hue: 345; }
+[ns="motion"]{ --hue: 90; }
+[ns="shape"]{ --hue: 195; }
+[ns="geolocation"]{ --hue: 300; }
+[ns="size"]{ --hue: 45; }
+[ns="date"]{ --hue: 55; }
+
+[ns]{
+    --color: hsl(var(--hue), 50%, 50%);
+    --border: hsl(var(--hue), 50%, 30%);
+    --color-light: hsl(var(--hue), 50%, 75%);
+    --border-light: hsl(var(--hue), 50%, 60%);
 }
-
-[ns="music"]{
-    --color: hsl(210, 50%, 50%);
-    --border: hsl(210, 50%, 30%);
-    --color-light: hsl(210, 50%, 75%);
-    --border-light: hsl(210, 50%, 60%);
-}
-
-[ns="sound"]{
-    --color: hsl(315, 50%, 50%);
-    --border: hsl(315, 50%, 30%);
-    --color-light: hsl(315, 50%, 75%);
-    --border-light: hsl(315, 50%, 60%);
-}
-
 
 [ns],
 .block-dragging .drop-target,
@@ -49,654 +53,47 @@
     stroke: var(--border-light);
 }
 
-[ns="array"],
-.block-dragging [ns="array"].drop-target,
-.block-dragging [ns="array"].drop-target.selected-block {
-    background-color: hsl(60, 50%, 50%);
-    border-color: hsl(60, 50%, 30%);
-    fill: hsl(60, 50%, 50%);
-    stroke: hsl(60, 50%, 30%);
-}
-
-.block-dragging [ns="array"],
-.block-dragging [ns="array"].selected-block {
-    background-color: hsl(60, 50%, 75%);
-    border-color: hsl(60, 50%, 60%);
-    fill: hsl(60, 50%, 75%);
-    stroke: hsl(60, 50%, 60%);
-}
-
-[ns="boolean"],
-.block-dragging [ns="boolean"].drop-target,
-.block-dragging [ns="boolean"].drop-target.selected-block {
-    background-color: hsl(165, 50%, 50%);
-    border-color: hsl(165, 50%, 30%);
-    fill: hsl(165, 50%, 50%);
-    stroke: hsl(165, 50%, 30%);
-}
-
-.block-dragging [ns="boolean"],
-.block-dragging [ns="boolean"].selected-block {
-    background-color: hsl(165, 50%, 75%);
-    border-color: hsl(165, 50%, 60%);
-    fill: hsl(165, 50%, 75%);
-    stroke: hsl(165, 50%, 60%);
-}
-
-[ns="stage"],
-.block-dragging [ns="stage"].drop-target,
-.block-dragging [ns="stage"].drop-target.selected-block {
-    background-color: hsl(270, 50%, 50%);
-    border-color: hsl(270, 50%, 30%);
-    fill: hsl(270, 50%, 50%);
-    stroke: hsl(270, 50%, 30%);
-}
-
-.block-dragging [ns="stage"],
-.block-dragging [ns="stage"].selected-block {
-    background-color: hsl(270, 50%, 75%);
-    border-color: hsl(270, 50%, 60%);
-    fill: hsl(270, 50%, 75%);
-    stroke: hsl(270, 50%, 60%);
-}
-
-[ns="color"],
-.block-dragging [ns="color"].drop-target,
-.block-dragging [ns="color"].drop-target.selected-block {
-    background-color: hsl(15, 50%, 50%);
-    border-color: hsl(15, 50%, 30%);
-    fill: hsl(15, 50%, 50%);
-    stroke: hsl(15, 50%, 30%);
-}
-
-.block-dragging [ns="color"],
-.block-dragging [ns="color"].selected-block {
-    background-color: hsl(15, 50%, 75%);
-    border-color: hsl(15, 50%, 60%);
-    fill: hsl(15, 50%, 75%);
-    stroke: hsl(15, 50%, 60%);
-}
-
-[ns="image"],
-.block-dragging [ns="image"].drop-target,
-.block-dragging [ns="image"].drop-target.selected-block {
-    background-color: hsl(120, 50%, 50%);
-    border-color: hsl(120, 50%, 30%);
-    fill: hsl(120, 50%, 50%);
-    stroke: hsl(120, 50%, 30%);
-}
-
-.block-dragging [ns="image"],
-.block-dragging [ns="image"].selected-block {
-    background-color: hsl(120, 50%, 75%);
-    border-color: hsl(120, 50%, 60%);
-    fill: hsl(120, 50%, 75%);
-    stroke: hsl(120, 50%, 60%);
-}
-
-[ns="math"],
-.block-dragging [ns="math"].drop-target,
-.block-dragging [ns="math"].drop-target.selected-block{
-    background-color: hsl(225, 50%, 50%);
-    border-color: hsl(225, 50%, 30%);
-    fill: hsl(225, 50%, 50%);
-    stroke: hsl(225, 50%, 30%);
-}
-
-.block-dragging [ns="math"],
-.block-dragging [ns="math"].selected-block {
-    background-color: hsl(225, 50%, 75%);
-    border-color: hsl(225, 50%, 60%);
-    fill: hsl(225, 50%, 75%);
-    stroke: hsl(225, 50%, 60%);
-}
-
-[ns="random"],
-.block-dragging [ns="random"].drop-target,
-.block-dragging [ns="random"].drop-target.selected-block {
-    background-color: hsl(330, 50%, 50%);
-    border-color: hsl(330, 50%, 30%);
-    fill: hsl(330, 50%, 50%);
-    stroke: hsl(330, 50%, 30%);
-}
-
-.block-dragging [ns="random"],
-.block-dragging [ns="random"].selected-block {
-    background-color: hsl(330, 50%, 75%);
-    border-color: hsl(330, 50%, 60%);
-    fill: hsl(330, 50%, 75%);
-    stroke: hsl(330, 50%, 60%);
-}
-
-[ns="vector"],
-.block-dragging [ns="vector"].drop-target,
-.block-dragging [ns="vector"].drop-target.selected-block {
-    background-color: hsl(75, 50%, 50%);
-    border-color: hsl(75, 50%, 30%);
-    fill: hsl(75, 50%, 50%);
-    stroke: hsl(75, 50%, 30%);
-}
-
-.block-dragging [ns="vector"],
-.block-dragging [ns="vector"].selected-block {
-    background-color: hsl(75, 50%, 75%);
-    border-color: hsl(75, 50%, 60%);
-    fill: hsl(75, 50%, 75%);
-    stroke: hsl(75, 50%, 60%);
-}
-
-[ns="object"],
-.block-dragging [ns="object"].drop-target,
-.block-dragging [ns="object"].drop-target.selected-block {
-    background-color: hsl(180, 50%, 50%);
-    border-color: hsl(180, 50%, 30%);
-    fill: hsl(180, 50%, 50%);
-    stroke: hsl(180, 50%, 30%);
-}
-
-.block-dragging [ns="object"],
-.block-dragging [ns="object"].selected-block {
-    background-color: hsl(180, 50%, 75%);
-    border-color: hsl(180, 50%, 60%);
-    fill: hsl(180, 50%, 75%);
-    stroke: hsl(180, 50%, 60%);
-}
-
-[ns="string"],
-.block-dragging [ns="string"].drop-target,
-.block-dragging [ns="string"].drop-target.selected-block {
-    background-color: hsl(285, 50%, 50%);
-    border-color: hsl(285, 50%, 30%);
-    fill: hsl(285, 50%, 50%);
-    stroke: hsl(285, 50%, 30%);
-}
-
-.block-dragging [ns="string"],
-.block-dragging [ns="string"].selected-block {
-    background-color: hsl(285, 50%, 75%);
-    border-color: hsl(285, 50%, 60%);
-    fill: hsl(285, 50%, 75%);
-    stroke: hsl(285, 50%, 60%);
-}
-
-[ns="path"],
-.block-dragging [ns="path"].drop-target,
-.block-dragging [ns="path"].drop-target.selected-block{
-    background-color: hsl(30, 50%, 50%);
-    border-color: hsl(30, 50%, 30%);
-    fill: hsl(30, 50%, 50%);
-    stroke: hsl(30, 50%, 30%);
-}
-
-.block-dragging [ns="path"],
-.block-dragging [ns="path"].selected-block {
-    background-color: hsl(30, 50%, 75%);
-    border-color: hsl(30, 50%, 60%);
-    background-fill: hsl(30, 50%, 75%);
-    border-stroke: hsl(30, 50%, 60%);
-}
-
-[ns="rect"],
-.block-dragging [ns="rect"].drop-target,
-.block-dragging [ns="rect"].drop-target.selected-block{
-    background-color: hsl(240, 50%, 50%);
-    border-color: hsl(240, 50%, 30%);
-    fill: hsl(240, 50%, 50%);
-    stroke: hsl(240, 50%, 30%);
-}
-
-.block-dragging [ns="rect"],
-.block-dragging [ns="rect"].selected-block {
-    background-color: hsl(240, 50%, 75%);
-    border-color: hsl(240, 50%, 60%);
-    fill: hsl(240, 50%, 75%);
-    stroke: hsl(240, 50%, 60%);
-}
-
-[ns="input"],
-.block-dragging [ns="input"].drop-target,
-.block-dragging [ns="input"].drop-target.selected-block {
-    background-color: hsl(345, 50%, 50%);
-    border-color: hsl(345, 50%, 30%);
-    fill: hsl(345, 50%, 50%);
-    stroke: hsl(345, 50%, 30%);
-}
-
-.block-dragging [ns="input"],
-.block-dragging [ns="input"].selected-block {
-    background-color: hsl(345, 50%, 75%);
-    border-color: hsl(345, 50%, 60%);
-    fill: hsl(345, 50%, 75%);
-    stroke: hsl(345, 50%, 60%);
-}
-
-[ns="motion"],
-.block-dragging [ns="motion"].drop-target,
-.block-dragging [ns="motion"].drop-target.selected-block {
-    background-color: hsl(90, 50%, 50%);
-    border-color: hsl(90, 50%, 30%);
-    fill: hsl(90, 50%, 50%);
-    stroke: hsl(90, 50%, 30%);
-}
-
-.block-dragging [ns="motion"],
-.block-dragging [ns="motion"].selected-block {
-    background-color: hsl(90, 50%, 75%);
-    border-color: hsl(90, 50%, 60%);
-    fill: hsl(90, 50%, 75%);
-    stroke: hsl(90, 50%, 60%);
-}
-
-[ns="shape"],
-.block-dragging [ns="shape"].drop-target,
-.block-dragging [ns="shape"].drop-target.selected-block {
-    background-color: hsl(195, 50%, 50%);
-    border-color: hsl(195, 50%, 30%);
-    fill: hsl(195, 50%, 50%);
-    stroke: hsl(195, 50%, 30%);
-}
-
-.block-dragging [ns="shape"],
-.block-dragging [ns="shape"].selected-block {
-    background-color: hsl(195, 50%, 75%);
-    border-color: hsl(195, 50%, 60%);
-    fill: hsl(195, 50%, 75%);
-    stroke: hsl(195, 50%, 60%);
-}
-
-[ns="geolocation"],
-.block-dragging [ns="geolocation"].drop-target,
-.block-dragging [ns="geolocation"].drop-target.selected-block {
-    background-color: hsl(300, 50%, 50%);
-    border-color: hsl(300, 50%, 30%);
-    fill: hsl(300, 50%, 50%);
-    stroke: hsl(300, 50%, 30%);
-}
-
-.block-dragging [ns="geolocation"],
-.block-dragging [ns="geolocation"].selected-block {
-    background-color: hsl(300, 50%, 75%);
-    border-color: hsl(300, 50%, 60%);
-    fill: hsl(300, 50%, 75%);
-    stroke: hsl(300, 50%, 60%);
-}
-
-[ns="size"],
-.block-dragging [ns="size"].drop-target,
-.block-dragging [ns="size"].drop-target.selected-block{
-    background-color: hsl(45, 50%, 50%);
-    border-color: hsl(45, 50%, 30%);
-    fill: hsl(45, 50%, 50%);
-    stroke: hsl(45, 50%, 30%);
-}
-
-.block-dragging [ns="size"],
-.block-dragging [ns="size"].selected-block {
-    background-color: hsl(45, 50%, 75%);
-    border-color: hsl(45, 50%, 60%);
-    fill: hsl(45, 50%, 75%);
-    stroke: hsl(45, 50%, 60%);
-}
-
-[ns="date"],
-.block-dragging [ns="date"].drop-target,
-.block-dragging [ns="date"].drop-target.selected-block{
-    background-color: hsl(55, 76%, 70%);
-    border-color: hsl(53, 60%, 53%);
-    fill: hsl(55, 76%, 70%);
-    stroke: hsl(53, 60%, 53%);
-}
-
-.block-dragging [ns="date"],
-.block-dragging [ns="date"].selected-block {
-    background-color: hsl(55, 76%, 70%);
-    border-color: hsl(53, 60%, 53%);
-    fill: hsl(55, 76%, 70%);
-    stroke: hsl(53, 60%, 53%);
-}
-
 
 /* Expression block colours by return type, with handling
  * for dimming while dragging, highlighting drop-targets,
  * and highlighting selected blocks.
  */
 
-wb-expression[type="number"].selected-block {
-    background-color: hsl(225, 95%, 50%);
-    border-color: hsl(225, 50%, 75%);
+[type=number]{ --hue: 225; }
+[type="color"]{ --hue: 15; }
+[type="text"]{ --hue: 150; }
+[type="boolean"]{ --hue: 165; }
+[type="sprite"]{ --hue: 105; }
+[type="any"]{ --hue: 0; }
+[type="sound"]{ --hue: 315; }
+[type="array"]{ --hue: 60; }
+[type="wb-image"]{ --hue: 120; }
+[type="shape"]{ --hue: 195; }
+[type="vector"]{ --hue: 75; }
+[type="object"]{ --hue: 180; }
+[type="path"]{ --hue: 30; }
+[type="pathset"]{ --hue: 30; }
+[type="rect"]{ --hue: 135; }
+[type="string"]{ --hue: 240; }
+[type="geolocation"]{ --hue: 285; }
+[type="size"]{ --hue: 300; }
+[type="motion"]{ --hue: 45; }
+[type="date"]{ --hue: 90; }
+
+wb-expression.selected-block {
+    background-color: hsl(var(--hue), 95%, 50%);
+    border-color: hsl(var(--hue), 50%, 75%);
 }
 
-wb-expression[type="number"],
-.block-dragging wb-expression[type="number"].drop-target {
-    background-color: hsl(225, 50%, 50%);
-    border-color: hsl(225, 50%, 30%);
+wb-expression,
+.block-dragging wb-expression.drop-target {
+    background-color: hsl(var(--hue), 50%, 50%);
+    border-color: hsl(var(--hue), 50%, 30%);
 }
 
-.block-dragging wb-expression[type="number"],
-.block-dragging wb-expression[type="number"].selected-block {
-    background-color: hsl(225, 50%, 75%);
-    border-color: hsl(225, 50%, 60%);
+.block-dragging wb-expression,
+.block-dragging wb-expression.selected-block {
+    background-color: hsl(var(--hue), 50%, 75%);
+    border-color: hsl(var(--hue), 9%, 52%);
 }
 
-wb-expression[type="color"].selected-block {
-    background-color: hsl(15, 95%, 50%);
-    border-color: hsl(15, 50%, 75%);
-}
-
-wb-expression[type="color"],
-.block-dragging wb-expression[type="color"].drop-target {
-    background-color: hsl(15, 50%, 50%);
-    border-color: hsl(15, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="color"],
-.block-dragging wb-expression[type="color"].selected-block {
-    background-color: hsl(15, 50%, 75%);
-    border-color: hsl(15, 50%, 60%);
-}
-
-wb-expression[type="text"].selected-block {
-    background-color: hsl(150, 95%, 50%);
-    border-color: hsl(150, 50%, 75%);
-}
-
-wb-expression[type="text"],
-.block-dragging wb-expression[type="text"].drop-target {
-    background-color: hsl(150, 50%, 50%);
-    border-color: hsl(150, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="text"],
-.block-dragging wb-expression[type="text"].selected-block {
-    background-color: hsl(150, 50%, 75%);
-    border-color: hsl(150, 50%, 60%);
-}
-
-wb-expression[type="boolean"].selected-block {
-    background-color: hsl(165, 95%, 50%);
-    border-color: hsl(165, 50%, 75%);
-}
-
-wb-expression[type="boolean"],
-.block-dragging wb-expression[type="boolean"].drop-target {
-    background-color: hsl(165, 50%, 50%);
-    border-color: hsl(165, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="boolean"],
-.block-dragging wb-expression[type="boolean"].selected-block {
-    background-color: hsl(165, 50%, 75%);
-    border-color: hsl(165, 50%, 60%);
-}
-
-wb-expression[type="sprite"].selected-block {
-    background-color: hsl(105, 95%, 50%);
-    border-color: hsl(105, 50%, 75%);
-}
-
-wb-expression[type="sprite"],
-.block-dragging wb-expression[type="sprite"].drop-target {
-    background-color: hsl(105, 50%, 50%);
-    border-color: hsl(105, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="sprite"],
-.block-dragging wb-expression[type="sprite"].selected-block {
-    background-color: hsl(105, 50%, 75%);
-    border-color: hsl(105, 50%, 60%);
-}
-
-wb-expression[type="any"].selected-block {
-    background-color: hsl(0, 95%, 50%);
-    border-color: hsl(0, 50%, 75%);
-}
-
-wb-expression[type="any"],
-.block-dragging wb-expression[type="any"].drop-target {
-    background-color: hsl(0, 50%, 50%);
-    border-color: hsl(0, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="any"],
-.block-dragging wb-expression[type="any"].selected-block {
-    background-color: hsl(0, 50%, 75%);
-    border-color: hsl(0, 50%, 60%);
-}
-
-wb-expression[type="sound"].selected-block {
-    background-color: hsl(315, 95%, 50%);
-    border-color: hsl(315, 50%, 75%);
-}
-
-wb-expression[type="sound"],
-.block-dragging wb-expression[type="sound"].drop-target {
-    background-color: hsl(315, 50%, 50%);
-    border-color: hsl(315, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="sound"],
-.block-dragging wb-expression[type="sound"].selected-block {
-    background-color: hsl(315, 50%, 75%);
-    border-color: hsl(315, 50%, 60%);
-}
-
-wb-expression[type="array"].selected-block {
-    background-color: hsl(60, 95%, 50%);
-    border-color: hsl(60, 50%, 75%);
-}
-
-wb-expression[type="array"],
-.block-dragging wb-expression[type="array"].drop-target {
-    background-color: hsl(60, 50%, 50%);
-    border-color: hsl(60, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="array"],
-.block-dragging wb-expression[type="array"].selected-block {
-    background-color: hsl(60, 50%, 75%);
-    border-color: hsl(60, 50%, 60%);
-}
-
-wb-expression[type="wb-image"].selected-block {
-    background-color: hsl(120, 95%, 50%);
-    border-color: hsl(120, 50%, 75%);
-}
-
-wb-expression[type="wb-image"],
-.block-dragging wb-expression[type="wb-image"].drop-target {
-    background-color: hsl(120, 50%, 50%);
-    border-color: hsl(120, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="wb-image"],
-.block-dragging wb-expression[type="wb-image"].selected-block {
-    background-color: hsl(120, 50%, 75%);
-    border-color: hsl(120, 50%, 60%);
-}
-
-wb-expression[type="shape"].selected-block {
-    background-color: hsl(195, 95%, 50%);
-    border-color: hsl(195, 50%, 75%);
-}
-
-wb-expression[type="shape"],
-.block-dragging wb-expression[type="shape"].drop-target {
-    background-color: hsl(195, 50%, 50%);
-    border-color: hsl(195, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="shape"],
-.block-dragging wb-expression[type="shape"].selected-block {
-    background-color: hsl(195, 50%, 75%);
-    border-color: hsl(195, 50%, 60%);
-}
-
-wb-expression[type="vector"].selected-block {
-    background-color: hsl(75, 95%, 50%);
-    border-color: hsl(75, 50%, 75%);
-}
-
-wb-expression[type="vector"],
-.block-dragging wb-expression[type="vector"].drop-target {
-    background-color: hsl(75, 50%, 50%);
-    border-color: hsl(75, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="vector"],
-.block-dragging wb-expression[type="vector"].selected-block {
-    background-color: hsl(75, 50%, 75%);
-    border-color: hsl(75, 50%, 60%);
-}
-
-wb-expression[type="object"].selected-block {
-    background-color: hsl(180, 95%, 50%);
-    border-color: hsl(180, 50%, 75%);
-}
-
-wb-expression[type="vector"],
-.block-dragging wb-expression[type="vector"].drop-target {
-    background-color: hsl(180, 50%, 50%);
-    border-color: hsl(180, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="vector"],
-.block-dragging wb-expression[type="vector"].selected-block {
-    background-color: hsl(180, 50%, 75%);
-    border-color: hsl(180, 50%, 60%);
-}
-
-wb-expression[type="path"].selected-block {
-    background-color: hsl(30, 95%, 50%);
-    border-color: hsl(30, 50%, 75%);
-}
-
-wb-expression[type="path"],
-.block-dragging wb-expression[type="path"].drop-target {
-    background-color: hsl(30, 50%, 50%);
-    border-color: hsl(30, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="path"],
-.block-dragging wb-expression[type="path"].selected-block {
-    background-color: hsl(30, 50%, 75%);
-    border-color: hsl(30, 50%, 60%);
-}
-
-wb-expression[type="pathset"].selected-block {
-    background-color: hsl(30, 95%, 50%);
-    border-color: hsl(30, 50%, 75%);
-}
-
-wb-expression[type="pathset"],
-.block-dragging wb-expression[type="pathset"].drop-target {
-    background-color: hsl(30, 50%, 50%);
-    border-color: hsl(30, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="pathset"],
-.block-dragging wb-expression[type="pathset"].selected-block {
-    background-color: hsl(30, 50%, 75%);
-    border-color: hsl(30, 50%, 60%);
-}
-
-wb-expression[type="rect"].selected-block {
-    background-color: hsl(135, 95%, 50%);
-    border-color: hsl(135, 50%, 75%);
-}
-
-wb-expression[type="rect"],
-.block-dragging wb-expression[type="rect"].drop-target {
-    background-color: hsl(135, 50%, 50%);
-    border-color: hsl(135, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="rect"],
-.block-dragging wb-expression[type="rect"].selected-block {
-    background-color: hsl(135, 50%, 75%);
-    border-color: hsl(135, 50%, 60%);
-}
-
-wb-expression[type="string"].selected-block {
-    background-color: hsl(240, 95%, 50%);
-    border-color: hsl(240, 50%, 75%);
-}
-
-wb-expression[type="string"],
-.block-dragging wb-expression[type="string"].drop-target {
-    background-color: hsl(240, 50%, 50%);
-    border-color: hsl(240, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="string"],
-.block-dragging wb-expression[type="string"].selected-block {
-    background-color: hsl(240, 50%, 75%);
-    border-color: hsl(240, 50%, 60%);
-}
-
-wb-expression[type="geolocation"].selected-block {
-    background-color: hsl(285, 95%, 50%);
-    border-color: hsl(285, 50%, 75%);
-}
-
-wb-expression[type="geolocation"],
-.block-dragging wb-expression[type="geolocation"].drop-target {
-    background-color: hsl(285, 50%, 50%);
-    border-color: hsl(285, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="geolocation"],
-.block-dragging wb-expression[type="geolocation"].selected-block {
-    background-color: hsl(285, 50%, 75%);
-    border-color: hsl(285, 50%, 60%);
-}
-
-wb-expression[type="size"].selected-block {
-    background-color: hsl(300, 95%, 50%);
-    border-color: hsl(300, 50%, 75%);
-}
-
-wb-expression[type="size"],
-.block-dragging wb-expression[type="size"].drop-target {
-    background-color: hsl(300, 50%, 50%);
-    border-color: hsl(300, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="size"],
-.block-dragging wb-expression[type="size"].selected-block {
-    background-color: hsl(300, 50%, 75%);
-    border-color: hsl(300, 50%, 60%);
-}
-
-wb-expression[type="motion"].selected-block {
-    background-color: hsl(45, 95%, 50%);
-    border-color: hsl(45, 50%, 75%);
-}
-
-wb-expression[type="motion"],
-.block-dragging wb-expression[type="motion"].drop-target {
-    background-color: hsl(45, 50%, 50%);
-    border-color: hsl(45, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="motion"],
-.block-dragging wb-expression[type="motion"].selected-block {
-    background-color: hsl(45, 50%, 75%);
-    border-color: hsl(45, 50%, 60%);
-}
-
-wb-expression[type="date"].selected-block {
-    background-color: hsl(90, 95%, 50%);
-    border-color: hsl(90, 50%, 75%);
-}
-
-wb-expression[type="date"],
-.block-dragging wb-expression[type="date"].drop-target {
-    background-color: hsl(90, 50%, 50%);
-    border-color: hsl(90, 50%, 30%);
-}
-
-.block-dragging wb-expression[type="date"],
-.block-dragging wb-expression[type="date"].selected-block {
-    background-color: hsl(90, 50%, 75%);
-    border-color: hsl(90, 50%, 60%);
-}

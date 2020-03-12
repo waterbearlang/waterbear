@@ -25,6 +25,7 @@ wb-workspace wb-contains{
     padding-top: 20px;
     padding-left: 5px;
     padding-right: 0;
+    overflow: auto;
 }
 
 /* header{

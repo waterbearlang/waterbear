@@ -21,11 +21,15 @@ wb-workspace wb-context, wb-workspace wb-step{
     margin-top: -2px;
 }
 
+wb-workspace{
+    overflow: auto;
+}
+
 wb-workspace wb-contains{
     padding-top: 20px;
     padding-left: 5px;
     padding-right: 0;
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 /* header{

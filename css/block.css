@@ -113,6 +113,7 @@ wb-context{
 
 wb-context, wb-context > header{
     padding-bottom: 15px;
+    padding-left: 10px;
 }
 
 /* end tab-related code */

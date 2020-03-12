@@ -78,14 +78,6 @@ wb-step > svg.tab, wb-context > svg.tab{
      fill: white;
  }
  
- /* wb-contains > svg.slot{
-     position: absolute;
-     display: block;
-     left: 34px;
-     top: -12px;
-     fill: white;
- } */
-
  wb-contains::before{
     content: url("../images/tab.svg");
     position: absolute;
@@ -95,16 +87,10 @@ wb-step > svg.tab, wb-context > svg.tab{
     fill: white;
  }
 
- wb-step, wb-context{
+ wb-step, 
+ wb-context{
      padding-bottom: 14px;
  }
-
- wb-context > header{
-     margin-bottom: 14px;
- }
-
-
-
 
 wb-step{
     padding-bottom: 12px;
@@ -115,9 +101,16 @@ wb-context{
     margin-top: -3px;
 }
 
-wb-context, wb-context > header{
+wb-context, 
+wb-context > header{
     padding-bottom: 15px;
     padding-left: 10px;
+}
+
+wb-context,
+wb-context > contains{
+    width: 200px;
+    overflow: visible;
 }
 
 /* end tab-related code */

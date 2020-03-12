@@ -3,74 +3,50 @@
  * highlighting selected blocks.
  */
 
- 
+ [ns="control"]{
+     --color: hsl(0, 50%, 50%);
+     --border: hsl(0, 50%, 30%);
+     --color-light: hsl(0, 50%, 75%);
+     --border-light: hsl(0, 50%, 60%);
+ }
 
-[ns="control"],
-.block-dragging [ns="control"].drop-target,
-.block-dragging [ns="control"].drop-target.selected-block {
-    background-color: hsl(0, 50%, 50%);
-    border-color: hsl(0, 50%, 30%);
-    fill: hsl(0, 50%, 50%);
-    stroke: hsl(0, 50%, 30%);
+ [ns="sprite"]{
+    --color: hsl(105, 50%, 50%);
+    --border: hsl(105, 50%, 30%);
+    --color-light: hsl(105, 50%, 75%);
+    --border-light: hsl(105, 50%, 60%);
 }
 
-.block-dragging [ns="control"],
-.block-dragging [ns="control"].selected-block {
-    background-color: hsl(0, 50%, 75%);
-    border-color: hsl(0, 50%, 60%);
-    fill: hsl(0, 50%, 75%);
-    stroke: hsl(0, 50%, 60%);
+[ns="music"]{
+    --color: hsl(210, 50%, 50%);
+    --border: hsl(210, 50%, 30%);
+    --color-light: hsl(210, 50%, 75%);
+    --border-light: hsl(210, 50%, 60%);
 }
 
-[ns="sprite"],
-.block-dragging [ns="sprite"].drop-target,
-.block-dragging [ns="sprite"].drop-target.selected-block {
-    background-color: hsl(105, 50%, 50%);
-    border-color: hsl(105, 50%, 30%);
-    fill: hsl(105, 50%, 50%);
-    stroke: hsl(105, 50%, 30%);
+[ns="sound"]{
+    --color: hsl(315, 50%, 50%);
+    --border: hsl(315, 50%, 30%);
+    --color-light: hsl(315, 50%, 75%);
+    --border-light: hsl(315, 50%, 60%);
 }
 
-.block-dragging [ns="sprite"],
-.block-dragging [ns="sprite"].selected-block {
-    background-color: hsl(105, 50%, 75%);
-    border-color: hsl(105, 50%, 60%);
-    fill: hsl(105, 50%, 75%);
-    stroke: hsl(105, 50%, 60%);
+
+[ns],
+.block-dragging .drop-target,
+.block-dragging .drop-target.selected-block {
+    background-color: var(--color);
+    border-color: var(--border);
+    fill: var(--color);
+    stroke: var(--border);
 }
 
-[ns="music"],
-.block-dragging [ns="music"].drop-target,
-.block-dragging [ns="music"].drop-target.selected-block {
-    background-color: hsl(210, 50%, 50%);
-    border-color: hsl(210, 50%, 30%);
-    fill: hsl(210, 50%, 50%);
-    stroke: hsl(210, 50%, 30%);
-}
-
-.block-dragging [ns="music"],
-.block-dragging [ns="music"].selected-block {
-    background-color: hsl(210, 50%, 75%);
-    border-color: hsl(210, 50%, 60%);
-    fill: hsl(210, 50%, 75%);
-    stroke: hsl(210, 50%, 60%);
-}
-
-[ns="sound"],
-.block-dragging [ns="sound"].drop-target,
-.block-dragging [ns="sound"].drop-target.selected-block {
-    background-color: hsl(315, 50%, 50%);
-    border-color: hsl(315, 50%, 30%);
-    fill: hsl(315, 50%, 50%);
-    stroke: hsl(315, 50%, 30%);
-}
-
-.block-dragging [ns="sound"],
-.block-dragging [ns="sound"].selected-block {
-    background-color: hsl(315, 50%, 75%);
-    border-color: hsl(315, 50%, 60%);
-    fill: hsl(315, 50%, 75%);
-    stroke: hsl(315, 50%, 60%);
+.block-dragging [ns],
+.block-dragging .selected-block {
+    background-color: var(--color-light);
+    border-color: var(--border-light);
+    fill: var(--color-light);
+    stroke: var(--border-light);
 }
 
 [ns="array"],
@@ -385,342 +361,342 @@
  * and highlighting selected blocks.
  */
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="number"].selected-block {
     background-color: hsl(225, 95%, 50%);
     border-color: hsl(225, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="number"],
+.block-dragging wb-expression[type="number"].drop-target {
     background-color: hsl(225, 50%, 50%);
     border-color: hsl(225, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="number"],
+.block-dragging wb-expression[type="number"].selected-block {
     background-color: hsl(225, 50%, 75%);
     border-color: hsl(225, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="color"].selected-block {
     background-color: hsl(15, 95%, 50%);
     border-color: hsl(15, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="color"],
+.block-dragging wb-expression[type="color"].drop-target {
     background-color: hsl(15, 50%, 50%);
     border-color: hsl(15, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="color"],
+.block-dragging wb-expression[type="color"].selected-block {
     background-color: hsl(15, 50%, 75%);
     border-color: hsl(15, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="text"].selected-block {
     background-color: hsl(150, 95%, 50%);
     border-color: hsl(150, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="text"],
+.block-dragging wb-expression[type="text"].drop-target {
     background-color: hsl(150, 50%, 50%);
     border-color: hsl(150, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="text"],
+.block-dragging wb-expression[type="text"].selected-block {
     background-color: hsl(150, 50%, 75%);
     border-color: hsl(150, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="boolean"].selected-block {
     background-color: hsl(165, 95%, 50%);
     border-color: hsl(165, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="boolean"],
+.block-dragging wb-expression[type="boolean"].drop-target {
     background-color: hsl(165, 50%, 50%);
     border-color: hsl(165, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="boolean"],
+.block-dragging wb-expression[type="boolean"].selected-block {
     background-color: hsl(165, 50%, 75%);
     border-color: hsl(165, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="sprite"].selected-block {
     background-color: hsl(105, 95%, 50%);
     border-color: hsl(105, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="sprite"],
+.block-dragging wb-expression[type="sprite"].drop-target {
     background-color: hsl(105, 50%, 50%);
     border-color: hsl(105, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="sprite"],
+.block-dragging wb-expression[type="sprite"].selected-block {
     background-color: hsl(105, 50%, 75%);
     border-color: hsl(105, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="any"].selected-block {
     background-color: hsl(0, 95%, 50%);
     border-color: hsl(0, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="any"],
+.block-dragging wb-expression[type="any"].drop-target {
     background-color: hsl(0, 50%, 50%);
     border-color: hsl(0, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="any"],
+.block-dragging wb-expression[type="any"].selected-block {
     background-color: hsl(0, 50%, 75%);
     border-color: hsl(0, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="sound"].selected-block {
     background-color: hsl(315, 95%, 50%);
     border-color: hsl(315, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="sound"],
+.block-dragging wb-expression[type="sound"].drop-target {
     background-color: hsl(315, 50%, 50%);
     border-color: hsl(315, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="sound"],
+.block-dragging wb-expression[type="sound"].selected-block {
     background-color: hsl(315, 50%, 75%);
     border-color: hsl(315, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="array"].selected-block {
     background-color: hsl(60, 95%, 50%);
     border-color: hsl(60, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="array"],
+.block-dragging wb-expression[type="array"].drop-target {
     background-color: hsl(60, 50%, 50%);
     border-color: hsl(60, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="array"],
+.block-dragging wb-expression[type="array"].selected-block {
     background-color: hsl(60, 50%, 75%);
     border-color: hsl(60, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="wb-image"].selected-block {
     background-color: hsl(120, 95%, 50%);
     border-color: hsl(120, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="wb-image"],
+.block-dragging wb-expression[type="wb-image"].drop-target {
     background-color: hsl(120, 50%, 50%);
     border-color: hsl(120, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="wb-image"],
+.block-dragging wb-expression[type="wb-image"].selected-block {
     background-color: hsl(120, 50%, 75%);
     border-color: hsl(120, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="shape"].selected-block {
     background-color: hsl(195, 95%, 50%);
     border-color: hsl(195, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="shape"],
+.block-dragging wb-expression[type="shape"].drop-target {
     background-color: hsl(195, 50%, 50%);
     border-color: hsl(195, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="shape"],
+.block-dragging wb-expression[type="shape"].selected-block {
     background-color: hsl(195, 50%, 75%);
     border-color: hsl(195, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="vector"].selected-block {
     background-color: hsl(75, 95%, 50%);
     border-color: hsl(75, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="vector"],
+.block-dragging wb-expression[type="vector"].drop-target {
     background-color: hsl(75, 50%, 50%);
     border-color: hsl(75, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="vector"],
+.block-dragging wb-expression[type="vector"].selected-block {
     background-color: hsl(75, 50%, 75%);
     border-color: hsl(75, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="object"].selected-block {
     background-color: hsl(180, 95%, 50%);
     border-color: hsl(180, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="vector"],
+.block-dragging wb-expression[type="vector"].drop-target {
     background-color: hsl(180, 50%, 50%);
     border-color: hsl(180, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="vector"],
+.block-dragging wb-expression[type="vector"].selected-block {
     background-color: hsl(180, 50%, 75%);
     border-color: hsl(180, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="path"].selected-block {
     background-color: hsl(30, 95%, 50%);
     border-color: hsl(30, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="path"],
+.block-dragging wb-expression[type="path"].drop-target {
     background-color: hsl(30, 50%, 50%);
     border-color: hsl(30, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="path"],
+.block-dragging wb-expression[type="path"].selected-block {
     background-color: hsl(30, 50%, 75%);
     border-color: hsl(30, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="pathset"].selected-block {
     background-color: hsl(30, 95%, 50%);
     border-color: hsl(30, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="pathset"],
+.block-dragging wb-expression[type="pathset"].drop-target {
     background-color: hsl(30, 50%, 50%);
     border-color: hsl(30, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="pathset"],
+.block-dragging wb-expression[type="pathset"].selected-block {
     background-color: hsl(30, 50%, 75%);
     border-color: hsl(30, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="rect"].selected-block {
     background-color: hsl(135, 95%, 50%);
     border-color: hsl(135, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="rect"],
+.block-dragging wb-expression[type="rect"].drop-target {
     background-color: hsl(135, 50%, 50%);
     border-color: hsl(135, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="rect"],
+.block-dragging wb-expression[type="rect"].selected-block {
     background-color: hsl(135, 50%, 75%);
     border-color: hsl(135, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="string"].selected-block {
     background-color: hsl(240, 95%, 50%);
     border-color: hsl(240, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="string"],
+.block-dragging wb-expression[type="string"].drop-target {
     background-color: hsl(240, 50%, 50%);
     border-color: hsl(240, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="string"],
+.block-dragging wb-expression[type="string"].selected-block {
     background-color: hsl(240, 50%, 75%);
     border-color: hsl(240, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="geolocation"].selected-block {
     background-color: hsl(285, 95%, 50%);
     border-color: hsl(285, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="geolocation"],
+.block-dragging wb-expression[type="geolocation"].drop-target {
     background-color: hsl(285, 50%, 50%);
     border-color: hsl(285, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="geolocation"],
+.block-dragging wb-expression[type="geolocation"].selected-block {
     background-color: hsl(285, 50%, 75%);
     border-color: hsl(285, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="size"].selected-block {
     background-color: hsl(300, 95%, 50%);
     border-color: hsl(300, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="size"],
+.block-dragging wb-expression[type="size"].drop-target {
     background-color: hsl(300, 50%, 50%);
     border-color: hsl(300, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="size"],
+.block-dragging wb-expression[type="size"].selected-block {
     background-color: hsl(300, 50%, 75%);
     border-color: hsl(300, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="motion"].selected-block {
     background-color: hsl(45, 95%, 50%);
     border-color: hsl(45, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="motion"],
+.block-dragging wb-expression[type="motion"].drop-target {
     background-color: hsl(45, 50%, 50%);
     border-color: hsl(45, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="motion"],
+.block-dragging wb-expression[type="motion"].selected-block {
     background-color: hsl(45, 50%, 75%);
     border-color: hsl(45, 50%, 60%);
 }
 
-wb-expression[type="${type}"].selected-block {
+wb-expression[type="date"].selected-block {
     background-color: hsl(90, 95%, 50%);
     border-color: hsl(90, 50%, 75%);
 }
 
-wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].drop-target {
+wb-expression[type="date"],
+.block-dragging wb-expression[type="date"].drop-target {
     background-color: hsl(90, 50%, 50%);
     border-color: hsl(90, 50%, 30%);
 }
 
-.block-dragging wb-expression[type="${type}"],
-.block-dragging wb-expression[type="${type}"].selected-block {
+.block-dragging wb-expression[type="date"],
+.block-dragging wb-expression[type="date"].selected-block {
     background-color: hsl(90, 50%, 75%);
     border-color: hsl(90, 50%, 60%);
 }
